@@ -12,7 +12,7 @@ import java.util.Set;
 public class Club
     extends Auditable
 {
-    // Getting Error about "'One To Many' attribute type should be a container"
+    // Id for table itself
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
     private long clubid;

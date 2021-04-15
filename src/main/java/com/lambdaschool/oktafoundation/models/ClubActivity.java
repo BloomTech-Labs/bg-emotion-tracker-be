@@ -9,8 +9,12 @@ import java.io.Serializable;
 @Table(name = "clubactivites")
 public class ClubActivity extends Auditable implements Serializable
 {
-    // What do we need an ID here for?
+
+    // Joining club and activities and using both ids for the external ids
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long clubactivityid;
+
     @ManyToOne
     @JoinColumn(name = "clubid")
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
@@ -30,9 +34,13 @@ public class ClubActivity extends Auditable implements Serializable
         this.activity = activity;
     }
 
+    // Constructor
+
     public ClubActivity() {
-        
+
     }
+
+    // Getters + Setters
 
     public Club getClub() {
         return club;

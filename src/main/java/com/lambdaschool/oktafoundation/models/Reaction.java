@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "reactions")
-public class Reaction {
+public class Reaction extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long reacitonid;

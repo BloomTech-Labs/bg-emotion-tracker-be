@@ -1,24 +1,42 @@
 package com.lambdaschool.oktafoundation.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "reactions")
 public class Reaction {
     @Id
-    @OneToOne
-    @JoinColumn(name = "reactionid")
-    private MemberReaction memberReaction;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long reacitonid;
 
     @Column(nullable = false, unique = true)
     private String reactionvalue;
 
-    public MemberReaction getMemberReaction() {
-        return memberReaction;
+    @OneToMany(mappedBy = "reactions")
+    @JsonIgnoreProperties(value="reactions", allowSetters = true)
+    public Set<MemberReaction> member = new HashSet<>();
+
+    public Reaction() {
     }
 
-    public void setMemberReaction(MemberReaction memberReaction) {
-        this.memberReaction = memberReaction;
+    public long getReacitonid() {
+        return reacitonid;
+    }
+
+    public void setReacitonid(long reacitonid) {
+        this.reacitonid = reacitonid;
+    }
+
+    public Set<MemberReaction> getMember() {
+        return member;
+    }
+
+    public void setMember(Set<MemberReaction> member) {
+        this.member = member;
     }
 
     public String getReactionvalue() {

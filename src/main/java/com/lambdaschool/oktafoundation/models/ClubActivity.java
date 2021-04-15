@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "clubactivites")
@@ -25,6 +27,11 @@ public class ClubActivity extends Auditable implements Serializable
     @JoinColumn(name = "activityid")
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
     private Activity activity;
+
+    @OneToMany(mappedBy="clubactivity")
+    @JoinColumn(name="memberreactionid")
+    private Set<MemberReaction> reactions = new HashSet<>();
+
 
     public ClubActivity(
             Club club,
@@ -58,4 +65,19 @@ public class ClubActivity extends Auditable implements Serializable
         this.activity = activity;
     }
 
+    public long getClubactivityid() {
+        return clubactivityid;
+    }
+
+    public void setClubactivityid(long clubactivityid) {
+        this.clubactivityid = clubactivityid;
+    }
+
+    public Set<MemberReaction> getReactions() {
+        return reactions;
+    }
+
+    public void setReactions(Set<MemberReaction> reactions) {
+        this.reactions = reactions;
+    }
 }

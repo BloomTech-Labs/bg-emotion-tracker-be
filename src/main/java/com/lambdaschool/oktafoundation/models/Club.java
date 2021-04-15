@@ -23,6 +23,12 @@ public class Club
     @JsonIgnoreProperties(value = "club", allowSetters = true)
     private Set<ClubActivity> activities = new HashSet<>();
 
+    @OneToMany(mappedBy = "club",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonIgnoreProperties(value = "club", allowSetters = true)
+    private Set<ClubUsers> users = new HashSet<>();
+
     @Column(nullable = false, unique = true)
     private String clubname;
 
@@ -40,6 +46,14 @@ public class Club
 
     public void setActivities(Set<ClubActivity> activities) {
         this.activities = activities;
+    }
+
+    public Set<ClubUsers> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<ClubUsers> users) {
+        this.users = users;
     }
 
     public String getClubname() {

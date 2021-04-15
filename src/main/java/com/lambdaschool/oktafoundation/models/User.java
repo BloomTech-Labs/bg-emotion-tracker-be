@@ -43,6 +43,12 @@ public class User
         allowSetters = true)
     private List<Useremail> useremails = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    private Set<ClubUsers> clubs = new HashSet<>();
+
     /**
      * Part of the join relationship between user and role
      * connects users to the user role combination

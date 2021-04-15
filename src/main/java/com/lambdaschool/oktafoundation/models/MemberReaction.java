@@ -13,6 +13,10 @@ import javax.persistence.*;
 public class MemberReaction extends Auditable
 {
     @Id
+    @GeneratedValue
+    private long memberreactionid;
+
+    @Id
     @ManyToOne
     @JoinColumn(name="member_table_id")
     @JsonIgnoreProperties(value="reactions")
@@ -27,10 +31,9 @@ public class MemberReaction extends Auditable
     @Column(nullable = false)
     private Boolean checkedin;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name="activity_id")
+    @JoinColumn(name="clubactivityid")
     @JsonIgnoreProperties(value="reactions")
-    private Activity activity_id;
+    private ClubActivity clubactivity;
 
 }

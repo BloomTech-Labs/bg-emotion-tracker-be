@@ -30,6 +30,10 @@ public class ClubActivity extends Auditable implements Serializable
         this.activity = activity;
     }
 
+    public ClubActivity() {
+        
+    }
+
     public Club getClub() {
         return club;
     }

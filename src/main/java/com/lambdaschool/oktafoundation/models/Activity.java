@@ -1,16 +1,26 @@
 package com.lambdaschool.oktafoundation.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "activities")
 public class Activity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long activityid;
 
-    @Column(nullable = false) //unique = true? Not sure since one activity could be available across multi clubs
+    @OneToMany(mappedBy = "activity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonIgnoreProperties(value = "club", allowSetters = true)
+    private Set<ClubActivity> club = new HashSet<>();
+
+    @Column(nullable = false)
     private String activityname;
 
     public long getActivityid() {
@@ -19,6 +29,14 @@ public class Activity
 
     public void setActivityid(long activityid) {
         this.activityid = activityid;
+    }
+
+    public Set<ClubActivity> getClub() {
+        return club;
+    }
+
+    public void setClub(Set<ClubActivity> club) {
+        this.club = club;
     }
 
     public String getActivityname() {

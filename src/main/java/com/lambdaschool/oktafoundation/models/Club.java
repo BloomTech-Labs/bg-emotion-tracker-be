@@ -1,6 +1,11 @@
 package com.lambdaschool.oktafoundation.models;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "clubs")
@@ -9,19 +14,32 @@ public class Club
 {
     // Getting Error about "'One To Many' attribute type should be a container"
     @Id
-    @OneToMany
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long clubid;
+    @GeneratedValue(strategy = GenerationType.AUTO )
+    private long clubid;
+
+    @OneToMany(mappedBy = "club",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true)
+    @JsonIgnoreProperties(value = "club", allowSetters = true)
+    private Set<ClubActivity> activities = new HashSet<>();
 
     @Column(nullable = false, unique = true)
     private String clubname;
 
-    public Long getClubid() {
+    public long getClubid() {
         return clubid;
     }
 
-    public void setClubid(Long id) {
-        this.clubid = id;
+    public void setClubid(long clubid) {
+        this.clubid = clubid;
+    }
+
+    public Set<ClubActivity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Set<ClubActivity> activities) {
+        this.activities = activities;
     }
 
     public String getClubname() {

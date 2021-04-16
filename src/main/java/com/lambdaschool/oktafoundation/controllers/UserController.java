@@ -107,7 +107,7 @@ public class UserController
     }
 
     /**
-     * Given a complete User Object, Super Admin can , create a new Club Director record and accompanying useremail
+     * Given a complete User Object, Super Admin can , create a new Club Director record, assign an accompanything club, useremail
      * and user role record.
      *
      * @param newClubDirector A complete new user to add including emails and roles.
@@ -120,7 +120,7 @@ public class UserController
      * @see UserService#save(User) UserService.save(newClubDirector)
      */
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @PostMapping(value = "/user/clubdirector",
+    @PostMapping(value = "/user/newclubdirector",
     consumes = "application/json")
     public ResponseEntity<?> addNewClubDirector(
             @Valid @RequestBody User newClubDirector) throws URISyntaxException
@@ -139,6 +139,7 @@ public class UserController
                 responseHeaders,
                 HttpStatus.CREATED);
     }
+
 
     /**
      * Given a complete User Object, create a new User record and accompanying useremail records
@@ -226,6 +227,13 @@ public class UserController
             id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+//    TODO COME BACK TO THIS
+//
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PatchMapping(value = "/user/{userid}")
+//
+
 
     /**
      * Deletes a given user along with associated emails and roles

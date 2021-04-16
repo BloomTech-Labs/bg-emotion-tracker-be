@@ -55,24 +55,45 @@ public class SeedData
     {
         roleService.deleteAll();
         Role r1 = new Role("admin");
-        Role r2 = new Role("user");
-        Role r3 = new Role("data");
+        Role r2 = new Role("program manager");
+        Role r3 = new Role("service provider");
+//        TODO: ASK TEAM.. IS A USER JUST A MEMBER OR CHILD IN THE PROGRAM?
+        Role r4 = new Role("user");
 
         r1 = roleService.save(r1);
         r2 = roleService.save(r2);
         r3 = roleService.save(r3);
+        r4 = roleService.save(r4);
 
+//        ADMIN
         User u1 = new User("llama001@maildrop.cc");
         u1.getRoles()
             .add(new UserRoles(u1,
                 r1));
         userService.save(u1);
 
+//        PROGRAM MANAGER
         User u2 = new User("barnbarn@maildrop.cc");
         u2.getRoles()
             .add(new UserRoles(u2,
                 r2));
         userService.save(u2);
+
+//        SERVICE PROVIDER
+        User u3 = new User("serviceprovider@bngclub.cc");
+        u3.getRoles()
+                .add(new UserRoles(u3,
+                        r3));
+        userService.save(u3);
+
+//        USER
+        User u4 = new User("normaluser@bngclub.cc");
+        u4.getRoles()
+                .add(new UserRoles(u4,
+                        r4));
+        userService.save(u4);
+
+
 
         // The following is an example user!
         /*

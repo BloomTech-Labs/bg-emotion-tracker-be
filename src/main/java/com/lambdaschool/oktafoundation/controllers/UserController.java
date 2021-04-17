@@ -227,14 +227,7 @@ public class UserController
             id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    TODO COME BACK TO THIS
-//
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-//    @PatchMapping(value = "/user/{userid}")
-//
-
-
+    
     /**
      * Deletes a given user along with associated emails and roles
      * <br>Example: <a href="http://localhost:2019/users/user/14">http://localhost:2019/users/user/14</a>

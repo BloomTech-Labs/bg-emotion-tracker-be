@@ -56,12 +56,10 @@ public class ClubServiceImpl implements ClubService{
 
         newClub.getActivities()
                 .clear();
-        for(ClubActivity ca: newClub.getActivities())
-        {
-            ClubActivity newclubActivity = clubActivityService.findClubActivityById(ca.getActivity().getActivityid());
-        }
 
-
+//  TODO HANDLE THE RELATIONSHIPS
+        
+        return clubrepos.save(newClub);
     }
 
     @Transactional

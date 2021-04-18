@@ -46,15 +46,15 @@ public class ClubController {
     @PostMapping(value = "/user/newClub",
             consumes = "application/json")
     public ResponseEntity<?> addNewClub(
-            @Valid @RequestBody Club newClub) throws URISyntaxException
+            @Valid @RequestBody Club club) throws URISyntaxException
     {
-        newClub.setClubid(0);
-        newClub = clubService.save(newClub);
+        club.setClubid(0);
+        club = clubService.save(club);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newClubURI = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{clubid}")
-                .buildAndExpand(newClub.getClubid())
+                .buildAndExpand(club.getClubid())
                 .toUri();
         responseHeaders.setLocation(newClubURI);
 

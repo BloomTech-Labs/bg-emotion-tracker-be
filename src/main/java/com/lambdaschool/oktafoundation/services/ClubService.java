@@ -25,11 +25,11 @@ public interface ClubService {
      * Given a complete club object, saves that club object in the database. Only a Role with 'ADMIN' can save a club.
      * If a primary key is provided the record is completely replaced.
      * If no primary key is provided, one is automatically generated and the record is added to the databse by an ADMIN
-     * @param newClub the club object to be saved
+     * @param club the club object to be saved
      * @return the saved club object including any automatically generated fields.
      */
 
-    Club save(Club newClub);
+    Club save(Club club);
 
     /**
      * Updates the provided fields in the club record provided by reference with the primary key.

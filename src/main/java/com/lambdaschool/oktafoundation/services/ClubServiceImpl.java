@@ -2,6 +2,7 @@ package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.Club;
+import com.lambdaschool.oktafoundation.models.ClubActivity;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class ClubServiceImpl implements ClubService{
 
     @Autowired
     private ClubRepository clubrepos;
+
+    @Autowired
+    private ClubActivityService clubActivityService;
 
     @Override
     public List<Club> findAll() {
@@ -35,11 +39,32 @@ public class ClubServiceImpl implements ClubService{
             .orElseThrow(() -> new ResourceNotFoundException("Club id" + clubid + "not found!"));
     }
 
+    @Transactional
     @Override
-    public Club save(Club newClub) {
-        return null;
+    public Club save(Club club) {
+
+        Club newClub = new Club();
+
+        if(club.getClubid() != 0)
+        {
+            clubrepos.findById(club.getClubid())
+                    .orElseThrow(() -> new ResourceNotFoundException("Club id" + club.getClubid() + "not found!"));
+            newClub.setClubid(club.getClubid());
+        }
+
+        newClub.setClubname(club.getClubname());
+
+        newClub.getActivities()
+                .clear();
+        for(ClubActivity ca: newClub.getActivities())
+        {
+            ClubActivity newclubActivity = clubActivityService.findClubActivityById(ca.getActivity().getActivityid());
+        }
+
+
     }
 
+    @Transactional
     @Override
     public void update(Club updateClub, long clubid) {
 

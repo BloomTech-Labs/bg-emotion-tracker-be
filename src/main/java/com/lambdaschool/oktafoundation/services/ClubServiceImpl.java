@@ -3,11 +3,15 @@ package com.lambdaschool.oktafoundation.services;
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.ClubActivity;
+import com.lambdaschool.oktafoundation.models.ClubUsers;
+import com.lambdaschool.oktafoundation.repository.ClubActivityRepository;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
+import com.lambdaschool.oktafoundation.repository.ClubUsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +23,10 @@ public class ClubServiceImpl implements ClubService{
     private ClubRepository clubrepos;
 
     @Autowired
-    private ClubActivityService clubActivityService;
+    private ClubActivityRepository clubactivityrepos;
+
+    @Autowired
+    private ClubUsersRepository clubUsersrepo;
 
     @Override
     public List<Club> findAll() {
@@ -54,11 +61,25 @@ public class ClubServiceImpl implements ClubService{
 
         newClub.setClubname(club.getClubname());
 
+//      TODO : Did I handle this many to many relationship correctly?
         newClub.getActivities()
                 .clear();
+        for (ClubActivity ca: club.getActivities())
+        {
+            ClubActivity newclubActivity = clubactivityrepos.findById(ca.getClubactivityid())
+                    .orElseThrow(() -> new EntityNotFoundException("Club Activity" + ca.getClubactivityid() +  "not found."));
+            newClub.getActivities().add(newclubActivity);
+        }
 
-//  TODO HANDLE THE RELATIONSHIPS
-        
+        newClub.getUsers()
+                .clear();
+        for (ClubUsers cu: club.getUsers())
+        {
+            ClubUsers newclubusers = clubUsersrepo.findById(cu.getUser().getUserid())
+                    .orElseThrow(() -> new EntityNotFoundException("Club Member" + cu.getUser().getUserid() + "not found!"));
+            newClub.getUsers().add(newclubusers);
+        }
+
         return clubrepos.save(newClub);
     }
 

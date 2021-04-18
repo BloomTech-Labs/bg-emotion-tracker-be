@@ -73,4 +73,13 @@ public class ClubController {
                 clubid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping(value = "/club/{clubid}")
+    public ResponseEntity<?> deleteClubById(
+            @PathVariable long clubid)
+    {
+        clubService.delete(clubid);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

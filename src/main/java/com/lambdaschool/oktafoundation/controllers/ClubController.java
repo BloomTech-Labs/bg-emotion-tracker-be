@@ -65,5 +65,12 @@ public class ClubController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PatchMapping(value = "/club/{clubid}",
         consumes = "application/json")
-    public ResponseEntity<?> updateClub(@RequestBody)
+    public ResponseEntity<?> updateClub(@RequestBody
+                                        Club updateClub,
+                                        @PathVariable long clubid)
+    {
+        clubService.update(updateClub,
+                clubid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

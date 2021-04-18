@@ -67,10 +67,10 @@ public class ClubController {
     @PatchMapping(value = "/club/{clubid}",
         consumes = "application/json")
     public ResponseEntity<?> updateClub(@RequestBody
-                                        Club updateClub,
+                                        Club club,
                                         @PathVariable long clubid)
     {
-        clubService.update(updateClub,
+        clubService.update(club,
                 clubid);
         return new ResponseEntity<>(HttpStatus.OK);
     }

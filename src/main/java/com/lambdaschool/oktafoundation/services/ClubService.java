@@ -33,10 +33,10 @@ public interface ClubService {
 
     /**
      * Updates the provided fields in the club record provided by reference with the primary key.
-     * @param updateClub The club fields to be updated.
+     * @param club The club fields to be updated.
      * @param clubid the primary key (long) of the club to update
      */
-    void update(Club updateClub, long clubid);
+    void update(Club club, long clubid);
 
     /**
      * Deletes the record by club (primary key) from the database.

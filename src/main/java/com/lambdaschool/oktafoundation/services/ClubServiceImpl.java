@@ -85,8 +85,34 @@ public class ClubServiceImpl implements ClubService{
 
     @Transactional
     @Override
-    public void update(Club updateClub, long clubid) {
+    public void update(Club club, long clubid) {
+        Club updateClub = clubrepos.findById(clubid)
+                .orElseThrow(() -> new EntityNotFoundException("Club Id" + clubid + "not found."));
 
+        if(club.getClubname() != null)
+        {
+            updateClub.setClubname(club.getClubname().toLowerCase());
+        }
+        if(club.getActivities().size() > 0)
+        {
+            updateClub.getActivities().clear();
+            for(ClubActivity ca: club.getActivities())
+            {
+                ClubActivity newClubActivity = clubactivityrepos.findById(ca.getClubactivityid())
+                        .orElseThrow(() -> new EntityNotFoundException("Club Activity" + ca.getClubactivityid() + "Not found!"));
+                updateClub.getActivities().add(newClubActivity);
+            }
+        }
+        if(club.getUsers().size() > 0)
+        {
+            updateClub.getUsers().clear();
+            for(ClubUsers cu: club.getUsers())
+            {
+                ClubUsers newClubUser = clubUsersrepo.findById(cu.getUser().getUserid())
+                        .orElseThrow(() -> new EntityNotFoundException("Club User" + cu.getUser().getUserid() + "Not found!"));
+                updateClub.getUsers().add(newClubUser);
+            }
+        }
     }
 
     @Override

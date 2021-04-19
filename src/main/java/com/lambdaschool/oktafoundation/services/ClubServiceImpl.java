@@ -1,12 +1,11 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
-import com.lambdaschool.oktafoundation.models.Club;
-import com.lambdaschool.oktafoundation.models.ClubActivity;
-import com.lambdaschool.oktafoundation.models.ClubUsers;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.ClubActivityRepository;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.repository.ClubUsersRepository;
+import com.lambdaschool.oktafoundation.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +26,9 @@ public class ClubServiceImpl implements ClubService{
 
     @Autowired
     private ClubUsersRepository clubUsersrepo;
+
+    @Autowired
+    private RoleRepository rolerepos;
 
     @Override
     public List<Club> findAll() {
@@ -58,16 +60,44 @@ public class ClubServiceImpl implements ClubService{
                     .orElseThrow(() -> new ResourceNotFoundException("Club id" + club.getClubid() + "not found!"));
             newClub.setClubid(club.getClubid());
         }
-
+//      set Fields
         newClub.setClubname(club.getClubname());
-
-//      TODO : Did I handle this many to many relationship correctly?
+//      set relationships
         newClub.getActivities()
                 .clear();
         for (ClubActivity ca: club.getActivities())
         {
-            ClubActivity newclubActivity = clubactivityrepos.findById(ca.getClubactivityid())
-                    .orElseThrow(() -> new EntityNotFoundException("Club Activity" + ca.getClubactivityid() +  "not found."));
+//          confirm activity is not in database
+            Activity newActivity = new Activity();
+            newActivity.setActivityname(ca.getActivity().getActivityname());
+
+            ClubActivity newclubActivity = new ClubActivity();
+            newclubActivity.setActivity(newActivity);
+            newclubActivity.setClub(newClub);
+            newclubActivity.getReactions()
+                    .clear();
+            for (MemberReaction mr: ca.getReactions())
+            {
+                Member newMember = new Member();
+//              TODO Are the relationships correct..
+                newMember.setMemberid(mr.getMember().getMemberid());
+                newMember.setReactions(mr.getMember().getReactions());
+
+                Reaction newReaction = new Reaction();
+                newReaction.setReactionvalue(mr.getReaction().getReactionvalue());
+                newReaction.setMember(mr.getReaction().getMember());
+
+                MemberReaction newMemberReaction = new MemberReaction();
+                newMemberReaction.setMember(newMember);
+                newMemberReaction.setReaction(newReaction);
+//              TODO MAKE SURE I REFERENCED THE BOOLEAN CORRECTLY...
+                newMemberReaction.setCheckedin(mr.getCheckedin());
+//              TODO MAKE SURE I REFERENCED THE NEWCLUBACTIVITY CORRECTLY...
+                newMemberReaction.setClubactivity(newclubActivity);
+
+                newclubActivity.getReactions().add(newMemberReaction);
+            }
+
             newClub.getActivities().add(newclubActivity);
         }
 
@@ -75,9 +105,26 @@ public class ClubServiceImpl implements ClubService{
                 .clear();
         for (ClubUsers cu: club.getUsers())
         {
-            ClubUsers newclubusers = clubUsersrepo.findById(cu.getUser().getUserid())
-                    .orElseThrow(() -> new EntityNotFoundException("Club Member" + cu.getUser().getUserid() + "not found!"));
-            newClub.getUsers().add(newclubusers);
+//            TODO HANDLE THE USER RELATIONSHIP.
+            User newUser = new User();
+            newUser.setUsername(cu.getUser().getUsername());
+//            newUser.setUseremails(cu.getUser().getUseremails());
+            newUser.getRoles()
+                    .clear();
+            for(UserRoles ur: cu.getUser().getRoles())
+            {
+                Role assignRole = rolerepos.findByNameIgnoreCase(ur.getRole().getName());
+                if(assignRole == null)
+                {
+                    throw new ResourceNotFoundException("Role " + ur.getRole().getName() + "not found");
+                }
+                UserRoles newUserRoles = new UserRoles();
+                newUserRoles.setRole(assignRole);
+                newUserRoles.setUser(newUser);
+                newUser.getRoles().add(newUserRoles);
+            }
+//            ClubUsers newclubusers =
+//            newClub.getUsers().add(newUser);
         }
 
         return clubrepos.save(newClub);
@@ -86,6 +133,7 @@ public class ClubServiceImpl implements ClubService{
     @Transactional
     @Override
     public void update(Club club, long clubid) {
+
         Club updateClub = clubrepos.findById(clubid)
                 .orElseThrow(() -> new EntityNotFoundException("Club Id" + clubid + "not found."));
 

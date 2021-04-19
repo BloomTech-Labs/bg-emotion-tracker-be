@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "clubdirectors")
+@Table(name = "clubusers")
 public class ClubUsers extends Auditable implements Serializable
 {
     @Id

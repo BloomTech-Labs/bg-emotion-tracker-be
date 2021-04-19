@@ -54,10 +54,10 @@ public class SeedData
                                    Exception
     {
         roleService.deleteAll();
-        Role r1 = new Role("admin");
+        Role r1 = new Role("ADMIN");
         Role r2 = new Role("YDP");
         Role r3 = new Role("CD");
-        Role r4 = new Role("kid");
+        Role r4 = new Role("KID");
 
         r1 = roleService.save(r1);
         r2 = roleService.save(r2);

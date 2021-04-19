@@ -60,10 +60,9 @@ public class ClubServiceImpl implements ClubService{
                     .orElseThrow(() -> new ResourceNotFoundException("Club id" + club.getClubid() + "not found!"));
             newClub.setClubid(club.getClubid());
         }
-
+//      set Fields
         newClub.setClubname(club.getClubname());
-
-//      TODO : Did I handle this many to many relationship correctly?
+//      set relationships
         newClub.getActivities()
                 .clear();
         for (ClubActivity ca: club.getActivities())
@@ -75,6 +74,29 @@ public class ClubServiceImpl implements ClubService{
             ClubActivity newclubActivity = new ClubActivity();
             newclubActivity.setActivity(newActivity);
             newclubActivity.setClub(newClub);
+            newclubActivity.getReactions()
+                    .clear();
+            for (MemberReaction mr: ca.getReactions())
+            {
+                Member newMember = new Member();
+//              TODO The only thing to set with this table is a memberid or reaction relationship??
+                newMember.setMemberid(mr.getMember().getMemberid());
+
+//              TODO IDENTIFY THE SAME RELATIONSHIPS PARENT TO CHILD SO IT DOESN'T DUPLICATE.
+
+                Reaction newReaction = new Reaction();
+                newReaction.setReactionvalue(mr.getReaction().getReactionvalue());
+
+                MemberReaction newMemberReaction = new MemberReaction();
+                newMemberReaction.setMember(newMember);
+                newMemberReaction.setReaction(newReaction);
+//              TODO MAKE SURE I REFERENCED THE BOOLEAN CORRECTLY...
+                newMemberReaction.setCheckedin(mr.getCheckedin());
+//              TODO MAKE SURE I REFERENCED THE NEWCLUBACTIVITY CORRECTLY...
+                newMemberReaction.setClubactivity(newclubActivity);
+
+                newclubActivity.getReactions().add(newMemberReaction);
+            }
 
             newClub.getActivities().add(newclubActivity);
         }

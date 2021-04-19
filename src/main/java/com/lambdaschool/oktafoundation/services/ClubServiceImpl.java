@@ -67,7 +67,7 @@ public class ClubServiceImpl implements ClubService{
                 .clear();
         for (ClubActivity ca: club.getActivities())
         {
-//
+//          confirm activity is not in database
             Activity newActivity = new Activity();
             newActivity.setActivityname(ca.getActivity().getActivityname());
 
@@ -79,13 +79,13 @@ public class ClubServiceImpl implements ClubService{
             for (MemberReaction mr: ca.getReactions())
             {
                 Member newMember = new Member();
-//              TODO The only thing to set with this table is a memberid or reaction relationship??
+//              TODO Are the relationships correct..
                 newMember.setMemberid(mr.getMember().getMemberid());
-
-//              TODO IDENTIFY THE SAME RELATIONSHIPS PARENT TO CHILD SO IT DOESN'T DUPLICATE.
+                newMember.setReactions(mr.getMember().getReactions());
 
                 Reaction newReaction = new Reaction();
                 newReaction.setReactionvalue(mr.getReaction().getReactionvalue());
+                newReaction.setMember(mr.getReaction().getMember());
 
                 MemberReaction newMemberReaction = new MemberReaction();
                 newMemberReaction.setMember(newMember);
@@ -105,6 +105,7 @@ public class ClubServiceImpl implements ClubService{
                 .clear();
         for (ClubUsers cu: club.getUsers())
         {
+//            TODO HANDLE THE USER RELATIONSHIP.
             User newUser = new User();
             newUser.setUsername(cu.getUser().getUsername());
 //            newUser.setUseremails(cu.getUser().getUseremails());
@@ -122,8 +123,8 @@ public class ClubServiceImpl implements ClubService{
                 newUserRoles.setUser(newUser);
                 newUser.getRoles().add(newUserRoles);
             }
-            ClubUsers newclubusers =
-            newClub.getUsers().add(newclubusers);
+//            ClubUsers newclubusers =
+//            newClub.getUsers().add(newUser);
         }
 
         return clubrepos.save(newClub);
@@ -132,6 +133,7 @@ public class ClubServiceImpl implements ClubService{
     @Transactional
     @Override
     public void update(Club club, long clubid) {
+
         Club updateClub = clubrepos.findById(clubid)
                 .orElseThrow(() -> new EntityNotFoundException("Club Id" + clubid + "not found."));
 

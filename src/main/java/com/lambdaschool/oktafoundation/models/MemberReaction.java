@@ -36,8 +36,6 @@ public class MemberReaction extends Auditable
     @JsonIgnoreProperties(value="reactions")
     private ClubActivity clubactivity;
 
-//    TODO why do we not have a constructor, getter, and setters?
-
     public MemberReaction() {
     }
 

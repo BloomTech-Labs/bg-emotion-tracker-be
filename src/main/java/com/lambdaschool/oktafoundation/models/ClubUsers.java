@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
 
-// TODO Why is our clubusers table named clubdirectors when we also have ydp's ?
 @Entity
-@Table(name = "clubdirectors")
+@Table(name = "clubusers")
 public class ClubUsers extends Auditable implements Serializable
 {
     @Id

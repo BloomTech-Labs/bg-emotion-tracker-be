@@ -1,12 +1,11 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
-import com.lambdaschool.oktafoundation.models.Club;
-import com.lambdaschool.oktafoundation.models.ClubActivity;
-import com.lambdaschool.oktafoundation.models.ClubUsers;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.ClubActivityRepository;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.repository.ClubUsersRepository;
+import com.lambdaschool.oktafoundation.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +26,9 @@ public class ClubServiceImpl implements ClubService{
 
     @Autowired
     private ClubUsersRepository clubUsersrepo;
+
+    @Autowired
+    private RoleRepository rolerepos;
 
     @Override
     public List<Club> findAll() {
@@ -66,8 +68,14 @@ public class ClubServiceImpl implements ClubService{
                 .clear();
         for (ClubActivity ca: club.getActivities())
         {
-            ClubActivity newclubActivity = clubactivityrepos.findById(ca.getClubactivityid())
-                    .orElseThrow(() -> new EntityNotFoundException("Club Activity" + ca.getClubactivityid() +  "not found."));
+//
+            Activity newActivity = new Activity();
+            newActivity.setActivityname(ca.getActivity().getActivityname());
+
+            ClubActivity newclubActivity = new ClubActivity();
+            newclubActivity.setActivity(newActivity);
+            newclubActivity.setClub(newClub);
+
             newClub.getActivities().add(newclubActivity);
         }
 
@@ -75,8 +83,24 @@ public class ClubServiceImpl implements ClubService{
                 .clear();
         for (ClubUsers cu: club.getUsers())
         {
-            ClubUsers newclubusers = clubUsersrepo.findById(cu.getUser().getUserid())
-                    .orElseThrow(() -> new EntityNotFoundException("Club Member" + cu.getUser().getUserid() + "not found!"));
+            User newUser = new User();
+            newUser.setUsername(cu.getUser().getUsername());
+//            newUser.setUseremails(cu.getUser().getUseremails());
+            newUser.getRoles()
+                    .clear();
+            for(UserRoles ur: cu.getUser().getRoles())
+            {
+                Role assignRole = rolerepos.findByNameIgnoreCase(ur.getRole().getName());
+                if(assignRole == null)
+                {
+                    throw new ResourceNotFoundException("Role " + ur.getRole().getName() + "not found");
+                }
+                UserRoles newUserRoles = new UserRoles();
+                newUserRoles.setRole(assignRole);
+                newUserRoles.setUser(newUser);
+                newUser.getRoles().add(newUserRoles);
+            }
+            ClubUsers newclubusers =
             newClub.getUsers().add(newclubusers);
         }
 

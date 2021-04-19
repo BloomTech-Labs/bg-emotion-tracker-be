@@ -107,6 +107,41 @@ public class UserController
     }
 
     /**
+     * Given a complete User Object, Super Admin can , create a new Club Director record, assign an accompanything club, useremail
+     * and user role record.
+     *
+     * @param newClubDirector A complete new user to add including emails and roles.
+     *                        Role must already exist.
+     *
+     * @return A location header with teh URI to the newly created user club director of CREATED
+     *
+     * @throws URISyntaxException Exception if something does not work in creating the location header
+     *
+     * @see UserService#save(User) UserService.save(newClubDirector)
+     */
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping(value = "/user/newclubdirector",
+    consumes = "application/json")
+    public ResponseEntity<?> addNewClubDirector(
+            @Valid @RequestBody User newClubDirector) throws URISyntaxException
+    {
+        newClubDirector.setUserid(0);
+        newClubDirector = userService.save(newClubDirector);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newDirectorURI = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{userid}")
+                .buildAndExpand(newClubDirector.getUserid())
+                .toUri();
+        responseHeaders.setLocation(newDirectorURI);
+
+        return new ResponseEntity<>(null,
+                responseHeaders,
+                HttpStatus.CREATED);
+    }
+
+
+    /**
      * Given a complete User Object, create a new User record and accompanying useremail records
      * and user role records.
      * <br> Example: <a href="http://localhost:2019/users/user">http://localhost:2019/users/user</a>

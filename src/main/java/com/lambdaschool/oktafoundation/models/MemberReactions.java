@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "memberreactions")
+@IdClass(MemberReactionsId.class)
 public class MemberReactions extends Auditable implements Serializable
 {
 //    @Id

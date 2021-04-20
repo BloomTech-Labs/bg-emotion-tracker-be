@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Entity(name = "ClubActivity")
 @Table(name = "club_activites")
+@IdClass(ClubActivitiesId.class)
 public class ClubActivities extends Auditable implements Serializable
 {
 

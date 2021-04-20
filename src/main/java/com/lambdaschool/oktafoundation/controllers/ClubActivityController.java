@@ -1,6 +1,6 @@
 package com.lambdaschool.oktafoundation.controllers;
 
-import com.lambdaschool.oktafoundation.models.ClubActivity;
+import com.lambdaschool.oktafoundation.models.ClubActivities;
 import com.lambdaschool.oktafoundation.services.ClubActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class ClubActivityController {
     produces = "application/json")
     public ResponseEntity<?> listAllClubActivities()
     {
-        List<ClubActivity> allClubActivities = clubActivityService.findAll();
+        List<ClubActivities> allClubActivities = clubActivityService.findAll();
         return new ResponseEntity<>(allClubActivities, HttpStatus.OK);
     }
 
@@ -34,7 +34,7 @@ public class ClubActivityController {
         produces = "application/json")
     public ResponseEntity<?> getClubActivityById(@PathVariable Long clubactivityid)
     {
-        ClubActivity ca = clubActivityService.findClubActivityById(clubactivityid);
+        ClubActivities ca = clubActivityService.findClubActivityById(clubactivityid);
         return new ResponseEntity<>(ca,
                 HttpStatus.OK);
     }

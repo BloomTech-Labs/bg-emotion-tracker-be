@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 public class ClubUsersId implements Serializable {
     private long club;
-    private long users;
+    private long user;
 
     public ClubUsersId() {
     }
 
     public ClubUsersId(long user, long role) {
         this.club = user;
-        this.users = role;
+        this.user = role;
     }
 
     public long getClub() {
@@ -22,12 +22,12 @@ public class ClubUsersId implements Serializable {
         this.club = club;
     }
 
-    public long getUsers() {
-        return users;
+    public long getUser() {
+        return user;
     }
 
-    public void setUsers(long users) {
-        this.users = users;
+    public void setUser(long user) {
+        this.user = user;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ClubUsersId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClubUsersId that = (ClubUsersId) o;
-        return getClub() == that.getClub() && getUsers() == that.getUsers();
+        return getClub() == that.getClub() && getUser() == that.getUser();
     }
 
     @Override

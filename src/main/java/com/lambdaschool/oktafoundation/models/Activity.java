@@ -17,8 +17,9 @@ public class Activity extends Auditable
     @OneToMany(mappedBy = "activity",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    @JsonIgnoreProperties(value = "club", allowSetters = true)
-    private Set<ClubActivity> club = new HashSet<>();
+    @JsonIgnoreProperties(value = "activity", allowSetters = true)
+    private Set<ClubActivities> clubs = new HashSet<>();
+
 
     @Column(nullable = false)
     private String activityname;
@@ -31,12 +32,12 @@ public class Activity extends Auditable
         this.activityid = activityid;
     }
 
-    public Set<ClubActivity> getClub() {
-        return club;
+    public Set<ClubActivities> getClub() {
+        return clubs;
     }
 
-    public void setClub(Set<ClubActivity> club) {
-        this.club = club;
+    public void setClub(Set<ClubActivities> club) {
+        this.clubs = club;
     }
 
     public String getActivityname() {

@@ -1,7 +1,7 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
-import com.lambdaschool.oktafoundation.models.ClubActivity;
+import com.lambdaschool.oktafoundation.models.ClubActivities;
 import com.lambdaschool.oktafoundation.repository.ClubActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +18,8 @@ public class ClubActivityServiceImpl implements ClubActivityService{
     private ClubActivityRepository clubactivityrepos;
 
     @Override
-    public List<ClubActivity> findAll() {
-        List<ClubActivity> clubActivitiesList = new ArrayList<>();
+    public List<ClubActivities> findAll() {
+        List<ClubActivities> clubActivitiesList = new ArrayList<>();
 
         clubactivityrepos.findAll()
                 .iterator()
@@ -28,7 +28,7 @@ public class ClubActivityServiceImpl implements ClubActivityService{
     }
 
     @Override
-    public ClubActivity findClubActivityById(Long clubactivityid) throws ResourceNotFoundException
+    public ClubActivities findClubActivityById(Long clubactivityid) throws ResourceNotFoundException
     {
         return clubactivityrepos.findById(clubactivityid)
                 .orElseThrow(() -> new ResourceNotFoundException("Club Acitivty id" + clubactivityid + "not found!"));

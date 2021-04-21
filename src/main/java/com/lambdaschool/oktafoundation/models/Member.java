@@ -19,7 +19,7 @@ public class Member extends Auditable
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value="member", allowSetters = true)
-    public Set<MemberReaction> reactions = new HashSet<>();
+    public Set<MemberReactions> reactions = new HashSet<>();
 
     public Member() {
     }
@@ -44,11 +44,11 @@ public class Member extends Auditable
         this.memberid = memberid;
     }
 
-    public Set<MemberReaction> getReactions() {
+    public Set<MemberReactions> getReactions() {
         return reactions;
     }
 
-    public void setReactions(Set<MemberReaction> reactions) {
+    public void setReactions(Set<MemberReactions> reactions) {
         this.reactions = reactions;
     }
 }

@@ -65,18 +65,18 @@ public class ClubServiceImpl implements ClubService{
 //      set relationships
         newClub.getActivities()
                 .clear();
-        for (ClubActivity ca: club.getActivities())
+        for (ClubActivities ca: club.getActivities())
         {
 //          confirm activity is not in database
             Activity newActivity = new Activity();
             newActivity.setActivityname(ca.getActivity().getActivityname());
 
-            ClubActivity newclubActivity = new ClubActivity();
-            newclubActivity.setActivity(newActivity);
-            newclubActivity.setClub(newClub);
-            newclubActivity.getReactions()
+            ClubActivities newclubActivities = new ClubActivities();
+            newclubActivities.setActivity(newActivity);
+            newclubActivities.setClub(newClub);
+            newclubActivities.getReactions()
                     .clear();
-            for (MemberReaction mr: ca.getReactions())
+            for (MemberReactions mr: ca.getReactions())
             {
                 Member newMember = new Member();
 //              TODO Are the relationships correct..
@@ -87,18 +87,18 @@ public class ClubServiceImpl implements ClubService{
                 newReaction.setReactionvalue(mr.getReaction().getReactionvalue());
                 newReaction.setMember(mr.getReaction().getMember());
 
-                MemberReaction newMemberReaction = new MemberReaction();
+                MemberReactions newMemberReaction = new MemberReactions();
                 newMemberReaction.setMember(newMember);
                 newMemberReaction.setReaction(newReaction);
 //              TODO MAKE SURE I REFERENCED THE BOOLEAN CORRECTLY...
                 newMemberReaction.setCheckedin(mr.getCheckedin());
 //              TODO MAKE SURE I REFERENCED THE NEWCLUBACTIVITY CORRECTLY...
-                newMemberReaction.setClubactivity(newclubActivity);
+                newMemberReaction.setClubactivity(newclubActivities);
 
-                newclubActivity.getReactions().add(newMemberReaction);
+                newclubActivities.getReactions().add(newMemberReaction);
             }
 
-            newClub.getActivities().add(newclubActivity);
+            newClub.getActivities().add(newclubActivities);
         }
 
         newClub.getUsers()
@@ -130,38 +130,43 @@ public class ClubServiceImpl implements ClubService{
         return clubrepos.save(newClub);
     }
 
-    @Transactional
     @Override
     public void update(Club club, long clubid) {
 
-        Club updateClub = clubrepos.findById(clubid)
-                .orElseThrow(() -> new EntityNotFoundException("Club Id" + clubid + "not found."));
-
-        if(club.getClubname() != null)
-        {
-            updateClub.setClubname(club.getClubname().toLowerCase());
-        }
-        if(club.getActivities().size() > 0)
-        {
-            updateClub.getActivities().clear();
-            for(ClubActivity ca: club.getActivities())
-            {
-                ClubActivity newClubActivity = clubactivityrepos.findById(ca.getClubactivityid())
-                        .orElseThrow(() -> new EntityNotFoundException("Club Activity" + ca.getClubactivityid() + "Not found!"));
-                updateClub.getActivities().add(newClubActivity);
-            }
-        }
-        if(club.getUsers().size() > 0)
-        {
-            updateClub.getUsers().clear();
-            for(ClubUsers cu: club.getUsers())
-            {
-                ClubUsers newClubUser = clubUsersrepo.findById(cu.getUser().getUserid())
-                        .orElseThrow(() -> new EntityNotFoundException("Club User" + cu.getUser().getUserid() + "Not found!"));
-                updateClub.getUsers().add(newClubUser);
-            }
-        }
     }
+
+    //    @Transactional
+//    @Override
+//    public void update(Club club, long clubid) {
+//
+//        Club updateClub = clubrepos.findById(clubid)
+//                .orElseThrow(() -> new EntityNotFoundException("Club Id" + clubid + "not found."));
+//
+//        if(club.getClubname() != null)
+//        {
+//            updateClub.setClubname(club.getClubname().toLowerCase());
+//        }
+//        if(club.getActivities().size() > 0)
+//        {
+//            updateClub.getActivities().clear();
+//            for(ClubActivities ca: club.getActivities())
+//            {
+//                ClubActivities newClubActivities = clubactivityrepos.findById(ca.get())
+//                        .orElseThrow(() -> new EntityNotFoundException("Club Activity" + ca.getClubactivityid() + "Not found!"));
+//                updateClub.getActivities().add(newClubActivities);
+//            }
+//        }
+//        if(club.getUsers().size() > 0)
+//        {
+//            updateClub.getUsers().clear();
+//            for(ClubUsers cu: club.getUsers())
+//            {
+//                ClubUsers newClubUser = clubUsersrepo.findById(cu.getUser().getUserid())
+//                        .orElseThrow(() -> new EntityNotFoundException("Club User" + cu.getUser().getUserid() + "Not found!"));
+//                updateClub.getUsers().add(newClubUser);
+//            }
+//        }
+//    }
 
     @Override
     public void delete(long clubid) {

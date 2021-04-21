@@ -1,6 +1,11 @@
 package com.lambdaschool.oktafoundation.models;
 
 import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "reactions")
@@ -12,9 +17,9 @@ public class Reaction extends Auditable {
     @Column(nullable = false, unique = true)
     private String reactionvalue;
 
-//    @OneToMany(mappedBy = "reactions")
-//    @JsonIgnoreProperties(value="reactions", allowSetters = true)
-//    public Set<MemberReaction> member = new HashSet<>();
+    @OneToMany(mappedBy = "reactions")
+    @JsonIgnoreProperties(value="reactions", allowSetters = true)
+    public Set<MemberReactions> member = new HashSet<>();
 
     public Reaction() {
     }
@@ -27,13 +32,13 @@ public class Reaction extends Auditable {
         this.reactionid = reacitonid;
     }
 
-//    public Set<MemberReaction> getMember() {
-//        return member;
-//    }
-//
-//    public void setMember(Set<MemberReaction> member) {
-//        this.member = member;
-//    }
+    public Set<MemberReactions> getMember() {
+        return member;
+    }
+
+    public void setMember(Set<MemberReactions> member) {
+        this.member = member;
+    }
 
     public String getReactionvalue() {
         return reactionvalue;

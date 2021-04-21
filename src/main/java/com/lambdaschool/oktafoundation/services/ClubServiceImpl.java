@@ -51,86 +51,84 @@ public class ClubServiceImpl implements ClubService{
     @Transactional
     @Override
     public Club save(Club club) {
-        return null;
-    }
 
-//        Club newClub = new Club();
-//
-//        if(club.getClubid() != 0)
-//        {
-//            clubrepos.findById(club.getClubid())
-//                    .orElseThrow(() -> new ResourceNotFoundException("Club id" + club.getClubid() + "not found!"));
-//            newClub.setClubid(club.getClubid());
-//        }
-////      set Fields
-//        newClub.setClubname(club.getClubname());
-////      set relationships
-//        newClub.getActivities()
-//                .clear();
-//        for (ClubActivities ca: club.getActivities())
-//        {
-////          confirm activity is not in database
-//            Activity newActivity = new Activity();
-//            newActivity.setActivityname(ca.getActivity().getActivityname());
-//
-//            ClubActivities newclubActivities = new ClubActivities();
-//            newclubActivities.setActivity(newActivity);
-//            newclubActivities.setClub(newClub);
-//            newclubActivities.getReactions()
-//                    .clear();
-//            for (MemberReaction mr: ca.getReactions())
-//            {
-//                Member newMember = new Member();
-////              TODO Are the relationships correct..
-//                newMember.setMemberid(mr.getMember().getMemberid());
-//                newMember.setReactions(mr.getMember().getReactions());
-//
-//                Reaction newReaction = new Reaction();
-//                newReaction.setReactionvalue(mr.getReaction().getReactionvalue());
-//                newReaction.setMember(mr.getReaction().getMember());
-//
-//                MemberReaction newMemberReaction = new MemberReaction();
-//                newMemberReaction.setMember(newMember);
-//                newMemberReaction.setReaction(newReaction);
-////              TODO MAKE SURE I REFERENCED THE BOOLEAN CORRECTLY...
-//                newMemberReaction.setCheckedin(mr.getCheckedin());
-////              TODO MAKE SURE I REFERENCED THE NEWCLUBACTIVITY CORRECTLY...
-//                newMemberReaction.setClubactivity(newclubActivities);
-//
-//                newclubActivities.getReactions().add(newMemberReaction);
-//            }
-//
-//            newClub.getActivities().add(newclubActivities);
-//        }
-//
-//        newClub.getUsers()
-//                .clear();
-//        for (ClubUsers cu: club.getUsers())
-//        {
-////            TODO HANDLE THE USER RELATIONSHIP.
-//            User newUser = new User();
-//            newUser.setUsername(cu.getUser().getUsername());
-////            newUser.setUseremails(cu.getUser().getUseremails());
-//            newUser.getRoles()
-//                    .clear();
-//            for(UserRoles ur: cu.getUser().getRoles())
-//            {
-//                Role assignRole = rolerepos.findByNameIgnoreCase(ur.getRole().getName());
-//                if(assignRole == null)
-//                {
-//                    throw new ResourceNotFoundException("Role " + ur.getRole().getName() + "not found");
-//                }
-//                UserRoles newUserRoles = new UserRoles();
-//                newUserRoles.setRole(assignRole);
-//                newUserRoles.setUser(newUser);
-//                newUser.getRoles().add(newUserRoles);
-//            }
-////            ClubUsers newclubusers =
-////            newClub.getUsers().add(newUser);
-//        }
-//
-//        return clubrepos.save(newClub);
-//    }
+        Club newClub = new Club();
+
+        if(club.getClubid() != 0)
+        {
+            clubrepos.findById(club.getClubid())
+                    .orElseThrow(() -> new ResourceNotFoundException("Club id" + club.getClubid() + "not found!"));
+            newClub.setClubid(club.getClubid());
+        }
+//      set Fields
+        newClub.setClubname(club.getClubname());
+//      set relationships
+        newClub.getActivities()
+                .clear();
+        for (ClubActivities ca: club.getActivities())
+        {
+//          confirm activity is not in database
+            Activity newActivity = new Activity();
+            newActivity.setActivityname(ca.getActivity().getActivityname());
+
+            ClubActivities newclubActivities = new ClubActivities();
+            newclubActivities.setActivity(newActivity);
+            newclubActivities.setClub(newClub);
+            newclubActivities.getReactions()
+                    .clear();
+            for (MemberReactions mr: ca.getReactions())
+            {
+                Member newMember = new Member();
+//              TODO Are the relationships correct..
+                newMember.setMemberid(mr.getMember().getMemberid());
+                newMember.setReactions(mr.getMember().getReactions());
+
+                Reaction newReaction = new Reaction();
+                newReaction.setReactionvalue(mr.getReaction().getReactionvalue());
+                newReaction.setMember(mr.getReaction().getMember());
+
+                MemberReactions newMemberReaction = new MemberReactions();
+                newMemberReaction.setMember(newMember);
+                newMemberReaction.setReaction(newReaction);
+//              TODO MAKE SURE I REFERENCED THE BOOLEAN CORRECTLY...
+                newMemberReaction.setCheckedin(mr.getCheckedin());
+//              TODO MAKE SURE I REFERENCED THE NEWCLUBACTIVITY CORRECTLY...
+                newMemberReaction.setClubactivity(newclubActivities);
+
+                newclubActivities.getReactions().add(newMemberReaction);
+            }
+
+            newClub.getActivities().add(newclubActivities);
+        }
+
+        newClub.getUsers()
+                .clear();
+        for (ClubUsers cu: club.getUsers())
+        {
+//            TODO HANDLE THE USER RELATIONSHIP.
+            User newUser = new User();
+            newUser.setUsername(cu.getUser().getUsername());
+//            newUser.setUseremails(cu.getUser().getUseremails());
+            newUser.getRoles()
+                    .clear();
+            for(UserRoles ur: cu.getUser().getRoles())
+            {
+                Role assignRole = rolerepos.findByNameIgnoreCase(ur.getRole().getName());
+                if(assignRole == null)
+                {
+                    throw new ResourceNotFoundException("Role " + ur.getRole().getName() + "not found");
+                }
+                UserRoles newUserRoles = new UserRoles();
+                newUserRoles.setRole(assignRole);
+                newUserRoles.setUser(newUser);
+                newUser.getRoles().add(newUserRoles);
+            }
+//            ClubUsers newclubusers =
+//            newClub.getUsers().add(newUser);
+        }
+
+        return clubrepos.save(newClub);
+    }
 
     @Override
     public void update(Club club, long clubid) {

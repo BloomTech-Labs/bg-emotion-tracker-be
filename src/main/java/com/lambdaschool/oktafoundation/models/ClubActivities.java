@@ -33,10 +33,10 @@ public class ClubActivities extends Auditable implements Serializable
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
     private Activity activity;
 
-//    @Column
-//    @OneToMany(mappedBy="clubactivity")
-//    @JoinColumn(name="memberreactionid")
-//    private Set<MemberReaction> reactions = new HashSet<>();
+    @Column
+    @OneToMany(mappedBy="clubactivity")
+    @JoinColumn(name="memberreactionid")
+    private Set<MemberReactions> reactions = new HashSet<>();
 
 
     public ClubActivities(
@@ -88,13 +88,13 @@ public class ClubActivities extends Auditable implements Serializable
         this.id = id;
     }
 
-//    public Set<MemberReaction> getReactions() {
-//        return reactions;
-//    }
-//
-//    public void setReactions(Set<MemberReaction> reactions) {
-//        this.reactions = reactions;
-//    }
+    public Set<MemberReactions> getReactions() {
+        return reactions;
+    }
+
+    public void setReactions(Set<MemberReactions> reactions) {
+        this.reactions = reactions;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -23,7 +23,6 @@ public class MemberReactions extends Auditable implements Serializable
     private Member member;
 
     @ManyToOne
-//    @JoinColumn(name="reaction_id")
     @MapsId("reactionid")
     @JsonIgnoreProperties(value="member", allowSetters = true)
     private Reaction reaction;

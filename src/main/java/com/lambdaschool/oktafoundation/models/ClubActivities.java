@@ -16,24 +16,17 @@ public class ClubActivities extends Auditable implements Serializable
     // Joining club and activities and using both ids for the external ids
     @EmbeddedId
     private ClubActivitiesId id;
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private long clubactivityid;
 
-//    @Id
     @ManyToOne
     @JoinColumn(name = "clubid")
-//    @MapsId("clubid")
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
     private Club club;
 
-//    @Id
     @ManyToOne
-//    @JoinColumn(name = "activityid")
     @MapsId("activityid")
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
     private Activity activity;
 
-//    Changed Join Columns for Mapped by error
     @Column
     @OneToMany
     @JoinColumns({@JoinColumn(name ="memberid"), @JoinColumn(name ="reactionid")})
@@ -72,14 +65,6 @@ public class ClubActivities extends Auditable implements Serializable
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
-
-//    public long getClubactivityid() {
-//        return clubactivityid;
-//    }
-//
-//    public void setClubactivityid(long clubactivityid) {
-//        this.clubactivityid = clubactivityid;
-//    }
 
     public ClubActivitiesId getId() {
         return id;

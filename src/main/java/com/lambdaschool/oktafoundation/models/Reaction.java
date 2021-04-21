@@ -17,7 +17,6 @@ public class Reaction extends Auditable {
     @Column(nullable = false, unique = true)
     private String reactionvalue;
 
-//
     @OneToMany
     @JoinColumn(name = "id")
     @JsonIgnoreProperties(value="reactions", allowSetters = true)

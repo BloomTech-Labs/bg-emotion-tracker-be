@@ -9,28 +9,28 @@ import java.io.Serializable;
 // reaction id
 // created id
 
-@Entity
+@Entity(name = "MemberReaction")
 @Table(name = "memberreactions")
 @IdClass(MemberReactionsId.class)
 public class MemberReactions extends Auditable implements Serializable
 {
+    @EmbeddedId
+    private MemberReactionsId id;
 
-    @Id
     @ManyToOne
     @JoinColumn(name="member_table_id")
-    @JsonIgnoreProperties(value="reactions")
+    @JsonIgnoreProperties(value="reactions", allowSetters = true)
     private Member member;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name="reaction_id")
-    @JsonIgnoreProperties(value="member")
+//    @JoinColumn(name="reaction_id")
+    @MapsId("reactionid")
+    @JsonIgnoreProperties(value="member", allowSetters = true)
     private Reaction reaction;
 
     @Column(nullable = false)
     private Boolean checkedin;
 
-    @Id
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "activityid"),

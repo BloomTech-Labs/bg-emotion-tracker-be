@@ -21,8 +21,8 @@ public class ClubActivities extends Auditable implements Serializable
 
 //    @Id
     @ManyToOne
-//    @JoinColumn(name = "clubid")
-    @MapsId("clubid")
+    @JoinColumn(name = "clubid")
+//    @MapsId("clubid")
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
     private Club club;
 

@@ -17,6 +17,7 @@ public class Reaction extends Auditable {
     @Column(nullable = false, unique = true)
     private String reactionvalue;
 
+//
     @OneToMany(mappedBy = "reactions")
     @JsonIgnoreProperties(value="reactions", allowSetters = true)
     public Set<MemberReactions> member = new HashSet<>();

@@ -33,9 +33,10 @@ public class ClubActivities extends Auditable implements Serializable
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
     private Activity activity;
 
+//    Changed Join Columns for Mapped by error
     @Column
-    @OneToMany(mappedBy="clubactivity")
-    @JoinColumn(name="memberreactionid")
+    @OneToMany
+    @JoinColumns({@JoinColumn(name ="memberid"), @JoinColumn(name ="reactionid")})
     private Set<MemberReactions> reactions = new HashSet<>();
 
 

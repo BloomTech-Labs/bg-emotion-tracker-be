@@ -24,18 +24,22 @@ public class Activity extends Auditable
     private long activityid;
 
 
+    @ApiModelProperty(name = "Club Activity Join",
+            value = "Join Table",
+            required = true
+    )
     @OneToMany(mappedBy = "activity",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @JsonIgnoreProperties(value = "activity", allowSetters = true)
     private Set<ClubActivities> clubs = new HashSet<>();
 
+
     @ApiModelProperty(name = "Activity Name",
             value = "Full activity name",
             required = true,
             example = "Piano Lessons"
     )
-
     @Column(nullable = false)
     private String activityname;
 

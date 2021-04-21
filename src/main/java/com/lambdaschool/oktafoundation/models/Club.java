@@ -29,12 +29,24 @@ public class Club
     @GeneratedValue(strategy = GenerationType.AUTO )
     private long clubid;
 
+
+    @ApiModelProperty(
+            name = "Club Activities Join Table",
+            value = "Join Table",
+            required = true
+    )
     @OneToMany(mappedBy = "club",
     cascade = CascadeType.ALL,
     orphanRemoval = true)
     @JsonIgnoreProperties(value = "club", allowSetters = true)
     private Set<ClubActivities> activities = new HashSet<>();
 
+
+    @ApiModelProperty(
+            name = "Club Users Join Table",
+            value = "Join Table",
+            required = true
+    )
     @OneToMany(mappedBy = "club",
             cascade = CascadeType.ALL,
             orphanRemoval = true)

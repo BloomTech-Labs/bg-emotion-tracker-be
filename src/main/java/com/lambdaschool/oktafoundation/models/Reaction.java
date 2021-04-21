@@ -1,17 +1,13 @@
 package com.lambdaschool.oktafoundation.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "reactions")
 public class Reaction extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long reacitonid;
+    private long reactionid;
 
     @Column(nullable = false, unique = true)
     private String reactionvalue;
@@ -23,12 +19,12 @@ public class Reaction extends Auditable {
     public Reaction() {
     }
 
-    public long getReacitonid() {
-        return reacitonid;
+    public long getReactionid() {
+        return reactionid;
     }
 
-    public void setReacitonid(long reacitonid) {
-        this.reacitonid = reacitonid;
+    public void setReactionid(long reacitonid) {
+        this.reactionid = reacitonid;
     }
 
 //    public Set<MemberReaction> getMember() {

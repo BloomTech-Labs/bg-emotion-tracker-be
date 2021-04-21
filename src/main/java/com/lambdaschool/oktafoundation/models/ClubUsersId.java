@@ -1,7 +1,9 @@
 package com.lambdaschool.oktafoundation.models;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Embeddable
 public class ClubUsersId implements Serializable {
     private long club;
     private long user;

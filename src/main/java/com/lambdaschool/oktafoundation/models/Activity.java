@@ -14,13 +14,11 @@ public class Activity extends Auditable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long activityid;
 
-//    @OneToMany(mappedBy = "activity",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true)
-////    @JsonIgnoreProperties(value = "club", allowSetters = true)
-//    @JsonIgnoreProperties(value = "activity", allowSetters = true)
-////    private Set<ClubActivity> club = new HashSet<>();
-//    private Set<ClubActivities> clubs = new HashSet<>();
+    @OneToMany(mappedBy = "activity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonIgnoreProperties(value = "activity", allowSetters = true)
+    private Set<ClubActivities> clubs = new HashSet<>();
 
 
     @Column(nullable = false)
@@ -34,13 +32,13 @@ public class Activity extends Auditable
         this.activityid = activityid;
     }
 
-//    public Set<ClubActivities> getClub() {
-//        return clubs;
-//    }
-//
-//    public void setClub(Set<ClubActivities> club) {
-//        this.clubs = club;
-//    }
+    public Set<ClubActivities> getClub() {
+        return clubs;
+    }
+
+    public void setClub(Set<ClubActivities> club) {
+        this.clubs = club;
+    }
 
     public String getActivityname() {
         return activityname;

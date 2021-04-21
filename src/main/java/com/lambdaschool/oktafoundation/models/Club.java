@@ -2,6 +2,8 @@ package com.lambdaschool.oktafoundation.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
@@ -9,12 +11,19 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@ApiModel
 @Entity(name = "Club")
 @Table(name = "clubs")
 @NaturalIdCache
 public class Club
     extends Auditable
 {
+    @ApiModelProperty(
+            name = "Club Id",
+            value = "primary key for club",
+            required = true,
+            example = "1"
+    )
     // Id for table itself
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
@@ -32,6 +41,13 @@ public class Club
     @JsonIgnoreProperties(value = "club", allowSetters = true)
     private Set<ClubUsers> users = new HashSet<>();
 
+
+    @ApiModelProperty(
+            name = "Club Name",
+            value = "Name of the Club",
+            required = true,
+            example = "South Palmdale Club"
+    )
     @NaturalId
     @Column(nullable = false, unique = true)
     private String clubname;

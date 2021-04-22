@@ -24,6 +24,13 @@ public class Activity extends Auditable
     @Column(nullable = false)
     private String activityname;
 
+    public Activity() {
+    }
+
+    public Activity(String activityname) {
+        this.activityname = activityname;
+    }
+
     public long getActivityid() {
         return activityid;
     }
@@ -38,6 +45,10 @@ public class Activity extends Auditable
 
     public void setClub(Set<ClubActivities> club) {
         this.clubs = club;
+    }
+
+    public Set<ClubActivities> getClubs() {
+        return clubs;
     }
 
     public String getActivityname() {

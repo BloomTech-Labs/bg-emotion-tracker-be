@@ -1,7 +1,7 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
-import com.lambdaschool.oktafoundation.models.Activity;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +29,60 @@ public class ActivityServiceImpl implements ActivityService{
     public Activity findActivityById(Long activityid) {
         return activityRepo.findById(activityid)
                 .orElseThrow(() -> new ResourceNotFoundException("Activity id" + activityid + "not found."));
+    }
+
+    @Override
+    public Activity save(Activity newActivity) {
+        Activity saveActivity = new Activity();
+
+        if(newActivity.getActivityid() != 0)
+        {
+            activityRepo.findById(newActivity.getActivityid())
+                    .orElseThrow(() -> new ResourceNotFoundException("Activity id" + newActivity.getActivityid() + "not found."));
+            saveActivity.setActivityid(newActivity.getActivityid());
+        }
+//      set Fields
+        saveActivity.setActivityname(newActivity.getActivityname());
+//      set Relationships
+        newActivity.getClubs()
+                .clear();
+        for(ClubActivities ca: newActivity.getClubs())
+        {
+            Club newClub = new Club();
+            newClub.setClubname(ca.getClub().getClubname());
+
+            ClubActivities newclubActivities = new ClubActivities();
+            newclubActivities.setActivity(saveActivity);
+            newclubActivities.setClub(newClub);
+            newclubActivities.getReactions().clear();
+            for (MemberReactions mr: ca.getReactions())
+            {
+                Member newMember = new Member();
+                newMember.setMemberid(mr.getMember().getMemberid());
+
+                Reaction newReaction = new Reaction();
+                newReaction.setReactionvalue(mr.getReaction().getReactionvalue());
+
+                MemberReactions newMemberReaction = new MemberReactions();
+                newMemberReaction.setMember(newMember);
+                newMemberReaction.setReaction(newReaction);
+                newMemberReaction.setCheckedin(mr.getCheckedin());
+                newMemberReaction.setClubactivity(newclubActivities);
+
+                newclubActivities.getReactions().add(newMemberReaction);
+            }
+            newActivity.getClubs().add(newclubActivities);
+        }
+        return activityRepo.save(newActivity);
+    }
+
+    @Override
+    public void update(Activity updateActivity, long activityid) {
+
+    }
+
+    @Override
+    public void delete(long activityid) {
+
     }
 }

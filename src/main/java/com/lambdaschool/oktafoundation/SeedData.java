@@ -1,8 +1,6 @@
 package com.lambdaschool.oktafoundation;
 
-import com.lambdaschool.oktafoundation.models.Role;
-import com.lambdaschool.oktafoundation.models.User;
-import com.lambdaschool.oktafoundation.models.UserRoles;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.services.RoleService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +89,41 @@ public class SeedData
                 .add(new UserRoles(u4,
                         r4));
         userService.save(u4);
+//        Activities
+        Activity a1 = new Activity("Club Attendance");
+
+//        Club
+        Club c1 = new Club("Anderson");
+        c1.getActivities()
+                .add(new ClubActivities());
+
+        Club c2 = new Club("Caitlin");
+        c2.getActivities()
+                .add(new ClubActivities());
+
+        Club c3 = new Club("Grossman");
+        c3.getActivities()
+                .add(new ClubActivities());
+
+        Club c4 = new Club("Johnston");
+        c4.getActivities()
+            .add(new ClubActivities());
+
+        Club c5 = new Club("Marley");
+        c5.getActivities()
+                .add(new ClubActivities());
+
+        Club c6 = new Club ("Morton");
+        c6.getActivities()
+                .add(new ClubActivities());
+
+        Club c7 = new Club("Notter");
+        c7.getActivities()
+                .add(new ClubActivities());
+
+        Club c8 = new Club("Stelle");
+        c8.getActivities()
+                .add(new ClubActivities());
 
 
         // The following is an example user!

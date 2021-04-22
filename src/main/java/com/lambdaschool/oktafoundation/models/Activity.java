@@ -23,6 +23,14 @@ public class Activity extends Auditable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long activityid;
 
+    @ApiModelProperty(name = "Activity Name",
+            value = "Full activity name",
+            required = true,
+            example = "Piano Lessons"
+    )
+    @Column(nullable = false)
+    private String activityname;
+
 
     @ApiModelProperty(name = "Club Activity Join",
             value = "Join Table",
@@ -34,14 +42,10 @@ public class Activity extends Auditable
     @JsonIgnoreProperties(value = "activity", allowSetters = true)
     private Set<ClubActivities> clubs = new HashSet<>();
 
+    public Activity(String club_attendance) {
+        super();
+    }
 
-    @ApiModelProperty(name = "Activity Name",
-            value = "Full activity name",
-            required = true,
-            example = "Piano Lessons"
-    )
-    @Column(nullable = false)
-    private String activityname;
 
     public long getActivityid() {
         return activityid;

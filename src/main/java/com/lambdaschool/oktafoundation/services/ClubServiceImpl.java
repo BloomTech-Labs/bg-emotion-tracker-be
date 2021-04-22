@@ -166,20 +166,7 @@ public class ClubServiceImpl implements ClubService{
                 Activity newActivity = activityRepos.findById(ca.getActivity().getActivityid())
                         .orElseThrow(() -> new EntityNotFoundException("Activity" + ca.getActivity().getActivityid() + "not found."));
 
-
-                if(newClubActivity.getReactions()
-                        .size() > 0)
-                {
-                    newClubActivity.getReactions()
-                            .clear();
-                    for (MemberReactions mr : ca.getReactions())
-                    {
-                        MemberReactions newMemberReaction = memberReactionRepos.findById(mr.getReaction().getReactionid())
-                                .orElseThrow(() -> new EntityNotFoundException("Member Reaction" + mr.getReaction().getReactionid() + "not found."));
-                        newClubActivity.getReactions().add(newMemberReaction);
-                    }
-                }
-                updateClub.getActivities().add(newClubActivity);
+                updateClub.getActivities().add(new ClubActivities(updateClub, newActivity));
             }
         }
         if(club.getUsers()
@@ -195,7 +182,7 @@ public class ClubServiceImpl implements ClubService{
                 updateClub.getUsers().add(new ClubUsers(addUser, updateClub));
             }
         }
-        
+
     }
 
 

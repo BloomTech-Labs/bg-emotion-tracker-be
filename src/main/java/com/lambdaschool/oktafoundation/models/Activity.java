@@ -39,13 +39,16 @@ public class Activity extends Auditable
     @OneToMany(mappedBy = "activity",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+
     @JsonIgnoreProperties(value = "activity", allowSetters = true)
     private Set<ClubActivities> clubs = new HashSet<>();
 
-    public Activity(String club_attendance) {
-        super();
+    public Activity() {
     }
 
+    public Activity(String activityname) {
+        this.activityname = activityname;
+    }
 
     public long getActivityid() {
         return activityid;

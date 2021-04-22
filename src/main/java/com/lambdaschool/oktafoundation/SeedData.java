@@ -91,6 +91,12 @@ public class SeedData
         userService.save(u4);
 //        Activities
         Activity a1 = new Activity("Club Attendance");
+        Activity a2 = new Activity("Arts & Crafts");
+        Activity a3 = new Activity("Archery");
+        Activity a4 = new Activity("Basketball");
+        Activity a5 = new Activity("Homework Help");
+        Activity a6 = new Activity("Music");
+        Activity a7 = new Activity("Soccer");
 
 //        Club
         Club c1 = new Club("Anderson");

@@ -48,6 +48,13 @@ public class ClubActivities extends Auditable implements Serializable
 
     }
 
+    public ClubActivities(ClubActivitiesId id, Club club, Activity activity, Set<MemberReactions> reactions) {
+        this.id = id;
+        this.club = club;
+        this.activity = activity;
+        this.reactions = reactions;
+    }
+
     // Getters + Setters
 
     public Club getClub() {

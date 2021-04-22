@@ -165,6 +165,8 @@ public class ClubServiceImpl implements ClubService{
             {
                 Activity newActivity = activityRepos.findById(ca.getActivity().getActivityid())
                         .orElseThrow(() -> new EntityNotFoundException("Activity" + ca.getActivity().getActivityid() + "not found."));
+
+
                 if(newClubActivity.getReactions()
                         .size() > 0)
                 {
@@ -193,45 +195,7 @@ public class ClubServiceImpl implements ClubService{
                 updateClub.getUsers().add(new ClubUsers(addUser, updateClub));
             }
         }
-
-
-        newClub.getUsers()
-                .clear();
-        for (ClubUsers cu: club.getUsers())
-        {
-            User newUser = new User();
-
-            if (cu.getUser().getUserid() != 0)
-            {
-                clubUsersrepo.findById(cu.getUser().getUserid())
-                        .orElseThrow(() -> new ResourceNotFoundException("User id " + user.getUserid() + " not found!"));
-                newUser.setUserid(cu.getUser().getUserid());
-            }
-
-            newUser.setUsername(cu.getUser().getUsername()
-                    .toLowerCase());
-
-            newUser.getRoles()
-                    .clear();
-            for (UserRoles ur : cu.getUser().getRoles())
-            {
-                Role addRole = roleService.findRoleById(ur.getRole()
-                        .getRoleid());
-                newUser.getRoles()
-                        .add(new UserRoles(newUser,
-                                addRole));
-            }
-
-            newUser.getUseremails()
-                    .clear();
-            for (Useremail ue : cu.getUser().getUseremails())
-            {
-                newUser.getUseremails()
-                        .add(new Useremail(newUser,
-                                ue.getUseremail()));
-            }
-            newClub.getUsers().add(new ClubUsers(newUser, newClub));
-        }
+        
     }
 
 

@@ -2,10 +2,7 @@ package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.*;
-import com.lambdaschool.oktafoundation.repository.ClubActivityRepository;
-import com.lambdaschool.oktafoundation.repository.ClubRepository;
-import com.lambdaschool.oktafoundation.repository.ClubUsersRepository;
-import com.lambdaschool.oktafoundation.repository.RoleRepository;
+import com.lambdaschool.oktafoundation.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +30,15 @@ public class ClubServiceImpl implements ClubService{
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private MemberReactionRepository memberReactionRepos;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ActivityRepository activityRepos;
+
     @Override
     public List<Club> findAll() {
         List<Club> clubList = new ArrayList<>();
@@ -54,7 +60,6 @@ public class ClubServiceImpl implements ClubService{
     @Transactional
     @Override
     public Club save(Club club) {
-
         Club newClub = new Club();
 
         if(club.getClubid() != 0)
@@ -107,7 +112,7 @@ public class ClubServiceImpl implements ClubService{
             if (cu.getUser().getUserid() != 0)
             {
                 clubUsersrepo.findById(cu.getUser().getUserid())
-                        .orElseThrow(() -> new ResourceNotFoundException("User id " + user.getUserid() + " not found!"));
+                        .orElseThrow(() -> new ResourceNotFoundException("User id " + cu.getUser().getUserid() + " not found!"));
                 newUser.setUserid(cu.getUser().getUserid());
             }
 
@@ -142,40 +147,93 @@ public class ClubServiceImpl implements ClubService{
     @Override
     public void update(Club club, long clubid) {
 
+        Club updateClub = clubrepos.findById(clubid)
+                .orElseThrow(() -> new ResourceNotFoundException("Club" + clubid + "not found."));
+
+//      set Fields
+        if (club.getClubname() != null)
+        {
+            updateClub.setClubname(club.getClubname());
+        }
+//      set relationships
+        if(club.getActivities()
+                .size() > 0)
+        {
+            updateClub.getActivities()
+                    .clear();
+            for(ClubActivities ca: club.getActivities())
+            {
+                Activity newActivity = activityRepos.findById(ca.getActivity().getActivityid())
+                        .orElseThrow(() -> new EntityNotFoundException("Activity" + ca.getActivity().getActivityid() + "not found."));
+                if(newClubActivity.getReactions()
+                        .size() > 0)
+                {
+                    newClubActivity.getReactions()
+                            .clear();
+                    for (MemberReactions mr : ca.getReactions())
+                    {
+                        MemberReactions newMemberReaction = memberReactionRepos.findById(mr.getReaction().getReactionid())
+                                .orElseThrow(() -> new EntityNotFoundException("Member Reaction" + mr.getReaction().getReactionid() + "not found."));
+                        newClubActivity.getReactions().add(newMemberReaction);
+                    }
+                }
+                updateClub.getActivities().add(newClubActivity);
+            }
+        }
+        if(club.getUsers()
+                .size()>0)
+        {
+            updateClub.getUsers()
+                    .clear();
+            for(ClubUsers cu: club.getUsers())
+            {
+                User addUser = userRepository.findById(cu.getUser().getUserid())
+                        .orElseThrow(() -> new ResourceNotFoundException("User id" + cu.getUser().getUserid() + "not found."));
+
+                updateClub.getUsers().add(new ClubUsers(addUser, updateClub));
+            }
+        }
+
+
+        newClub.getUsers()
+                .clear();
+        for (ClubUsers cu: club.getUsers())
+        {
+            User newUser = new User();
+
+            if (cu.getUser().getUserid() != 0)
+            {
+                clubUsersrepo.findById(cu.getUser().getUserid())
+                        .orElseThrow(() -> new ResourceNotFoundException("User id " + user.getUserid() + " not found!"));
+                newUser.setUserid(cu.getUser().getUserid());
+            }
+
+            newUser.setUsername(cu.getUser().getUsername()
+                    .toLowerCase());
+
+            newUser.getRoles()
+                    .clear();
+            for (UserRoles ur : cu.getUser().getRoles())
+            {
+                Role addRole = roleService.findRoleById(ur.getRole()
+                        .getRoleid());
+                newUser.getRoles()
+                        .add(new UserRoles(newUser,
+                                addRole));
+            }
+
+            newUser.getUseremails()
+                    .clear();
+            for (Useremail ue : cu.getUser().getUseremails())
+            {
+                newUser.getUseremails()
+                        .add(new Useremail(newUser,
+                                ue.getUseremail()));
+            }
+            newClub.getUsers().add(new ClubUsers(newUser, newClub));
+        }
     }
 
-    //    @Transactional
-//    @Override
-//    public void update(Club club, long clubid) {
-//
-//        Club updateClub = clubrepos.findById(clubid)
-//                .orElseThrow(() -> new EntityNotFoundException("Club Id" + clubid + "not found."));
-//
-//        if(club.getClubname() != null)
-//        {
-//            updateClub.setClubname(club.getClubname().toLowerCase());
-//        }
-//        if(club.getActivities().size() > 0)
-//        {
-//            updateClub.getActivities().clear();
-//            for(ClubActivities ca: club.getActivities())
-//            {
-//                ClubActivities newClubActivities = clubactivityrepos.findById(ca.get())
-//                        .orElseThrow(() -> new EntityNotFoundException("Club Activity" + ca.getClubactivityid() + "Not found!"));
-//                updateClub.getActivities().add(newClubActivities);
-//            }
-//        }
-//        if(club.getUsers().size() > 0)
-//        {
-//            updateClub.getUsers().clear();
-//            for(ClubUsers cu: club.getUsers())
-//            {
-//                ClubUsers newClubUser = clubUsersrepo.findById(cu.getUser().getUserid())
-//                        .orElseThrow(() -> new EntityNotFoundException("Club User" + cu.getUser().getUserid() + "Not found!"));
-//                updateClub.getUsers().add(newClubUser);
-//            }
-//        }
-//    }
 
     @Override
     public void delete(long clubid) {

@@ -3,18 +3,25 @@ package com.lambdaschool.oktafoundation.services;
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.ActivityRepository;
+import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
 @Service(value = "activityService")
 public class ActivityServiceImpl implements ActivityService{
+
     @Autowired
     private ActivityRepository activityRepo;
+
+    @Autowired
+    private ClubRepository clubRepo;
+
     @Override
     public List<Activity> findAll() {
         List<Activity> activityList = new ArrayList<>();
@@ -77,12 +84,38 @@ public class ActivityServiceImpl implements ActivityService{
     }
 
     @Override
-    public void update(Activity updateActivity, long activityid) {
+    public Activity update(Activity updateActivity, long activityid) {
+
+        Activity updateCurrentActivity = activityRepo.findById(activityid)
+                .orElseThrow(() -> new ResourceNotFoundException("Activity id " + activityid + "not found."));
+
+//      set fields
+        if (updateActivity.getActivityname() != null)
+        {
+            updateCurrentActivity.setActivityname(updateActivity.getActivityname());
+        }
+//      set relationships
+        if(updateActivity.getClubs()
+                .size() >0)
+        {
+            updateCurrentActivity.getClubs()
+                    .clear();
+            for(ClubActivities ca: updateActivity.getClubs())
+            {
+                Club newClub = clubRepo.findById(ca.getClub().getClubid())
+                        .orElseThrow(() -> new EntityNotFoundException("Club id" + ca.getClub().getClubid() + "not found."));
+
+                updateCurrentActivity.getClubs().add(new ClubActivities(newClub, updateCurrentActivity));
+            }
+        }
+        return activityRepo.save(updateCurrentActivity);
 
     }
 
     @Override
     public void delete(long activityid) {
-
+        activityRepo.findById(activityid)
+                .orElseThrow(() -> new ResourceNotFoundException("Activity id" + activityid + "not found!"));
+        activityRepo.deleteById(activityid);
     }
 }

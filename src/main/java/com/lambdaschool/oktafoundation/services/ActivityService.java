@@ -12,7 +12,7 @@ public interface ActivityService {
 
     Activity save(Activity newActivity);
 
-    void update(Activity updateActivity, long activityid);
+    Activity update(Activity updateActivity, long activityid);
 
     void delete(long activityid);
 }

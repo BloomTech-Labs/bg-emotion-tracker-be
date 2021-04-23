@@ -145,7 +145,7 @@ public class ClubServiceImpl implements ClubService{
     }
 
     @Override
-    public void update(Club club, long clubid) {
+    public Club update(Club club, long clubid) {
 
         Club updateClub = clubrepos.findById(clubid)
                 .orElseThrow(() -> new ResourceNotFoundException("Club" + clubid + "not found."));
@@ -182,7 +182,7 @@ public class ClubServiceImpl implements ClubService{
                 updateClub.getUsers().add(new ClubUsers(addUser, updateClub));
             }
         }
-
+        return clubrepos.save(updateClub);
     }
 
 

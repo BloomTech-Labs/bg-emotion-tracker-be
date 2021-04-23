@@ -10,6 +10,7 @@ import java.io.Serializable;
 @IdClass(ClubUsersId.class)
 public class ClubUsers extends Auditable implements Serializable
 {
+
     @Id
     @ManyToOne
     @JoinColumn(name = "clubid")

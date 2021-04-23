@@ -12,8 +12,6 @@ import java.util.Set;
 @IdClass(ClubActivitiesId.class)
 public class ClubActivities extends Auditable implements Serializable
 {
-
-    // Joining club and activities and using both ids for the external ids
     @EmbeddedId
     private ClubActivitiesId id;
 
@@ -31,6 +29,7 @@ public class ClubActivities extends Auditable implements Serializable
     @OneToMany
     @JoinColumns({@JoinColumn(name ="memberid"), @JoinColumn(name ="reactionid")})
     private Set<MemberReactions> reactions = new HashSet<>();
+
 
 
     public ClubActivities(

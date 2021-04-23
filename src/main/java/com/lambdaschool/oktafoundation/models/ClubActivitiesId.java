@@ -55,7 +55,6 @@ public class ClubActivitiesId implements Serializable {
      * Setter for the activity id
      *
      * @return long the activity id
-     * 
      */
     public void setActivity(long activity) {
         this.activity = activity;

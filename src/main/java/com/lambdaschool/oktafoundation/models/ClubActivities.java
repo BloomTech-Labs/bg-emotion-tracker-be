@@ -58,8 +58,8 @@ public class ClubActivities extends Auditable implements Serializable
     /**
      * Given the params, create a new club activity combination object
      *
-     * @param club The user object of this relationship
-     * @param activity The role object of this relationship
+     * @param club The club object of this relationship
+     * @param activity The activity object of this relationship
      */
     public ClubActivities(
             Club club,
@@ -73,7 +73,7 @@ public class ClubActivities extends Auditable implements Serializable
     /**
      * The getter for Club
      *
-     * @return the complete user object associated with user role combination
+     * @return the complete user object associated with club activity combination
      */
     public Club getClub() {
         return club;

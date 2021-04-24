@@ -60,7 +60,7 @@ public class MemberReactionsId implements Serializable {
     public void setReaction(long reaction) {
         this.reaction = reaction;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

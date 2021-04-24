@@ -130,5 +130,4 @@ public class Club
     public void setClubname(String clubname) {
         this.clubname = clubname.toLowerCase();
     }
-// TODO IF ERROR PERSISTS THIS IS WHERE IT HAPPENED.
 }

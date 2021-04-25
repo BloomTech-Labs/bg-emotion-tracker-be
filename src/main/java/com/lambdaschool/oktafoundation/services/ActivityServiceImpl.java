@@ -12,13 +12,21 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implements ActivityService Interface
+ */
 @Transactional
 @Service(value = "activityService")
 public class ActivityServiceImpl implements ActivityService{
 
+    /**
+     * Connects this service to the Activity table.
+     */
     @Autowired
     private ActivityRepository activityRepo;
-
+    /**
+     * Connects this service to the Club table.
+     */
     @Autowired
     private ClubRepository clubRepo;
 

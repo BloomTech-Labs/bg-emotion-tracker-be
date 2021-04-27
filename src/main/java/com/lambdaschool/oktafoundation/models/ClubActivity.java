@@ -29,7 +29,7 @@ public class ClubActivity extends Auditable implements Serializable
     private Activity activity;
 
     @OneToMany(mappedBy="clubactivity")
-    @JoinColumn(name="memberreactionid")
+    @JsonIgnoreProperties(value = "clubactivity")
     private Set<MemberReaction> reactions = new HashSet<>();
 
 

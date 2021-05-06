@@ -72,56 +72,49 @@ public class SeedData
         userService.save(u1);
 
 //        Youth Development Professional
-        User u2 = new User("barnbarn@maildrop.cc");
+        User u2 = new User("llama002@maildrop.cc");
         u2.getRoles()
             .add(new UserRoles(u2,
                 r2));
         userService.save(u2);
 
 //        Club Director
-        User u3 = new User("serviceprovider@bngclub.cc");
+        User u3 = new User("llama003@maildrop.cc");
         u3.getRoles()
                 .add(new UserRoles(u3,
                         r3));
         userService.save(u3);
 
 //        Kid
-        User u4 = new User("kid1@bngclub.cc");
+        User u4 = new User("llama004@maildrop.cc");
         u4.getRoles()
                 .add(new UserRoles(u4,
                         r4));
         userService.save(u4);
 
-        User u5 = new User("kid2@bngclub.cc");
+        User u5 = new User("llama005@maildrop.cc");
         u5.getRoles()
                 .add(new UserRoles(u5,
                         r4));
         userService.save(u5);
 
-        User u6 = new User("kid3@bngclub.cc");
+        User u6 = new User("llama006@maildrop.cc");
         u6.getRoles()
                 .add(new UserRoles(u6,
                         r4));
         userService.save(u6);
 
-        User u7 = new User("kid4@bngclub.cc");
+        User u7 = new User("llama007@maildrop.cc");
         u7.getRoles()
                 .add(new UserRoles(u7,
                         r4));
         userService.save(u7);
 
-        User u8 = new User("kid5@bngclub.cc");
+        User u8 = new User("llama008@maildrop.cc");
         u8.getRoles()
                 .add(new UserRoles(u8,
                         r4));
         userService.save(u8);
-
-        User u9 = new User("kid6@bngclub.cc");
-        u9.getRoles()
-                .add(new UserRoles(u9,
-                        r4));
-        userService.save(u9);
-
 
         // The following is an example user!
         /*

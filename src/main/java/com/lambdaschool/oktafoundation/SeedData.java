@@ -86,11 +86,41 @@ public class SeedData
         userService.save(u3);
 
 //        Kid
-        User u4 = new User("normaluser@bngclub.cc");
+        User u4 = new User("kid1@bngclub.cc");
         u4.getRoles()
                 .add(new UserRoles(u4,
                         r4));
         userService.save(u4);
+
+        User u5 = new User("kid2@bngclub.cc");
+        u5.getRoles()
+                .add(new UserRoles(u5,
+                        r4));
+        userService.save(u5);
+
+        User u6 = new User("kid3@bngclub.cc");
+        u6.getRoles()
+                .add(new UserRoles(u6,
+                        r4));
+        userService.save(u6);
+
+        User u7 = new User("kid4@bngclub.cc");
+        u7.getRoles()
+                .add(new UserRoles(u7,
+                        r4));
+        userService.save(u7);
+
+        User u8 = new User("kid5@bngclub.cc");
+        u8.getRoles()
+                .add(new UserRoles(u8,
+                        r4));
+        userService.save(u8);
+
+        User u9 = new User("kid6@bngclub.cc");
+        u9.getRoles()
+                .add(new UserRoles(u9,
+                        r4));
+        userService.save(u9);
 
 
         // The following is an example user!

@@ -70,7 +70,7 @@ public class ClubController {
      * @see ClubService#save(Club) ClubService.save(Club)
      */
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @PostMapping(value = "/user/newClub",
+    @PostMapping(value = "/club/newClub",
             consumes = "application/json")
     public ResponseEntity<?> addNewClub(
             @Valid @RequestBody Club club) throws URISyntaxException

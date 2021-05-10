@@ -126,4 +126,12 @@ public class ActivityServiceImpl implements ActivityService{
                 .orElseThrow(() -> new ResourceNotFoundException("Activity id" + activityid + "not found!"));
         activityRepo.deleteById(activityid);
     }
+
+
+    @Transactional
+    @Override
+    public void deleteAll()
+    {
+        activityRepo.deleteAll();
+    }
 }

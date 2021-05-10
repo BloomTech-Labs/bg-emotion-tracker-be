@@ -3,6 +3,7 @@ package com.lambdaschool.oktafoundation.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,18 +19,20 @@ import java.util.Set;
  * When you implement Serializable you must implement equals and hash code
  */
 @Entity(name = "ClubActivity")
-@Table(name = "club_activites")
+@Table(name = "club_activities")
 @IdClass(ClubActivitiesId.class)
 public class ClubActivities extends Auditable implements Serializable
 {
-    @EmbeddedId
-    private ClubActivitiesId id;
+//    @EmbeddedId
+//    private ClubActivitiesId id;
 
     /**
      * 1/2 of the primary key (long) for clubactivities.
      * Also is a foreign key into the club table
      */
+    @Id
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "clubid")
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
     private Club club;
@@ -37,8 +40,10 @@ public class ClubActivities extends Auditable implements Serializable
     * 1/2 of the primary key (long) for clubactivities.
     * Also is a foreign key into the activity table
     */
+    @Id
     @ManyToOne
-    @MapsId("activityid")
+    @NotNull
+    @JoinColumn(name = "activityid")
     @JsonIgnoreProperties(value = "roles", allowSetters = true)
     private Activity activity;
     /**
@@ -67,12 +72,12 @@ public class ClubActivities extends Auditable implements Serializable
     {
         this.club = club;
         this.activity = activity;
-        this.id = new ClubActivitiesId(club.getClubid(), activity.getActivityid());
+//        this.id = new ClubActivitiesId(club.getClubid(), activity.getActivityid());
     }
 
 
-    public ClubActivities(ClubActivitiesId id, Club club, Activity activity, Set<MemberReactions> reactions) {
-        this.id = id;
+    public ClubActivities(Club club, Activity activity, Set<MemberReactions> reactions) {
+//        this.id = id;
         this.club = club;
         this.activity = activity;
         this.reactions = reactions;
@@ -112,22 +117,7 @@ public class ClubActivities extends Auditable implements Serializable
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
-    /**
-     * Getter for clubactivitiesid
-     *
-     * @return the id (long) of the clubactivitiesid
-     */
-    public ClubActivitiesId getId() {
-        return id;
-    }
-    /**
-     * Setter for id. Used primary for seeding data
-     *
-     * @param id the new id (long) of the clubactivities
-     */
-    public void setId(ClubActivitiesId id) {
-        this.id = id;
-    }
+
     /**
      * Getter for member reaction combinations
      *

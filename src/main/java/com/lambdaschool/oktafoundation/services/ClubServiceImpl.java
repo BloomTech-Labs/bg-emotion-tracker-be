@@ -75,7 +75,12 @@ public class ClubServiceImpl implements ClubService{
                 .clear();
         for (ClubActivities ca: club.getActivities())
         {
+
             Activity newActivity = new Activity();
+            if(ca.getActivity().getActivityid() != 0) {
+                activityRepos.findById(ca.getActivity().getActivityid()).orElseThrow();
+                newActivity.setActivityid(ca.getActivity().getActivityid());
+            }
             newActivity.setActivityname(ca.getActivity().getActivityname());
 
             ClubActivities newclubActivities = new ClubActivities();
@@ -191,5 +196,13 @@ public class ClubServiceImpl implements ClubService{
         clubrepos.findById(clubid)
                 .orElseThrow(() -> new ResourceNotFoundException("Club id" + clubid + "not found!"));
         clubrepos.deleteById(clubid);
+    }
+
+
+    @Transactional
+    @Override
+    public void deleteAll()
+    {
+        clubrepos.deleteAll();
     }
 }

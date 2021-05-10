@@ -23,10 +23,6 @@ public class ClubActivitiesId implements Serializable {
     public ClubActivitiesId() {
     }
 
-    public ClubActivitiesId(long user, long role) {
-        this.club = user;
-        this.activity = role;
-    }
     /**
      * Getter for the club id
      *

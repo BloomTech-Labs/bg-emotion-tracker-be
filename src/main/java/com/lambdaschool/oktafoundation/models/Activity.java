@@ -21,6 +21,7 @@ public class Activity extends Auditable
             value = "Primary Key for Activity",
             required = true,
             example = "1"
+    )
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long activityid;
@@ -49,12 +50,6 @@ public class Activity extends Auditable
     @JsonIgnoreProperties(value = "activity", allowSetters = true)
     private Set<ClubActivities> clubs = new HashSet<>();
 
-    /**
-     * The activityname (String). Cannot be null and must be unique
-     */
-    @NotNull
-    @Column(nullable = false)
-    private String activityname;
 
     /**
      * Default constructor used primarily by the JPA.

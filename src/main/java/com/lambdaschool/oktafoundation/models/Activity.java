@@ -47,7 +47,7 @@ public class Activity extends Auditable
             cascade = CascadeType.ALL,
             orphanRemoval = true)
 
-    @JsonIgnoreProperties(value = "activity", allowSetters = true)
+    @JsonIgnoreProperties(value = {"activity","reactions"}, allowSetters = true)
     private Set<ClubActivities> clubs = new HashSet<>();
 
 
@@ -82,14 +82,6 @@ public class Activity extends Auditable
      */
     public void setActivityid(long activityid) {
         this.activityid = activityid;
-    }
-    /**
-     * Getter for club activities combinations
-     *
-     * @return A list of club activity combinations associated with this activity
-     */
-    public Set<ClubActivities> getClub() {
-        return clubs;
     }
     /**
      * Setter for user role combinations

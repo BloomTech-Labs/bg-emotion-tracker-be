@@ -34,7 +34,7 @@ public class ClubActivities extends Auditable implements Serializable
     @ManyToOne
     @NotNull
     @JoinColumn(name = "clubid")
-    @JsonIgnoreProperties(value = "roles", allowSetters = true)
+    @JsonIgnoreProperties(value = {"activities","activity"}, allowSetters = true)
     private Club club;
     /**
     * 1/2 of the primary key (long) for clubactivities.
@@ -44,7 +44,7 @@ public class ClubActivities extends Auditable implements Serializable
     @ManyToOne
     @NotNull
     @JoinColumn(name = "activityid")
-    @JsonIgnoreProperties(value = "roles", allowSetters = true)
+    @JsonIgnoreProperties(value = {"clubs","club"}, allowSetters = true)
     private Activity activity;
     /**
      * Part of the join relationship between member and reactions
@@ -117,22 +117,7 @@ public class ClubActivities extends Auditable implements Serializable
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
-    /**
-     * Getter for clubactivitiesid
-     *
-     * @return the id (long) of the clubactivitiesid
-     */
-//    public ClubActivitiesId getId() {
-//        return id;
-//    }
-    /**
-     * Setter for id. Used primary for seeding data
-     *
-     * @param id the new id (long) of the clubactivities
-     */
-//    public void setId(ClubActivitiesId id) {
-//        this.id = id;
-//    }
+
     /**
      * Getter for member reaction combinations
      *

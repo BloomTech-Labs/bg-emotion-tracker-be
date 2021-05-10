@@ -34,7 +34,7 @@ public class ClubController {
      * @return JSON list of all clubs with a status of OK
      * @see ClubService#findAll() ClubService.findAll()
      */
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @GetMapping(value = "/clubs",
     produces = "application/json")
     public ResponseEntity <?> ListAllClubs()
@@ -51,7 +51,7 @@ public class ClubController {
      * @return JSON object of the club you seek
      * @see ClubService#findClubById(Long)  ClubService.findClubById(long)
      */
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @GetMapping(value = "/club/{clubid}",
         produces = "application/json")
     public ResponseEntity<?> getClubById(@PathVariable Long clubid)
@@ -69,7 +69,7 @@ public class ClubController {
      * @throws URISyntaxException Exception if something does not work in creating the location header
      * @see ClubService#save(Club) ClubService.save(Club)
      */
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PostMapping(value = "/club/newClub",
             consumes = "application/json")
     public ResponseEntity<?> addNewClub(
@@ -99,7 +99,7 @@ public class ClubController {
      * @return status of OK
      * @see ClubService#save(Club) ClubService.save(Club)
      */
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PatchMapping(value = "/club/{clubid}",
         consumes = "application/json")
     public ResponseEntity<?> updateClub(@RequestBody
@@ -117,7 +117,7 @@ public class ClubController {
      * @param clubid the primary key of the club you wish to delete
      * @return Status of NO_CONTENT
      */
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @DeleteMapping(value = "/club/{clubid}")
     public ResponseEntity<?> deleteClubById(
             @PathVariable long clubid)

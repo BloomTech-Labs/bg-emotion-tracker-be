@@ -84,14 +84,6 @@ public class Activity extends Auditable
         this.activityid = activityid;
     }
     /**
-     * Getter for club activities combinations
-     *
-     * @return A list of club activity combinations associated with this activity
-     */
-    public Set<ClubActivities> getClub() {
-        return clubs;
-    }
-    /**
      * Setter for user role combinations
      *
      * @return A list of club activity combinations associated with this activity

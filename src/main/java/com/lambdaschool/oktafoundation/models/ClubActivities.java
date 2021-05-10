@@ -70,6 +70,21 @@ public class ClubActivities extends Auditable implements Serializable
         this.id = new ClubActivitiesId(club.getClubid(), activity.getActivityid());
     }
 
+    // Constructor
+
+    public ClubActivities() {
+
+    }
+
+    public ClubActivities(ClubActivitiesId id, Club club, Activity activity, Set<MemberReactions> reactions) {
+        this.id = id;
+        this.club = club;
+        this.activity = activity;
+        this.reactions = reactions;
+    }
+
+    // Getters + Setters
+
     /**
      * The getter for Club
      *

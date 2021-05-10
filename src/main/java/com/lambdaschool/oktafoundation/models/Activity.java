@@ -1,6 +1,8 @@
 package com.lambdaschool.oktafoundation.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,24 +12,40 @@ import java.util.Set;
 /**
  * The entity allowing interaction with the activities table
  */
+@ApiModel(value = "Activities", description = "Activities available")
 @Entity
 @Table(name = "activities")
 public class Activity extends Auditable
 {
-    /**
-     * The primary key (long) of the activities table.
-     */
+    @ApiModelProperty(name = "Activity Id",
+            value = "Primary Key for Activity",
+            required = true,
+            example = "1"
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long activityid;
-
+    
     /**
      * Part of the join relationship between Club and Activities
      * connects clubs to the club activities combination
      */
+    @ApiModelProperty(name = "Activity Name",
+            value = "Full activity name",
+            required = true,
+            example = "Piano Lessons"
+            )
+    @Column(nullable = false)
+    private String activityname;
+
+
+    @ApiModelProperty(name = "Club Activity Join",
+            value = "Join Table",
+            required = true
+    )
     @OneToMany(mappedBy = "activity",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+
     @JsonIgnoreProperties(value = "activity", allowSetters = true)
     private Set<ClubActivities> clubs = new HashSet<>();
 

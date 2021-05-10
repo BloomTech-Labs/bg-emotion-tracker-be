@@ -2,6 +2,8 @@ package com.lambdaschool.oktafoundation.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
@@ -12,32 +14,49 @@ import java.util.Set;
 /**
  * The entity allowing interaction with the clubs table
  */
+@ApiModel
 @Entity(name = "Club")
 @Table(name = "clubs")
 @NaturalIdCache
 public class Club
     extends Auditable
 {
-    /**
-     * The primary key (long) of the clubs table.
-     */
+
+    @ApiModelProperty(
+            name = "Club Id",
+            value = "primary key for club",
+            required = true,
+            example = "1"
+    )
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
     private long clubid;
+
 
     /**
      * Part of the join relationship between Club and Activities
      * connects clubs to the club activities combination
      */
+    @ApiModelProperty(
+            name = "Club Activities Join Table",
+            value = "Join Table",
+            required = true
+    )
     @OneToMany(mappedBy = "club",
     cascade = CascadeType.ALL,
     orphanRemoval = true)
     @JsonIgnoreProperties(value = "club", allowSetters = true)
     private Set<ClubActivities> activities = new HashSet<>();
+
     /**
      * Part of the join relationship between Club and Users
      * connects clubs to the club users combination
      */
+    @ApiModelProperty(
+            name = "Club Users Join Table",
+            value = "Join Table",
+            required = true
+    )
     @OneToMany(mappedBy = "club",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
@@ -47,6 +66,12 @@ public class Club
     /**
      * The clubname (String). Cannot be null and must be unique
      */
+    @ApiModelProperty(
+            name = "Club Name",
+            value = "Name of the Club",
+            required = true,
+            example = "South Palmdale Club"
+    )
     @NaturalId
     @Column(nullable = false, unique = true)
     private String clubname;

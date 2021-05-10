@@ -2,6 +2,7 @@ package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.ClubActivities;
 import com.lambdaschool.oktafoundation.services.ClubActivityService;
+import io.swagger.annotations.ApiOperation;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,12 +25,16 @@ public class ClubActivityController {
      */
     @Autowired
     private ClubActivityService clubActivityService;
+  
     /**
      * Returns a list of all clubactivities
      * <br>Example: <a href="http://localhost:2019/clubactivities/clubactivities"></a>
      *
      * @return JSON list of all clubactivities with a status of OK
      */
+    @ApiOperation(value = "Returns all club activities",
+          response = ClubActivities.class,
+          responseContainer = "List")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/clubactivities",
     produces = "application/json")

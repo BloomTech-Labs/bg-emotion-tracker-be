@@ -117,22 +117,7 @@ public class ClubActivities extends Auditable implements Serializable
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
-    /**
-     * Getter for clubactivitiesid
-     *
-     * @return the id (long) of the clubactivitiesid
-     */
-//    public ClubActivitiesId getId() {
-//        return id;
-//    }
-    /**
-     * Setter for id. Used primary for seeding data
-     *
-     * @param id the new id (long) of the clubactivities
-     */
-//    public void setId(ClubActivitiesId id) {
-//        this.id = id;
-//    }
+
     /**
      * Getter for member reaction combinations
      *

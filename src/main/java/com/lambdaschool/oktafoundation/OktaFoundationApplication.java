@@ -12,9 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  */
 @EnableJpaAuditing
 @SpringBootApplication
-@PropertySource(value = "file:/Users/jacobolness/oktafoundationconf.properties", ignoreResourceNotFound = true)
-// Jordans config below, comment out line 15 and uncomment 17
-//@PropertySource(value = "file:/Users/jordanhanson/Downloads/oktafoundationconf.properties", ignoreResourceNotFound = true)
+@PropertySource("file:/E:/Coding/configs/oktafoundationconf.properties")
 public class OktaFoundationApplication
 {
     /**

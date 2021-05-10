@@ -36,7 +36,7 @@ public interface ClubService {
      * @param club The club fields to be updated.
      * @param clubid the primary key (long) of the club to update
      */
-    void update(Club club, long clubid);
+    Club update(Club club, long clubid);
 
     /**
      * Deletes the record by club (primary key) from the database.

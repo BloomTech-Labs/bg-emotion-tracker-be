@@ -55,6 +55,30 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
             .antMatchers("/roles/**")
             .hasAnyRole("ADMIN")
 
+            .antMatchers("/users/getuserinfo")
+            .authenticated()
+
+            .antMatchers("/users/user/**")
+            .authenticated()
+            .antMatchers("/clubactivities/**")
+            .hasAnyRole("ADMIN", "CD")
+
+            .antMatchers("/clubs/**")
+            .hasAnyRole("ADMIN", "CD")
+            .antMatchers("/clubusers/**")
+            .hasAnyRole("ADMIN", "CD")
+
+            .antMatchers("/roles/**")
+            .authenticated()
+
+            .antMatchers("/useremails/**")
+            .authenticated()
+
+            .antMatchers("/memberreactions/{id}")
+            .hasAnyRole("ADMIN", "CD")
+            .antMatchers("/memberreactions/**")
+            .authenticated()
+
             // *** Endpoints not specified above are automatically denied
             .anyRequest()
             .denyAll()

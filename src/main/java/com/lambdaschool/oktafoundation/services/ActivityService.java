@@ -41,4 +41,6 @@ public interface ActivityService {
      * Deletes the activity by activityid record from the database
      */
     void delete(long activityid);
+
+    void deleteAll();
 }

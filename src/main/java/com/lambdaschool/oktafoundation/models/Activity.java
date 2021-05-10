@@ -47,7 +47,7 @@ public class Activity extends Auditable
             cascade = CascadeType.ALL,
             orphanRemoval = true)
 
-    @JsonIgnoreProperties(value = "activity", allowSetters = true)
+    @JsonIgnoreProperties(value = {"activity","reactions"}, allowSetters = true)
     private Set<ClubActivities> clubs = new HashSet<>();
 
 

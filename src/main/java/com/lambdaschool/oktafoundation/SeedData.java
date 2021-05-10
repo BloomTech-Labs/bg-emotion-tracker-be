@@ -1,8 +1,7 @@
 package com.lambdaschool.oktafoundation;
 
 import com.lambdaschool.oktafoundation.models.*;
-import com.lambdaschool.oktafoundation.services.RoleService;
-import com.lambdaschool.oktafoundation.services.UserService;
+import com.lambdaschool.oktafoundation.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,6 +35,14 @@ public class SeedData
      */
     @Autowired
     UserService userService;
+
+
+    @Autowired
+    ClubService clubService;
+
+    @Autowired
+    ActivityService activityService;
+
 
     /**
      * Generates test, seed data for our application
@@ -115,6 +122,8 @@ public class SeedData
         userService.save(u8);
         
 //        Activities
+        clubService.deleteAll();
+        activityService.deleteAll();
         Activity a1 = new Activity("Club Attendance");
         Activity a2 = new Activity("Arts & Crafts");
         Activity a3 = new Activity("Archery");
@@ -122,8 +131,16 @@ public class SeedData
         Activity a5 = new Activity("Homework Help");
         Activity a6 = new Activity("Music");
         Activity a7 = new Activity("Soccer");
+        activityService.save(a1);
+        activityService.save(a2);
+        activityService.save(a3);
+        activityService.save(a4);
+        activityService.save(a5);
+        activityService.save(a6);
+        activityService.save(a7);
 
-//        Club
+
+//       Club
         //Anderson has Attendance, Arts, Archery, Basketball, Homework
         Club c1 = new Club("Anderson");
         c1.getActivities()
@@ -136,6 +153,7 @@ public class SeedData
                 .add(new ClubActivities(c1,a4));
         c1.getActivities()
                 .add(new ClubActivities(c1,a5));
+        clubService.save(c1);
 
         //Caitlin has Attendance,Arts, Basketball, Homework,
         Club c2 = new Club("Caitlin");
@@ -147,6 +165,7 @@ public class SeedData
                 .add(new ClubActivities(c2, a4));
         c2.getActivities()
                 .add(new ClubActivities(c2, a5));
+        clubService.save(c2);
 
         //Grossman has Attendance, Arts, Basketball, Homework, Music, Soccer
         Club c3 = new Club("Grossman");
@@ -162,6 +181,7 @@ public class SeedData
                 .add(new ClubActivities(c3, a6));
         c3.getActivities()
                 .add(new ClubActivities(c3, a7));
+        clubService.save(c3);
 
         //Johnston has Attendance, Arts, Basketball, Homework, Music, Soccer
         Club c4 = new Club("Johnston");
@@ -177,6 +197,7 @@ public class SeedData
                 .add(new ClubActivities(c4, a6));
         c4.getActivities()
                 .add(new ClubActivities(c4, a7));
+        clubService.save(c4);
 
         //Marley has Attendance, Arts, Basketball, Homework Help, Music, Soccer
         Club c5 = new Club("Marley");
@@ -192,6 +213,7 @@ public class SeedData
                 .add(new ClubActivities(c5, a6));
         c5.getActivities()
                 .add(new ClubActivities(c5, a7));
+        clubService.save(c5);
 
         //Morton has Attendance, Arts, Basketball, Homework, Soccer
         Club c6 = new Club ("Morton");
@@ -205,6 +227,7 @@ public class SeedData
                 .add(new ClubActivities(c6, a5));
         c6.getActivities()
                 .add(new ClubActivities(c6, a7));
+        clubService.save(c6);
         //Notter has Attendance, Arts, Basketball, Homework,
         Club c7 = new Club("Notter");
         c7.getActivities()
@@ -215,6 +238,7 @@ public class SeedData
                 .add(new ClubActivities(c7, a4));
         c7.getActivities()
                 .add(new ClubActivities(c7, a5));
+        clubService.save(c7);
 
         //Stelle has Attendance, Arts
         Club c8 = new Club("Stelle");
@@ -222,7 +246,7 @@ public class SeedData
                 .add(new ClubActivities(c8, a1));
         c8.getActivities()
                 .add(new ClubActivities(c8, a2));
-
+        clubService.save(c8);
         //Jefferson has Attendance, Arts, Basketball, Homework, Music, Soccer
         Club c9 = new Club("Jefferson");
         c9.getActivities()
@@ -237,7 +261,7 @@ public class SeedData
                 .add(new ClubActivities(c9, a6));
         c9.getActivities()
                 .add(new ClubActivities(c9, a7));
-
+        clubService.save(c9);
         // The following is an example user!
         /*
         // admin, data, user

@@ -1,6 +1,7 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.models.Club;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -43,4 +44,6 @@ public interface ClubService {
      * @param clubid
      */
     void delete(long clubid);
+
+    void deleteAll();
 }

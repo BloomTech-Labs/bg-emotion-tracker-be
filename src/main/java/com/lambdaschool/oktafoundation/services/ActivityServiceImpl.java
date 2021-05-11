@@ -46,6 +46,14 @@ public class ActivityServiceImpl implements ActivityService{
                 .orElseThrow(() -> new ResourceNotFoundException("Activity id" + activityid + "not found."));
     }
 
+
+    @Override
+    public Activity findActivityByName(String name) {
+        return activityRepo.findActivityByActivityname(name).orElseThrow(() -> new ResourceNotFoundException("Activity name" + name + "not found."));
+    }
+
+
+
     @Override
     public Activity save(Activity newActivity) {
         Activity saveActivity = new Activity();

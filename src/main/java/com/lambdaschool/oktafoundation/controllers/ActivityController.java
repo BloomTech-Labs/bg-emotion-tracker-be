@@ -138,8 +138,13 @@ public class ActivityController {
     @PostMapping(value = "/activity/addclub/{clubid}",consumes = "application/json")
     public ResponseEntity<?> addActivityToClub(@RequestBody Activity activity, @PathVariable long clubid){
         Activity newact;
+
         if (activity.getActivityid() == 0){
-            newact = activityService.save(activity);
+            try {
+                newact = activityService.findActivityByName(activity.getActivityname());
+            } catch (Exception e) {
+                newact = activityService.save(activity);
+            }
         } else {
             newact = activityService.findActivityById(activity.getActivityid());
         }

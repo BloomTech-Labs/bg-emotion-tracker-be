@@ -21,6 +21,8 @@ public interface ActivityService {
      */
     Activity findActivityById(Long activityid);
 
+    Activity findActivityByName(String name);
+
     /**
      * Given a complete activity object, saves that activity object in the database.
      * If a primary key is provided, the record is completely replaced

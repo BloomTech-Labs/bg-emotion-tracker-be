@@ -1,6 +1,9 @@
 # Endpoints that Frontend is probably going to use
 
 
+Remote API root: https://bg-emotion-tracker-be-b.herokuapp.com/
+Local API root: http://localhost:2019/
+
 ## Endpoints for Users
 ### User getting their own userinfo
 

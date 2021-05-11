@@ -29,9 +29,29 @@ with response
 
 ## Endpoints for Clubs
 ### Getting list of club names and ids
-GET /clubs/summary *** not implemented yet ***
+GET /clubs/summary
 
-reponses ommited
+sample response
+```
+[
+    {
+        "clubid": 20,
+        "clubname": "anderson"
+    },
+    {
+        "clubid": 21,
+        "clubname": "caitlin"
+    },
+    {
+        "clubid": 22,
+        "clubname": "grossman"
+    },
+    {
+        "clubid": 23,
+        "clubname": "johnston"
+    }
+]
+```
 
 ### Getting a club by ID
 This is current way to get list of activities by club

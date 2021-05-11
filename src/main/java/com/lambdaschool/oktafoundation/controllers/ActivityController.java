@@ -1,9 +1,15 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.Activity;
+import com.lambdaschool.oktafoundation.models.Club;
+import com.lambdaschool.oktafoundation.models.ClubActivities;
 import com.lambdaschool.oktafoundation.models.User;
+import com.lambdaschool.oktafoundation.repository.ClubActivityRepository;
+import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.services.ActivityService;
+import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.UserService;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +32,13 @@ public class ActivityController {
      */
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private ClubRepository clubRepository;
+
+    @Autowired
+    private ClubActivityRepository clubActivityRepository;
+
     /**
      * Returns a list of all activities
      * <br>Example: <a href="http://localhost:2019/activities/activities"></a>
@@ -110,10 +123,37 @@ public class ActivityController {
      * @param activityid the primary key of the activity you wish to delete
      * @return Status of NO_CONTENT
      */
+
+
+
+
     @DeleteMapping(value = "/activity/{activityid}")
     public ResponseEntity<?> deleteActivityById(@PathVariable long activityid)
     {
         activityService.delete(activityid);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+    @PostMapping(value = "/activity/addclub/{clubid}",consumes = "application/json")
+    public ResponseEntity<?> addActivityToClub(@RequestBody Activity activity, @PathVariable long clubid){
+        Activity newact;
+        if (activity.getActivityid() == 0){
+            newact = activityService.save(activity);
+        } else {
+            newact = activityService.findActivityById(activity.getActivityid());
+        }
+
+        Club club = clubRepository.findById(clubid).orElseThrow();
+        ClubActivities temp =  new ClubActivities(club,newact);
+        club.getActivities().add(temp);
+        clubRepository.save(club);;
+        return new ResponseEntity<>(HttpStatus.OK);
+
+
+
+
+    }
+
+
 }

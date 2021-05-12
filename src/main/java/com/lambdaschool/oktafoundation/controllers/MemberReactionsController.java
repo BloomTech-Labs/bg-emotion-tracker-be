@@ -1,15 +1,20 @@
 package com.lambdaschool.oktafoundation.controllers;
 
+import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
+import com.lambdaschool.oktafoundation.models.Reaction;
+import com.lambdaschool.oktafoundation.models.ValidationError;
+import com.lambdaschool.oktafoundation.repository.*;
+import com.lambdaschool.oktafoundation.services.ActivityService;
 import com.lambdaschool.oktafoundation.services.ClubActivityService;
+import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.MemberReactionService;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 /**
@@ -23,6 +28,20 @@ public class MemberReactionsController {
      */
     @Autowired
     private MemberReactionService memberReactionService;
+
+    @Autowired
+    private MemberReactionRepository memberReactionRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private ClubActivityRepository clubActivityRepository;
+
+    @Autowired
+    private ReactionRepository reactionRepository;
+
+
     /**
      * Returns a list of all memberreactions
      * <br>Example: <a href="http://localhost:2019/memberreactions/memberreactions"></a>
@@ -30,7 +49,7 @@ public class MemberReactionsController {
      * @return JSON list of all memberreactions with a status of OK
      */
     @GetMapping(value = "/memberreactions",
-    produces = "application/json")
+            produces = "application/json")
     public ResponseEntity<?> listAllMemberReactions()
     {
         List<MemberReactions> allMemberReactions = memberReactionService.findAll();
@@ -45,10 +64,38 @@ public class MemberReactionsController {
      * @see MemberReactionService#
      */
     @GetMapping(value = "/memberreaction/{id}",
-    produces = "application/json")
+            produces = "application/json")
     public ResponseEntity<?> getMemberReactionById(@PathVariable Long id)
     {
         MemberReactions mr = memberReactionService.findMemberReactionById(id);
         return new ResponseEntity<>(mr, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
+    @PostMapping(value = "/memberreaction/submit")
+    public ResponseEntity<?> addNewReaction(
+            @RequestParam(value = "mid") String mid,
+            @RequestParam(value = "aid") Long aid,
+            @RequestParam(value = "cid") Long cid,
+            @RequestParam(value = "rx") String rx
+    ) {
+
+        var member = memberRepository.findMemberByMemberid(mid).orElseThrow();
+        var ca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(
+                aid,cid
+        ).orElseThrow();
+        Reaction currentreaction;
+        currentreaction= reactionRepository.findReactionByReactionvalue(rx).orElseThrow();
+        // we no longer create any reaction, if the reaction is not in our DB, throw.
+
+        MemberReactions temp = new MemberReactions(member,currentreaction,true, ca);
+
+        memberReactionRepository.save(temp);
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+
 }

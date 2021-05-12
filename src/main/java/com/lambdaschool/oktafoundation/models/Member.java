@@ -14,7 +14,7 @@ import java.util.Set;
 public class Member extends Auditable
 {
     @Id
-    @Column(unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long member_table_id;
 
     /**

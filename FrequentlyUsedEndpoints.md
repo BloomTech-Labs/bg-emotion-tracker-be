@@ -111,4 +111,18 @@ Or if the frontend knows the activity ID, you can use this too:
 
 
 
+## Endpoints for Reactions
+
+### Submitting a MemberReaction
+
+POST /memberreactions/memberreaction/submit?mid={memberidvalue}&aid={activityid}&cid={clubid}&rx={reactionstring}
+
+- No request body needed.
+
+Explanation with a example url:
+- POST /memberreactions/memberreaction/submit?mid=0aZ7gd3&aid=13&cid=20&rx=1F62D
+    - memberid: 0aZ7gd3
+    - activityid: 13
+    - clubid: 20
+    - Emojivalue: 1F62D (means U+1F62D)
 

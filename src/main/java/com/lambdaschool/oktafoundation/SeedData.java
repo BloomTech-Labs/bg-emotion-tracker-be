@@ -1,6 +1,7 @@
 package com.lambdaschool.oktafoundation;
 
 import com.lambdaschool.oktafoundation.models.*;
+import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
 import com.lambdaschool.oktafoundation.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -42,6 +43,15 @@ public class SeedData
 
     @Autowired
     ActivityService activityService;
+
+    @Autowired
+    MemberService memberService;
+
+    @Autowired
+    ReactionService reactionService;
+
+    @Autowired
+    MemberReactionRepository memberReactionRepository;
 
 
     /**
@@ -153,7 +163,7 @@ public class SeedData
                 .add(new ClubActivities(c1,a4));
         c1.getActivities()
                 .add(new ClubActivities(c1,a5));
-        clubService.save(c1);
+        c1=clubService.save(c1);
 
         //Caitlin has Attendance,Arts, Basketball, Homework,
         Club c2 = new Club("Caitlin");
@@ -262,6 +272,45 @@ public class SeedData
         c9.getActivities()
                 .add(new ClubActivities(c9, a7));
         clubService.save(c9);
+
+
+
+
+        Member m1 = new Member("testmember1");
+        Member m2 = new Member("testmember2");
+        Member m3 = new Member("testmember3");
+        Member m4 = new Member("testmember4");
+
+        m1=memberService.save(m1);
+        memberService.save(m2);
+        memberService.save(m3);
+        memberService.save(m4);
+
+        Reaction rx1 = new Reaction();
+        rx1.setReactionvalue("1F601"); // +2 😁
+        Reaction rx2 = new Reaction();
+        rx2.setReactionvalue("1F642"); //+1 🙂
+        Reaction rx3 = new Reaction();
+        rx3.setReactionvalue("1F610"); //0 😐
+        Reaction rx4 = new Reaction();
+        rx4.setReactionvalue("1F641"); // -1 🙁
+        Reaction rx5 = new Reaction();
+        rx5.setReactionvalue("1F61E"); // -2 😞
+        Reaction rx6 = new Reaction();
+        rx6.setReactionvalue("testreaction");
+
+        rx1=reactionService.save(rx1);
+        reactionService.save(rx2);
+        reactionService.save(rx3);
+        reactionService.save(rx4);
+        reactionService.save(rx5);
+        reactionService.save(rx6);
+
+        m1.getReactions().add(new MemberReactions(m1,rx1,true, c1.getActivities().stream().findFirst().get()));
+        memberService.save(m1);
+
+
+
         // The following is an example user!
         /*
         // admin, data, user

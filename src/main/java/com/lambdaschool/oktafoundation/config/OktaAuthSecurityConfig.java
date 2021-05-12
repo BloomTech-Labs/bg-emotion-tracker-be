@@ -77,9 +77,14 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
 
             .antMatchers("/memberreactions/{id}")
             .hasAnyRole("ADMIN", "CD")
+            .antMatchers(HttpMethod.POST,"/memberreactions/memberreaction/**")
+            .hasAnyRole("ADMIN","CD","YDP")
             .antMatchers("/memberreactions/**")
             .authenticated()
-
+            .antMatchers(HttpMethod.POST,"/members/**")
+            .authenticated()
+            .antMatchers(HttpMethod.GET,"/members/**")
+            .authenticated()
             // *** Endpoints not specified above are automatically denied
             .anyRequest()
             .denyAll()

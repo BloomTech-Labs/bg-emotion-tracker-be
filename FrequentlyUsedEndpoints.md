@@ -1,4 +1,4 @@
-# Endpoints that Frontend is probably going to use
+# Major Endpoints for frontend features 
 
 
 Remote API root: https://bg-emotion-tracker-be-b.herokuapp.com/

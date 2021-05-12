@@ -52,7 +52,9 @@ public class ClubActivities extends Auditable implements Serializable
      */
     @Column
     @OneToMany
-    @JoinColumns({@JoinColumn(name ="memberid"), @JoinColumn(name ="reactionid")})
+    @JoinColumns({@JoinColumn(), @JoinColumn(name ="reactionid")})
+    //first join column used to be memberid, but regardless what to put there, we get a null field in memberreacctions
+    //however, this doesn't break anything, but if this can be fixed that'll be good.
     private Set<MemberReactions> reactions = new HashSet<>();
 
     /**

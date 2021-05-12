@@ -27,10 +27,7 @@ public class Reaction extends Auditable {
      * Part of the join relationship between Member and Reactions
      * connects reaction to the memberreaction combination
      */
-    @OneToMany
-    @JoinColumn(name = "id")
-    @JsonIgnoreProperties(value="reactions", allowSetters = true)
-    public Set<MemberReactions> member = new HashSet<>();
+
     /**
      * Default constructor used primarily by the JPA.
      */
@@ -52,22 +49,7 @@ public class Reaction extends Auditable {
     public void setReactionid(long reactionid) {
         this.reactionid = reactionid;
     }
-    /**
-     * Getter for member reaction combinations
-     *
-     * @return A list of member reaction combinations associated with this reaction
-     */
-    public Set<MemberReactions> getMember() {
-        return member;
-    }
-    /**
-     * Setter for member reaction combinations
-     *
-     * @param member Change the list of member reaction combinations associated with this reaction to this one
-     */
-    public void setMember(Set<MemberReactions> member) {
-        this.member = member;
-    }
+
     /**
      * Getter for reactionvalue
      *

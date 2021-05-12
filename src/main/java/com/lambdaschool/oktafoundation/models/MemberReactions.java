@@ -16,15 +16,19 @@ import java.io.Serializable;
  */
 @Entity(name = "MemberReaction")
 @Table(name = "memberreactions")
-@IdClass(MemberReactionsId.class)
+//@IdClass(MemberReactionsId.class)
 public class MemberReactions extends Auditable implements Serializable
 {
-    @EmbeddedId
-    private MemberReactionsId id;
     /**
      * 1/2 of the primary key (long) for memberreactions.
      * Also is a foreign key into the member table
      */
+
+    @Id
+    @GeneratedValue(strategy =  GenerationType.AUTO)
+    private long memberreactionid;
+
+
     @ManyToOne
     @JoinColumn(name="member_table_id")
     @JsonIgnoreProperties(value="reactions", allowSetters = true)
@@ -33,8 +37,9 @@ public class MemberReactions extends Auditable implements Serializable
      * 1/2 of the primary key (long) for memberreactions.
      * Also is a foreign key into the reaction table
      */
+
     @ManyToOne
-    @MapsId("reactionid")
+    @JoinColumn(name = "reactionid")
     @JsonIgnoreProperties(value="member", allowSetters = true)
     private Reaction reaction;
     /**
@@ -61,6 +66,8 @@ public class MemberReactions extends Auditable implements Serializable
      * @param reaction The activity object of this relationship
      * @param member The club object of this relationship
      */
+
+
     public MemberReactions(Member member, Reaction reaction, Boolean checkedin, ClubActivities clubactivity) {
         this.member = member;
         this.reaction = reaction;

@@ -51,12 +51,6 @@ public class ReactionServiceImpl implements ReactionService {
 
         newReaction.setReactionvalue(reaction.getReactionvalue());
 
-        newReaction.getMember().clear();
-        for (MemberReactions mr : reaction.getMember()) {
-            Member addMember = memberService.findMemberById(mr.getMember().getMember_table_id());
-            newReaction.getMember().add(new MemberReactions(addMember, newReaction, mr.getCheckedin(), mr.getClubactivity()));
-        }
-
         return reactionrepos.save(newReaction);
     }
 }

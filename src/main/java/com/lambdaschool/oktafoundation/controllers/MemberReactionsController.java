@@ -13,6 +13,7 @@ import org.hibernate.annotations.NaturalId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class MemberReactionsController {
      * @return JSON list of all memberreactions with a status of OK
      */
     @GetMapping(value = "/memberreactions",
-    produces = "application/json")
+            produces = "application/json")
     public ResponseEntity<?> listAllMemberReactions()
     {
         List<MemberReactions> allMemberReactions = memberReactionService.findAll();
@@ -63,38 +64,33 @@ public class MemberReactionsController {
      * @see MemberReactionService#
      */
     @GetMapping(value = "/memberreaction/{id}",
-    produces = "application/json")
+            produces = "application/json")
     public ResponseEntity<?> getMemberReactionById(@PathVariable Long id)
     {
         MemberReactions mr = memberReactionService.findMemberReactionById(id);
         return new ResponseEntity<>(mr, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @PostMapping(value = "/memberreaction/submit")
     public ResponseEntity<?> addNewReaction(
             @RequestParam(value = "mid") String mid,
             @RequestParam(value = "aid") Long aid,
             @RequestParam(value = "cid") Long cid,
             @RequestParam(value = "rx") String rx
-            ) {
+    ) {
 
         var member = memberRepository.findMemberByMemberid(mid).orElseThrow();
-        System.out.println(member.getMemberid());
         var ca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(
                 aid,cid
         ).orElseThrow();
         Reaction currentreaction;
-        try {
-            currentreaction= reactionRepository.findReactionByReactionvalue(rx).orElseThrow();
-        } catch (Exception e){
-            currentreaction = new Reaction();
-            currentreaction.setReactionvalue(rx);
-            currentreaction=reactionRepository.save(currentreaction);
-        }
+        currentreaction= reactionRepository.findReactionByReactionvalue(rx).orElseThrow();
+        // we no longer create any reaction, if the reaction is not in our DB, throw.
+
         MemberReactions temp = new MemberReactions(member,currentreaction,true, ca);
 
-        temp = memberReactionRepository.save(temp);
+        memberReactionRepository.save(temp);
 
 
         return new ResponseEntity<>(HttpStatus.OK);

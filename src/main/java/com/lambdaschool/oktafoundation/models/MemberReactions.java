@@ -52,7 +52,7 @@ public class MemberReactions extends Auditable implements Serializable
     @JoinColumns({
             @JoinColumn(name = "activityid"),
             @JoinColumn(name="clubid")})
-    @JsonIgnoreProperties(value="reactions")
+    @JsonIgnoreProperties(value="reactions",allowSetters = true)
     private ClubActivities clubactivity;
     /**
      * Default constructor used primarily by the JPA.

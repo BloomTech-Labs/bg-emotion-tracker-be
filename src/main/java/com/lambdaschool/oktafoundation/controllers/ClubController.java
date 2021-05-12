@@ -2,9 +2,12 @@ package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.User;
+import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.UserService;
+import com.lambdaschool.oktafoundation.views.ClubSummary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.awt.desktop.OpenFilesEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
+
 /**
  * The entry point for clients to access clubs data
  */
@@ -27,6 +33,10 @@ public class ClubController {
      */
     @Autowired
     private ClubService clubService;
+
+    @Autowired
+    private ClubRepository clubRepository;
+
     /**
      * Returns a list of all clubs
      * <br>Example: <a href="http://localhost:2019/clubs/clubs"></a>
@@ -125,4 +135,13 @@ public class ClubController {
         clubService.delete(clubid);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
+    @GetMapping(value = "/summary")
+    public ResponseEntity<?> getClubsSummary(){
+        List<ClubSummary> temp = clubRepository.getClubsSummary();
+        return new ResponseEntity<>(temp,HttpStatus.OK);
+    }
+
 }

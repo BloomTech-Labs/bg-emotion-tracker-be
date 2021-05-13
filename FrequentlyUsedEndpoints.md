@@ -72,6 +72,8 @@ sample response
 ]
 ```
 
+<br />
+
 ### Getting a club by ID
 This is current way to get list of activities by club
 
@@ -105,8 +107,34 @@ sample response
     "clubname": "johnston"
 }
 ```
+<br />
+
+### Adding a User to a Club
+- Use this to assign a user(staff) to a club
+
+POST /clubs/club/{cid}/addUser/{uid}
+
+with empty body
+
+Example url
+```
+https://bg-emotion-tracker-be-b.herokuapp.com/clubs/club/22/addUser/8
+```
+will add user with id 8 to club with id 22
 
 
+<br />
+
+### Removing a User from a club 
+
+DELETE /clubs/club/{cid}/removeUser/{uid}
+
+Example url
+```
+https://bg-emotion-tracker-be-b.herokuapp.com/clubs/club/22/removeUser/8
+```
+
+<br />
 
 ##  Endpoints for Activities
 ### Posting new activity to club
@@ -149,8 +177,7 @@ Explanation with a example url:
 
 
 
-
----
+<br />
 
 
 

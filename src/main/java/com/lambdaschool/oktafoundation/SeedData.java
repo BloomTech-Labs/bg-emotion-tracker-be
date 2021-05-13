@@ -68,6 +68,7 @@ public class SeedData
     public void run(String[] args) throws
                                    Exception
     {
+
         roleService.deleteAll();
         Role r1 = new Role("ADMIN");
         Role r2 = new Role("YDP");
@@ -80,17 +81,21 @@ public class SeedData
         r4 = roleService.save(r4);
 
 //        ADMIN
+        userService.deleteAll();
         User u1 = new User("llama001@maildrop.cc");
         u1.getRoles()
-            .add(new UserRoles(u1,
-                r1));
+                .add(new UserRoles(u1,
+                        r1));
+
         userService.save(u1);
 
 //        Youth Development Professional
         User u2 = new User("llama002@maildrop.cc");
         u2.getRoles()
-            .add(new UserRoles(u2,
-                r2));
+                .add(new UserRoles(u2,
+                        r2));
+
+
         userService.save(u2);
 
 //        Club Director
@@ -98,6 +103,7 @@ public class SeedData
         u3.getRoles()
                 .add(new UserRoles(u3,
                         r3));
+
         userService.save(u3);
 
 //        Kid
@@ -106,7 +112,7 @@ public class SeedData
                 .add(new UserRoles(u4,
                         r4));
         userService.save(u4);
-        
+
         User u5 = new User("llama005@maildrop.cc");
         u5.getRoles()
                 .add(new UserRoles(u5,
@@ -130,7 +136,9 @@ public class SeedData
                 .add(new UserRoles(u8,
                         r4));
         userService.save(u8);
-        
+
+
+
 //        Activities
         clubService.deleteAll();
         activityService.deleteAll();
@@ -163,7 +171,12 @@ public class SeedData
                 .add(new ClubActivities(c1,a4));
         c1.getActivities()
                 .add(new ClubActivities(c1,a5));
+
         c1=clubService.save(c1);
+        //Anderson has 3 staff
+        c1.getUsers().add(new ClubUsers(c1, userService.findByName("llama001@maildrop.cc")));
+        c1.getUsers().add(new ClubUsers(c1, userService.findByName("llama002@maildrop.cc")));
+        c1.getUsers().add(new ClubUsers(c1, userService.findByName("llama003@maildrop.cc")));
 
         //Caitlin has Attendance,Arts, Basketball, Homework,
         Club c2 = new Club("Caitlin");
@@ -175,7 +188,9 @@ public class SeedData
                 .add(new ClubActivities(c2, a4));
         c2.getActivities()
                 .add(new ClubActivities(c2, a5));
-        clubService.save(c2);
+        c2=clubService.save(c2);
+        //Caitlin has 1 staff
+        c2.getUsers().add(new ClubUsers(c2, userService.findByName("llama001@maildrop.cc")));
 
         //Grossman has Attendance, Arts, Basketball, Homework, Music, Soccer
         Club c3 = new Club("Grossman");

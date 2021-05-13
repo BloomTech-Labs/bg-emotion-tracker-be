@@ -3,6 +3,7 @@ package com.lambdaschool.oktafoundation.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -26,8 +27,9 @@ public class ClubUsers extends Auditable implements Serializable
      */
     @Id
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "clubid")
-    @JsonIgnoreProperties(value = "users", allowSetters = true)
+    @JsonIgnoreProperties(value = {"users","activities"}, allowSetters = true)
     private Club club;
     /**
      * 1/2 of the primary key (long) for clubusers.
@@ -35,29 +37,32 @@ public class ClubUsers extends Auditable implements Serializable
      */
     @Id
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "userid")
     @JsonIgnoreProperties(value = "clubs", allowSetters = true)
     private User user;
-    /**
-     * Given the params, create a new club user combination object
-     *
-     * @param user The user object of this relationship
-     * @param club The club object of this relationship
-     */
-    public ClubUsers(
-            User user,
-            Club club
-    )
-    {
-        this.user = user;
-        this.club = club;
-    }
 
     /**
      * Default constructor used primarily by the JPA.
      */
     public ClubUsers() {
 
+    }
+
+    /**
+     * Given the params, create a new club user combination object
+     *
+     * @param user The user object of this relationship
+     * @param club The club object of this relationship
+     */
+
+    public ClubUsers(
+            Club club,
+            User user
+    )
+    {
+        this.club = club;
+        this.user = user;
     }
     /**
      * The getter for Club

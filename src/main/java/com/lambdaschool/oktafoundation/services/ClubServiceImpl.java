@@ -143,7 +143,7 @@ public class ClubServiceImpl implements ClubService{
                         .add(new Useremail(newUser,
                                 ue.getUseremail()));
             }
-            newClub.getUsers().add(new ClubUsers(newUser, newClub));
+            newClub.getUsers().add(new ClubUsers(newClub, newUser));
         }
 
         return clubrepos.save(newClub);
@@ -184,7 +184,7 @@ public class ClubServiceImpl implements ClubService{
                 User addUser = userRepository.findById(cu.getUser().getUserid())
                         .orElseThrow(() -> new ResourceNotFoundException("User id" + cu.getUser().getUserid() + "not found."));
 
-                updateClub.getUsers().add(new ClubUsers(addUser, updateClub));
+                updateClub.getUsers().add(new ClubUsers(updateClub,addUser));
             }
         }
         return clubrepos.save(updateClub);

@@ -1,5 +1,24 @@
-# Major Endpoints for frontend features 
+# Test Data
+## Login Accounts
+- llama001@maildrop.cc -> ADMIN
+- llama002@maildrop.cc -> YDP
+- llama003@maildrop.cc -> CD
 
+## Existing Reactions Strings Values
+- 1F601 (😁)
+- 1F642 (🙂)
+- 1F610 (😐)
+- 1F641 (🙁)
+- 1F61E (😞)
+
+## Existing Members ID Value
+- testmember1
+- testmember2
+- testmember3
+- testmember4
+
+
+# Major Endpoints for frontend features 
 
 Remote API root: https://bg-emotion-tracker-be-b.herokuapp.com/
 Local API root: http://localhost:2019/
@@ -9,7 +28,7 @@ Local API root: http://localhost:2019/
 
 GET /users/getuserinfo
 
-with response
+sample response
 ```
 {
     "userid": 5,
@@ -111,7 +130,7 @@ Or if the frontend knows the activity ID, you can use this too:
 
 
 
-## Endpoints for Reactions
+## Endpoints for MembersReactions
 
 ### Submitting a MemberReaction
 
@@ -120,9 +139,50 @@ POST /memberreactions/memberreaction/submit?mid={memberidvalue}&aid={activityid}
 - No request body needed.
 
 Explanation with a example url:
-- POST /memberreactions/memberreaction/submit?mid=0aZ7gd3&aid=13&cid=20&rx=1F62D
-    - memberid: 0aZ7gd3
+- POST /memberreactions/memberreaction/submit?mid=testmember1&aid=13&cid=20&rx=1F601
+    - memberid: testmember1
     - activityid: 13
     - clubid: 20
-    - Emojivalue: 1F62D (means U+1F62D)
+    - Emojivalue: 1F601 (means U+1F601)
+
+
+
+
+
+
+---
+
+
+
+### Searching for MemberReactions (planned, WIP)
+- Can be used as a way to query general feedbacks to a specific club activity.
+- Can be used as a way to query how a particular member is doing.
+- Could be used in fancy ways as comparisons against multiple club activities and/or members
+
+POST /memberreactions/search?from={starttime}&to={endtime}
+
+with sample body (tentative): 
+```
+{
+    "activities": [
+        {
+            "clubid": 20,
+            "activityid": 13,
+        },
+        {
+            "clubid": 20,
+            "activityid": 14,
+        }
+    ],
+    "members": [
+        {
+            "memberid": "testmember1"
+        }, 
+        {
+            "memberid": "testmember2"
+        }
+    ]
+}
+```
+The above query shall return all reactions from testmember1 and testmember2 for their submissions for club 20's activity 13 and 14.
 

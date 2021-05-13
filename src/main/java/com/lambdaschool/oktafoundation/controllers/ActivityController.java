@@ -152,7 +152,7 @@ public class ActivityController {
         Club club = clubRepository.findById(clubid).orElseThrow();
         ClubActivities temp =  new ClubActivities(club,newact);
         club.getActivities().add(temp);
-        clubRepository.save(club);;
+        clubRepository.save(club);
         return new ResponseEntity<>(HttpStatus.OK);
 
 

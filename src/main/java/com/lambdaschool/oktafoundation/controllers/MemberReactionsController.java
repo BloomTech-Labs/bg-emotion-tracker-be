@@ -139,7 +139,6 @@ public class MemberReactionsController {
         }
 
 
-
         // adding filters for members
 
         if (ca != null && ca.size() > 0) {
@@ -153,13 +152,11 @@ public class MemberReactionsController {
 
         }
 
-
-
-        // In conclusion you can supply
-        // 1. (0 or 1) CA + any numbers of members
-        // 2. (0 or 1) Member + any numbers of CA
-        // anything else or you are not supplying the members list or activities list, returns all memberreactions
-        // within the given time period.
+        // In conclusion, for charting, you would supply
+        // 1. 1 CA + any numbers of members
+        // 2. 1 Member + any numbers of CA
+        // anything else would be regular unplottable filtered list.
+        // all within the given time period.
         System.out.println(res);
 
 

@@ -214,7 +214,7 @@ with sample body:
 ```
 The above query shall return all reactions from testmember1 and testmember2 for their submissions for club 20's activity 13 and 14.
 
-- A another endpoint that derives from the one above shall be made that would respond with formatted arrays specifically for plotting charts on the frontend.
+- Another endpoint that derives from the one above shall be made that would respond with formatted arrays specifically for plotting charts/analysis on the frontend.
     - restrict to club-activities to up to 1
         - A plot that compares how different members are feeling towards one specific club-activity 
     - restrict members to up to 1

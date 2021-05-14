@@ -180,15 +180,16 @@ Explanation with a example url:
 <br />
 
 
-
-### Searching for MemberReactions (planned, WIP)
+### Searching for MemberReactions (Beta)
 - Can be used as a way to query general feedbacks to a specific club activity.
 - Can be used as a way to query how a particular member is doing.
 - Could be used in fancy ways as comparisons against multiple club activities and/or members
 
 POST /memberreactions/search?from={starttime}&to={endtime}
 
-with sample body (tentative): 
+sample uri: /memberreactions/search?from=2020-04-01&to=2021-06-01
+
+with sample body: 
 ```
 {
     "activities": [
@@ -212,4 +213,13 @@ with sample body (tentative):
 }
 ```
 The above query shall return all reactions from testmember1 and testmember2 for their submissions for club 20's activity 13 and 14.
+
+- A another endpoint that derives from the one above shall be made that would respond with formatted arrays specifically for plotting charts on the frontend.
+    - restrict to club-activities to up to 1
+        - A plot that compares how different members are feeling towards one specific club-activity 
+    - restrict members to up to 1
+        - A plot that compares how a single member feel towards different club-activities
+
+
+
 

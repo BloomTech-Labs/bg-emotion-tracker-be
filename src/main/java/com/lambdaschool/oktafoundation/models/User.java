@@ -49,7 +49,7 @@ public class User
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    @JsonIgnoreProperties(value = {"user"}, allowSetters = true)
     private Set<ClubUsers> clubs = new HashSet<>();
 
     /**
@@ -169,6 +169,17 @@ public class User
      *
      * @return The list of authorities, roles, this user object has
      */
+    public Set<ClubUsers> getClubs()
+    {
+        return clubs;
+    }
+
+    public void setClubs(Set<ClubUsers> clubs)
+    {
+        this.clubs = clubs;
+    }
+
+
     @JsonIgnore
     public List<SimpleGrantedAuthority> getAuthority()
     {

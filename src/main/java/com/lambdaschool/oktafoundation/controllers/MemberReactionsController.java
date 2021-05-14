@@ -61,11 +61,11 @@ public class MemberReactionsController {
      */
     @GetMapping(value = "/memberreactions",
             produces = "application/json")
-    public ResponseEntity<?> listAllMemberReactions()
-    {
+    public ResponseEntity<?> listAllMemberReactions() {
         List<MemberReactions> allMemberReactions = memberReactionService.findAll();
         return new ResponseEntity<>(allMemberReactions, HttpStatus.OK);
     }
+
     /**
      * Returns a single memberreaction based off a memberreaction id number
      * <br>Example: http://localhost:2019/memberreactions/memberreaction/7
@@ -76,8 +76,7 @@ public class MemberReactionsController {
      */
     @GetMapping(value = "/memberreaction/{id}",
             produces = "application/json")
-    public ResponseEntity<?> getMemberReactionById(@PathVariable Long id)
-    {
+    public ResponseEntity<?> getMemberReactionById(@PathVariable Long id) {
         MemberReactions mr = memberReactionService.findMemberReactionById(id);
         return new ResponseEntity<>(mr, HttpStatus.OK);
     }
@@ -93,13 +92,13 @@ public class MemberReactionsController {
 
         var member = memberRepository.findMemberByMemberid(mid).orElseThrow();
         var ca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(
-                aid,cid
+                aid, cid
         ).orElseThrow();
         Reaction currentreaction;
-        currentreaction= reactionRepository.findReactionByReactionvalue(rx).orElseThrow();
+        currentreaction = reactionRepository.findReactionByReactionvalue(rx).orElseThrow();
         // we no longer create any reaction, if the reaction is not in our DB, throw.
 
-        MemberReactions temp = new MemberReactions(member,currentreaction,true, ca);
+        MemberReactions temp = new MemberReactions(member, currentreaction, true, ca);
 
         memberReactionRepository.save(temp);
 
@@ -108,132 +107,109 @@ public class MemberReactionsController {
 
     }
 
-    private String searchQueryBuilder(LocalDate from, LocalDate to, List<ClubActivities> ca, List<Member> members){
+    private String searchQueryBuilder(LocalDate from, LocalDate to, List<ClubActivities> ca, List<Member> members) {
         var res = new StringBuilder();
 
-        if(from != null || to != null){
-            if (from != null && to != null){
+        if (from != null || to != null) {
+            if (from != null && to != null) {
                 res.append(" created_date >= date '").append(from).append("'");
                 res.append(" and ");
                 res.append(" created_date <= date '").append(to).append("' ");
-            }
-            else if (from != null) {
+            } else if (from != null) {
                 res.append(" created_date >= date '").append(from).append("' ");
-            }
-            else {
+            } else {
                 res.append(" created_date <= date '").append(to).append("' ");
             }
         }
-        if(from == null && to == null){
+        if (from == null && to == null) {
             res.append(" true ");
         }
 
-        // We enforce only two modes of searching
-        // because this is the only way we can plot those.
-        // search by clubactivity (1 clubactivity)
-        // then any number of members
-        if (ca!=null && ca.size()<=1) {
-            if(ca.size()==0){
-                if (members!=null){
-                    res.append(" and member_table_id in (");
-                    for (var e: members) {
-                        res.append(e.getMember_table_id()).append(",");
-                    }
-                    res.deleteCharAt(res.length()-1);
-                    res.append(")");
-                }
-            } else {
-                res.append(" and cast((cast(clubid as varchar(255))||(cast(activityid as varchar(255))))as bigint) =").append(ca.get(0).getClub().getClubid()).append(ca.get(0).getActivity().getActivityid());
-                if (members!=null){
-                    res.append(" and member_table_id in (");
-                    for (var e: members) {
-                        res.append(e.getMember_table_id()).append(",");
-                    }
-                    res.deleteCharAt(res.length()-1);
-                    res.append(")");
-                }
+
+        // adding filters for club activities
+
+        if (members != null && members.size() > 0) {
+
+            res.append(" and member_table_id in (");
+            for (var e : members) {
+                res.append(e.getMember_table_id()).append(",");
             }
-
-            // search by member (1 member)
-            // then any number of clubactivities
-        } else if (members.size() <=1 ) {
-            if(members.size()==0){
-                if (ca != null) {
-                    res.append(" and cast((cast(clubid as varchar(255))||(cast(activityid as varchar(255))))as bigint) in (");
-                    for (var e: ca){
-                        res.append(e.getClub().getClubid()).append(e.getActivity().getActivityid()).append(",");
-                    }
-                    res.deleteCharAt(res.length()-1);
-                    res.append(")");
-                }
-
-            } else {
-                res.append(" and member_table_id=").append(members.get(0).getMember_table_id());
-                if (ca != null) {
-                    res.append(" and cast((cast(clubid as varchar(255))||(cast(activityid as varchar(255))))as bigint) in (");
-                    for (var e: ca){
-                        res.append(e.getClub().getClubid()).append(e.getActivity().getActivityid()).append(",");
-                    }
-                    res.deleteCharAt(res.length()-1);
-                    res.append(")");
-                }
-            }
-
-        } else {
-            return "true";
+            res.deleteCharAt(res.length() - 1);
+            res.append(")");
         }
 
-        System.out.println(res.toString());
+
+
+        // adding filters for members
+
+        if (ca != null && ca.size() > 0) {
+            res.append(" and cast((cast(clubid as varchar(255))||(cast(activityid as varchar(255))))as bigint) in (");
+            for (var e : ca) {
+                res.append(e.getClub().getClubid()).append(e.getActivity().getActivityid()).append(",");
+            }
+            res.deleteCharAt(res.length() - 1);
+            res.append(")");
+
+
+        }
+
+
+
+        // In conclusion you can supply
+        // 1. (0 or 1) CA + any numbers of members
+        // 2. (0 or 1) Member + any numbers of CA
+        // anything else or you are not supplying the members list or activities list, returns all memberreactions
+        // within the given time period.
+        System.out.println(res);
 
 
         return res.toString();
     }
 
 
-
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PostMapping(value = "/search")
     public ResponseEntity<?> getReport(
             @RequestParam(value = "from", required = false) String from,
-            @RequestParam(value = "to" , required = false) String to,
+            @RequestParam(value = "to", required = false) String to,
             @RequestBody SearchPost sp
-    ) throws Exception{
+    ) throws Exception {
 
         List<ClubActivities> calist = new ArrayList<>();
         List<Member> mlist = new ArrayList<>();
 
-        for (var e: sp.getActivities()){
-            calist.add(clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(e.getActivityid(),e.getClubid()).orElseThrow());
+        if (sp.getActivities() == null) {
+            calist = null;
+        } else {
+            for (var e : sp.getActivities()) {
+                calist.add(clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(e.getActivityid(), e.getClubid()).orElseThrow());
+            }
         }
-
-        for (var e: sp.getMembers()){
-            mlist.add(memberRepository.findMemberByMemberid(e.getMemberid()).orElseThrow());
+        if (sp.getMembers() == null) {
+            mlist = null;
+        } else {
+            for (var e : sp.getMembers()) {
+                mlist.add(memberRepository.findMemberByMemberid(e.getMemberid()).orElseThrow());
+            }
         }
 
         //if no body presented, then it means we just search against all memberreactions within certain date range
 
-
-
         LocalDate fromstr = null;
         LocalDate tostr = null;
-        if (from != null){
+        if (from != null) {
             fromstr = LocalDate.parse(from);
         }
-        if (to != null){
+        if (to != null) {
             tostr = LocalDate.parse(to);
         }
 
 
-        Query q = entityManager.createNativeQuery("select * from memberreactions where " + searchQueryBuilder(fromstr,tostr, calist, mlist),MemberReactions.class);
+        Query q = entityManager.createNativeQuery("select * from memberreactions where " + searchQueryBuilder(fromstr, tostr, calist, mlist), MemberReactions.class);
 
 
-
-
-        return new ResponseEntity<>(q.getResultList(),HttpStatus.OK);
+        return new ResponseEntity<>(q.getResultList(), HttpStatus.OK);
     }
-
-
-
 
 
 }

@@ -126,7 +126,7 @@ public class MemberReactionsController {
         }
 
 
-        // adding filters for club activities
+        // adding filters for members
 
         if (members != null && members.size() > 0) {
 
@@ -139,7 +139,7 @@ public class MemberReactionsController {
         }
 
 
-        // adding filters for members
+        // adding filters for club activities
 
         if (ca != null && ca.size() > 0) {
             res.append(" and cast((cast(clubid as varchar(255))||(cast(activityid as varchar(255))))as bigint) in (");

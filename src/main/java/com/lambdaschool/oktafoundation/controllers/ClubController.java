@@ -1,8 +1,11 @@
 package com.lambdaschool.oktafoundation.controllers;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.lambdaschool.oktafoundation.models.Club;
+import com.lambdaschool.oktafoundation.models.ClubUsers;
 import com.lambdaschool.oktafoundation.models.User;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
+import com.lambdaschool.oktafoundation.repository.ClubUsersRepository;
 import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import com.lambdaschool.oktafoundation.views.ClubSummary;
@@ -36,6 +39,12 @@ public class ClubController {
 
     @Autowired
     private ClubRepository clubRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ClubUsersRepository clubUsersRepository;
 
     /**
      * Returns a list of all clubs
@@ -142,6 +151,39 @@ public class ClubController {
     public ResponseEntity<?> getClubsSummary(){
         List<ClubSummary> temp = clubRepository.getClubsSummary();
         return new ResponseEntity<>(temp,HttpStatus.OK);
+    }
+
+
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PostMapping(value = "/club/{cid}/addUser/{uid}",
+            consumes = "application/json")
+    public ResponseEntity<?> addNewUser(
+            @PathVariable Long cid, @PathVariable Long uid) throws URISyntaxException
+    {
+        var currentclub =  clubService.findClubById(cid);
+        var currentuser = userService.findUserById(uid);
+        currentclub.getUsers().add(new ClubUsers(currentclub,currentuser));
+
+        // services currently has problem with its save.
+        clubRepository.save(currentclub);
+
+        return new ResponseEntity<>(null,
+                HttpStatus.OK);
+    }
+
+
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @DeleteMapping(value = "/club/{cid}/removeUser/{uid}",
+            consumes = "application/json")
+    public ResponseEntity<?> removeNewUser(
+            @PathVariable Long cid, @PathVariable Long uid) throws URISyntaxException
+    {
+
+        var cu = clubUsersRepository.findClubUsersByClub_ClubidAndUser_Userid(cid,uid).orElseThrow();
+        clubUsersRepository.delete(cu);
+
+        return new ResponseEntity<>(null,
+                HttpStatus.OK);
     }
 
 }

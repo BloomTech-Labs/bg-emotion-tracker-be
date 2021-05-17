@@ -28,72 +28,37 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-            .antMatchers("/",
-                "/h2-console/**",
-                "/swagger-resources/**",
-                "/swagger-resource/**",
-                "/swagger-ui.html",
-                "/v2/api-docs",
-                "/webjars/**")
-            .permitAll()
-            .antMatchers(HttpMethod.POST,
-                "/users/**")
-            .hasAnyRole("ADMIN")
-            .antMatchers(HttpMethod.DELETE,
-                "/users/**")
-            .hasAnyRole("ADMIN")
-            .antMatchers(HttpMethod.PUT,
-                "/users/**")
-            .hasAnyRole("ADMIN")
-
-            // *** NOTE AUTHENTICATED CAN READ USERS!!! PATCHES are handled in UserService
-            .antMatchers("/users/**")
-            .authenticated()
-            // *** Handled at UseremailService Level
-            .antMatchers("/useremails/**")
-            .authenticated()
-            .antMatchers("/roles/**")
-            .hasAnyRole("ADMIN")
-
-            .antMatchers("/users/getuserinfo")
-            .authenticated()
-
-            .antMatchers("/users/user/**")
-            .authenticated()
-            .antMatchers("/clubactivities/**")
-            .hasAnyRole("ADMIN", "CD")
-            .antMatchers("/activities/**")
-            .hasAnyRole("ADMIN","CD","YDP")
-            .antMatchers("/clubs/**")
-            .hasAnyRole("ADMIN", "CD")
-            .antMatchers("/clubusers/**")
-            .hasAnyRole("ADMIN", "CD")
-
-            .antMatchers("/roles/**")
-            .authenticated()
-
-            .antMatchers("/useremails/**")
-            .authenticated()
-
-            .antMatchers("/memberreactions/{id}")
-            .hasAnyRole("ADMIN", "CD")
-            .antMatchers(HttpMethod.POST,"/memberreactions/memberreaction/**")
-            .hasAnyRole("ADMIN","CD","YDP")
-            .antMatchers("/memberreactions/**")
-            .authenticated()
-            .antMatchers(HttpMethod.POST,"/members/**")
-            .authenticated()
-            .antMatchers(HttpMethod.GET,"/members/**")
-            .authenticated()
-            // *** Endpoints not specified above are automatically denied
-            .anyRequest()
-            .denyAll()
-
-            .and()
-            .exceptionHandling()
-            .and()
-            .oauth2ResourceServer()
-            .jwt();
+                .antMatchers("/",
+                        "/h2-console/**",
+                        "/swagger-resources/**",
+                        "/swagger-resource/**",
+                        "/swagger-ui.html",
+                        "/v2/api-docs",
+                        "/webjars/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/users/**").authenticated()
+                .antMatchers("/users/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/useremails/**").authenticated()
+                .antMatchers("/useremails/**").hasAnyRole("ADMIN")
+                .antMatchers("/roles/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/clubactivities/**").authenticated()
+                .antMatchers("/clubactivities").hasAnyRole("ADMIN", "CD")
+                .antMatchers(HttpMethod.GET,"/activities/**").authenticated()
+                .antMatchers("/activities/**").hasAnyRole("CD","ADMIN")
+                .antMatchers(HttpMethod.GET,"/clubs/**").authenticated()
+                .antMatchers("/clubs/**").hasAnyRole("ADMIN", "CD")
+                .antMatchers("/clubusers/**").hasAnyRole("ADMIN", "CD")
+                .antMatchers(HttpMethod.POST,"/memberreactions/**").authenticated() //YDP can post reactions
+                .antMatchers("/memberreactions/**").hasAnyRole("ADMIN","CD") //YDP cannot GET reactions
+                .antMatchers(HttpMethod.GET,"/members/**").authenticated()
+                .antMatchers("/members/**").hasAnyRole("CD","ADMIN")
+                // *** Endpoints not specified above are automatically denied
+                .anyRequest()
+                .denyAll()
+                .and()
+                .exceptionHandling()
+                .and()
+                .oauth2ResourceServer()
+                .jwt();
 
         // process CORS annotations
         // http.cors();
@@ -102,21 +67,21 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
         // These tokens require coordination with the front end client that is beyond the scope of this class.
         // See https://www.yawintutor.com/how-to-enable-and-disable-csrf/ for more information
         http
-            .csrf()
-            .disable();
+                .csrf()
+                .disable();
 
         // Insert the JwtAuthenticationFilter so that it can grab credentials from the
         // local database before they are checked for authorization (fix by Trevor Buchanan)
         http
-            .addFilterBefore(authenticationTokenFilterBean(),
-                FilterSecurityInterceptor.class);
+                .addFilterBefore(authenticationTokenFilterBean(),
+                        FilterSecurityInterceptor.class);
 
         // force a non-empty response body for 401's to make the response more browser friendly
         Okta.configureResourceServer401ResponseBody(http);
 
         // h2 console
         http.headers()
-            .frameOptions()
-            .disable();
+                .frameOptions()
+                .disable();
     }
 }

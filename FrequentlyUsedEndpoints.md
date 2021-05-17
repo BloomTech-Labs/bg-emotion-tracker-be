@@ -164,7 +164,7 @@ Or if the frontend knows the activity ID, you can use this too:
 
 POST /memberreactions/memberreaction/submit?mid={memberidvalue}&aid={activityid}&cid={clubid}&rx={reactionstring}
 
-- No request body needed.
+- Use empty body
 
 Explanation with a example url:
 - POST /memberreactions/memberreaction/submit?mid=testmember1&aid=13&cid=20&rx=1F601

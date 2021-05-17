@@ -50,7 +50,7 @@ public class ClubController {
      * Returns a list of all Clubs.
      * <br>Example: <a href="http://localhost:2019/clubs/clubs"></a>
      *
-     * @return JSON list of all clubs with a status of OK
+     * @return JSON list of all Clubs with a status of OK
      * @see ClubService#findAll() ClubService.findAll()
      */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
@@ -68,7 +68,7 @@ public class ClubController {
      * <br>Example: http://localhost:2019/clubs/club/7
      *
      * @param clubid The primary key of the club you seek
-     * @return JSON object of the club you seek
+     * @return JSON object of the Club you seek
      * @see ClubService#findClubById(Long)  ClubService.findClubById(long)
      */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
@@ -116,7 +116,7 @@ public class ClubController {
      * <br> Example: <a href="http://localhost:2019/users/user/15">http://localhost:2019/users/user/15</a>
      *
      * @param club An object containing values for just the fields being updated, all other fields left NULL
-     * @param clubid     The primary key of the club you wish to replace
+     * @param clubid     The primary key of the Club you wish to replace
      * @return status of OK
      * @see ClubService#save(Club) ClubService.save(Club)
      */
@@ -151,7 +151,7 @@ public class ClubController {
     /**
      * Returns a summary of all existing Clubs, including name and id.
      *
-     * @return A summary of all clubs, including name and id
+     * @return A summary of all Clubs, including name and id
      */
     @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/summary")

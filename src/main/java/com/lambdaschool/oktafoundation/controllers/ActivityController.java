@@ -44,7 +44,7 @@ public class ActivityController {
      * Returns a list of all Activities.
      * <br>Example: <a href="http://localhost:2019/activities/activities"></a>
      *
-     * @return JSON list of all activities with a status of OK
+     * @return JSON list of all Activities with a status of OK
      * @see ActivityService#findAll() ActivityService.findAll()
      */
     @GetMapping(value = "/activities",
@@ -59,8 +59,8 @@ public class ActivityController {
      * Returns the Activity with the given id.
      * <br>Example: http://localhost:2019/activities/activity/4
      *
-     * @param activityid The primary key of the activity you seek
-     * @return JSON object of the activity you seek
+     * @param activityid The primary key of the Activity you seek
+     * @return JSON object of the Activity you seek
      * @see ActivityService#findActivityById(Long)  ActivityService.findActivityById(long)
      */
     @GetMapping(value = "/activity/{activityid}",

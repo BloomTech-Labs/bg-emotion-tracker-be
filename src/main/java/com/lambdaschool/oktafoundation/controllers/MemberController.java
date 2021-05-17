@@ -15,6 +15,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+/**
+ * The entry point for clients to access member data
+ */
 @RestController
 @RequestMapping("/members")
 public class MemberController {
@@ -24,6 +27,11 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    /**
+     * Returns a list of all Members.
+     *
+     * @return JSON list of all members with a status of OK
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/members", produces = "application/json")
     public ResponseEntity<?> listAllMembers() {
@@ -31,6 +39,12 @@ public class MemberController {
         return new ResponseEntity<>(allMembers, HttpStatus.OK);
     }
 
+    /**
+     * Returns the Member with the given id.
+     *
+     * @param member_table_id The primary key of the Member you seek
+     * @return JSON object of the Member you seek
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/member/{member_table_id}", produces = "application/json")
     public ResponseEntity<?> getMemberById(@PathVariable Long member_table_id) {
@@ -39,9 +53,9 @@ public class MemberController {
     }
 
     /**
-     * Given a complete Member object, create a new Member record
+     * Given a complete Member object, creates a new Member record.
      *
-     * @param newMember the new Member object
+     * @param newMember The new Member to be added
      * @return A location header with the URI to the newly created member and a status of CREATED
      * @throws URISyntaxException Exception if something does not work in creating the response header
      */
@@ -60,5 +74,4 @@ public class MemberController {
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
-
 }

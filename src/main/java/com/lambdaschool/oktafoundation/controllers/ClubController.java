@@ -70,7 +70,7 @@ public class ClubController {
      * @return JSON object of the club you seek
      * @see ClubService#findClubById(Long)  ClubService.findClubById(long)
      */
-    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/club/{clubid}",
         produces = "application/json")
     public ResponseEntity<?> getClubById(@PathVariable Long clubid)

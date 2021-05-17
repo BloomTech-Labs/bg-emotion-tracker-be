@@ -117,7 +117,7 @@
     </dependencies>
 
     <build>
-        <finalName>jrmmba-oktafoundation</finalName>
+        <finalName>bg-emotion-tracker-be-b</finalName>
 
         <plugins>
             <plugin>

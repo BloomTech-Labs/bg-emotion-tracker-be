@@ -28,7 +28,7 @@ public class UseremailController
     UseremailService useremailService;
 
     /**
-     * List of all users emails
+     * Returns a list of all users emails.
      * <br>Example: <a href="http://localhost:2019/useremails/useremails">http://localhost:2019/useremails/useremails</a>
      *
      * @return JSON list of all users emails
@@ -44,10 +44,10 @@ public class UseremailController
     }
 
     /**
-     * Return the user email combination referenced by the given primary key
+     * Returns the user email combination referenced by the given primary key
      * <br>Example: <a href="http://localhost:2019/useremails/useremail/8">http://localhost:2019/useremails/useremail/8</a>
      *
-     * @param useremailId the primary key of the user email combination you seek
+     * @param useremailId The primary key of the user email combination you seek
      * @return JSON object of the user email combination you seek with a status of OK
      */
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -66,7 +66,7 @@ public class UseremailController
      * Removes the given user email combination
      * <br>Example: <a href="http://localhost:2019/useremails/useremail/8">http://localhost:2019/useremails/useremail/8</a>
      *
-     * @param useremailid the primary key of the user email combination you wish to remove
+     * @param useremailid The primary key of the user email combination you wish to remove
      * @return Status of OK
      */
     @DeleteMapping(value = "/useremail/{useremailid}")
@@ -79,7 +79,7 @@ public class UseremailController
     }
 
     /**
-     * Change the email associated with the given user email combination
+     * Changes the email associated with the given user email combination id
      * <br>Example: <a href="http://localhost:2019/useremails/useremail/9/email/favbun@hops.local">http://localhost:2019/useremails/useremail/9/email/favbun@hops.local</a>
      *
      * @param useremailid  The primary key of the user email combination you wish to change
@@ -101,8 +101,8 @@ public class UseremailController
     /**
      * Adds a new user email combination
      *
-     * @param userid       the user id of the new user email combination
-     * @param emailaddress the email address of the new user eamil combination
+     * @param userid       The user id of the new user email combination
+     * @param emailaddress The email address of the new user email combination
      * @return A location header with the URI to the newly created user email combination and a status of CREATED
      * @throws URISyntaxException Exception if something does not work in creating the location header
      * @see UseremailService#save(long, String) UseremailService.save(long, String)

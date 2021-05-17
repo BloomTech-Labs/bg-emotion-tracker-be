@@ -1,6 +1,10 @@
 package com.lambdaschool.oktafoundation.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.lambdaschool.oktafoundation.repository.ClubActivityRepository;
+import org.hibernate.annotations.Formula;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,7 +28,7 @@ import java.util.Set;
 public class ClubActivities extends Auditable implements Serializable
 {
 //    @EmbeddedId
-//    private ClubActivitiesId id;
+//    private ClubActivitiesId clubActivitiesId;
 
     /**
      * 1/2 of the primary key (long) for clubactivities.
@@ -34,7 +38,7 @@ public class ClubActivities extends Auditable implements Serializable
     @ManyToOne
     @NotNull
     @JoinColumn(name = "clubid")
-    @JsonIgnoreProperties(value = {"activities","activity"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"activities","activity","users"}, allowSetters = true)
     private Club club;
     /**
     * 1/2 of the primary key (long) for clubactivities.
@@ -59,6 +63,7 @@ public class ClubActivities extends Auditable implements Serializable
     //however, this doesn't break anything, but if this can be fixed that'll be good.
     private Set<MemberReactions> reactions = new HashSet<>();
 
+
     /**
      * Default constructor used primarily by the JPA.
      */
@@ -71,12 +76,14 @@ public class ClubActivities extends Auditable implements Serializable
      * @param activity The activity object of this relationship
      */
     public ClubActivities(
+
             Club club,
             Activity activity)
     {
+
         this.club = club;
         this.activity = activity;
-//        this.id = new ClubActivitiesId(club.getClubid(), activity.getActivityid());
+
     }
 
 
@@ -85,6 +92,7 @@ public class ClubActivities extends Auditable implements Serializable
         this.club = club;
         this.activity = activity;
         this.reactions = reactions;
+
     }
 
     // Getters + Setters
@@ -96,6 +104,7 @@ public class ClubActivities extends Auditable implements Serializable
      */
     public Club getClub() {
         return club;
+
     }
     /**
      * Setter for club
@@ -139,6 +148,7 @@ public class ClubActivities extends Auditable implements Serializable
         this.reactions = reactions;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -156,3 +166,4 @@ public class ClubActivities extends Auditable implements Serializable
         return 22;
     }
 }
+

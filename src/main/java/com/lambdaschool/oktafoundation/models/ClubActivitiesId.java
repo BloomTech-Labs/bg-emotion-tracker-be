@@ -11,11 +11,11 @@ public class ClubActivitiesId implements Serializable {
     /**
      * The id of the club
      */
-    private long club;
+    private Long club;
     /**
      * The id of the activity
      */
-    private long activity;
+    private Long activity;
 
     /**
      * The default constructor required by JPA

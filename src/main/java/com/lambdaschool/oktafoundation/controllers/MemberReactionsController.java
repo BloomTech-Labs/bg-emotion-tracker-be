@@ -52,12 +52,11 @@ public class MemberReactionsController {
     @Autowired
     private EntityManager entityManager;
 
-
     /**
-     * Returns a list of all memberreactions
+     * Returns a list of all MemberReactions.
      * <br>Example: <a href="http://localhost:2019/memberreactions/memberreactions"></a>
      *
-     * @return JSON list of all memberreactions with a status of OK
+     * @return JSON list of all MemberReactions with a status of OK
      */
     @GetMapping(value = "/memberreactions",
             produces = "application/json")
@@ -67,11 +66,11 @@ public class MemberReactionsController {
     }
 
     /**
-     * Returns a single memberreaction based off a memberreaction id number
+     * Returns the MemberReaction with the given id.
      * <br>Example: http://localhost:2019/memberreactions/memberreaction/7
      *
-     * @param id The primary key of the membereaction you seek
-     * @return JSON object of the memberreaction you seek
+     * @param id The primary key of the MemberReaction you seek
+     * @return JSON object of the MemberReaction you seek
      * @see MemberReactionService#
      */
     @GetMapping(value = "/memberreaction/{id}",
@@ -81,6 +80,15 @@ public class MemberReactionsController {
         return new ResponseEntity<>(mr, HttpStatus.OK);
     }
 
+    /**
+     * Adds a new MemberReaction with the given memberId, activityId, clubId, and reaction.
+     *
+     * @param mid The id of the Member whose reaction is being added
+     * @param aid The id of the Activity for which the Member gave this Reaction
+     * @param cid The id of the Club at which the Member gave this Reaction
+     * @param rx A string representing the Reaction, in the form of the selected emoji's Unicode codepoint
+     * @return Status of OK
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @PostMapping(value = "/memberreaction/submit")
     public ResponseEntity<?> addNewReaction(
@@ -89,7 +97,6 @@ public class MemberReactionsController {
             @RequestParam(value = "cid") Long cid,
             @RequestParam(value = "rx") String rx
     ) {
-
         var member = memberRepository.findMemberByMemberid(mid).orElseThrow();
         var ca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(
                 aid, cid
@@ -102,9 +109,7 @@ public class MemberReactionsController {
 
         memberReactionRepository.save(temp);
 
-
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     private String searchQueryBuilder(LocalDate from, LocalDate to, List<ClubActivities> ca, List<Member> members) {
@@ -125,9 +130,7 @@ public class MemberReactionsController {
             res.append(" true ");
         }
 
-
         // adding filters for members
-
         if (members != null && members.size() > 0) {
 
             res.append(" and member_table_id in (");
@@ -138,9 +141,7 @@ public class MemberReactionsController {
             res.append(")");
         }
 
-
         // adding filters for club activities
-
         if (ca != null && ca.size() > 0) {
             res.append(" and cast((cast(clubid as varchar(255))||(cast(activityid as varchar(255))))as bigint) in (");
             for (var e : ca) {
@@ -148,8 +149,6 @@ public class MemberReactionsController {
             }
             res.deleteCharAt(res.length() - 1);
             res.append(")");
-
-
         }
 
         // In conclusion, for charting, you would supply
@@ -159,11 +158,18 @@ public class MemberReactionsController {
         // all within the given time period.
         System.out.println(res);
 
-
         return res.toString();
     }
 
-
+    /**
+     * Given start and end dates, returns all the relevant reactions from the Members (or to the ClubActivities) specified in the request body.
+     *
+     * @param from The earliest date by which to filter reactions
+     * @param to The latest date by which to filter reactions
+     * @param sp Other data such as ClubActivities or Members by which to filter the reactions
+     * @return A list of the relevant MemberReactions
+     * @throws Exception
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PostMapping(value = "/search")
     public ResponseEntity<?> getReport(
@@ -191,7 +197,6 @@ public class MemberReactionsController {
         }
 
         //if no body presented, then it means we just search against all memberreactions within certain date range
-
         LocalDate fromstr = null;
         LocalDate tostr = null;
         if (from != null) {
@@ -201,12 +206,8 @@ public class MemberReactionsController {
             tostr = LocalDate.parse(to);
         }
 
-
         Query q = entityManager.createNativeQuery("select * from memberreactions where " + searchQueryBuilder(fromstr, tostr, calist, mlist), MemberReactions.class);
-
 
         return new ResponseEntity<>(q.getResultList(), HttpStatus.OK);
     }
-
-
 }

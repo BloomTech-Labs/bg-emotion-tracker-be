@@ -43,6 +43,7 @@ public interface ActivityService {
 
     /**
      * Updates the provided fields in the Activity record referenced by the primary key.
+     *
      * @param updateActivity An object containing just the Activity fields to be updated
      * @param activityid  The primary key (long) of the Activity to update
      * @return The complete Activity object that was updated

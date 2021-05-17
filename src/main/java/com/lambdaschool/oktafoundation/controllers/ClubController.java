@@ -26,13 +26,13 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The entry point for clients to access clubs data
+ * The entry point for clients to access club data
  */
 @RestController
 @RequestMapping("/clubs")
 public class ClubController {
     /**
-     * Using the User service to process club data
+     * Using the Club service to process club data
      */
     @Autowired
     private ClubService clubService;
@@ -47,7 +47,7 @@ public class ClubController {
     private ClubUsersRepository clubUsersRepository;
 
     /**
-     * Returns a list of all clubs
+     * Returns a list of all Clubs.
      * <br>Example: <a href="http://localhost:2019/clubs/clubs"></a>
      *
      * @return JSON list of all clubs with a status of OK
@@ -62,8 +62,9 @@ public class ClubController {
         return new ResponseEntity<>(allClubs, HttpStatus.OK);
 
     }
+
     /**
-     * Returns a single club based off a club id number
+     * Returns the Club with the given id.
      * <br>Example: http://localhost:2019/clubs/club/7
      *
      * @param clubid The primary key of the club you seek
@@ -79,12 +80,13 @@ public class ClubController {
         return new ResponseEntity<>(c,
                 HttpStatus.OK);
     }
+
     /**
-     * Given a complete Club Object, create a new Club record
+     * Given a complete Club object, creates a new Club.
      * <br> Example: <a href="http://localhost:2019/users/user">http://localhost:2019/users/user</a>
      *
-     * @param club A complete new club
-     * @return A location header with the URI to the newly created club and a status of CREATED
+     * @param club A complete new Club to be added
+     * @return A location header with the URI to the newly created Club and a status of CREATED
      * @throws URISyntaxException Exception if something does not work in creating the location header
      * @see ClubService#save(Club) ClubService.save(Club)
      */
@@ -108,13 +110,13 @@ public class ClubController {
                 responseHeaders,
                 HttpStatus.CREATED);
     }
+
     /**
-     * Given a complete Club Object
-     * Given the club id, primary key, is in the Club table
+     * Updates the Club record with the given id using the provided data
      * <br> Example: <a href="http://localhost:2019/users/user/15">http://localhost:2019/users/user/15</a>
      *
-     * @param club A complete Club to replace the Club
-     * @param clubid     The primary key of the club you wish to replace.
+     * @param club An object containing values for just the fields being updated, all other fields left NULL
+     * @param clubid     The primary key of the club you wish to replace
      * @return status of OK
      * @see ClubService#save(Club) ClubService.save(Club)
      */
@@ -129,11 +131,12 @@ public class ClubController {
                 clubid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     /**
-     * Deletes a given club
+     * Deletes the Club with the given id.
      * <br>Example: <a href="http://localhost:2019/clubs/club/14"></a>
      *
-     * @param clubid the primary key of the club you wish to delete
+     * @param clubid The primary key of the Club you wish to delete
      * @return Status of NO_CONTENT
      */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
@@ -145,7 +148,11 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
+    /**
+     * Returns a summary of all existing Clubs, including name and id.
+     *
+     * @return A summary of all clubs, including name and id
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/summary")
     public ResponseEntity<?> getClubsSummary(){
@@ -153,14 +160,21 @@ public class ClubController {
         return new ResponseEntity<>(temp,HttpStatus.OK);
     }
 
-
+    /**
+     * Adds the User with the given userId to the Club with the given clubId.
+     *
+     * @param cid The id of the Club to which the User should be added
+     * @param uid The id of the User to be added
+     * @return Status of OK
+     * @throws URISyntaxException
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PostMapping(value = "/club/{cid}/addUser/{uid}",
             consumes = "application/json")
     public ResponseEntity<?> addNewUser(
             @PathVariable Long cid, @PathVariable Long uid) throws URISyntaxException
     {
-        var currentclub =  clubService.findClubById(cid);
+        var currentclub = clubService.findClubById(cid);
         var currentuser = userService.findUserById(uid);
         currentclub.getUsers().add(new ClubUsers(currentclub,currentuser));
 
@@ -171,19 +185,24 @@ public class ClubController {
                 HttpStatus.OK);
     }
 
-
+    /**
+     * Removes the User with the given userId from the Club with the given clubId.
+     *
+     * @param cid The id of the Club from which the User should be removed
+     * @param uid The id of the User to be removed
+     * @return Status of OK
+     * @throws URISyntaxException
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @DeleteMapping(value = "/club/{cid}/removeUser/{uid}",
             consumes = "application/json")
     public ResponseEntity<?> removeNewUser(
             @PathVariable Long cid, @PathVariable Long uid) throws URISyntaxException
     {
-
         var cu = clubUsersRepository.findClubUsersByClub_ClubidAndUser_Userid(cid,uid).orElseThrow();
         clubUsersRepository.delete(cu);
 
         return new ResponseEntity<>(null,
                 HttpStatus.OK);
     }
-
 }

@@ -41,7 +41,7 @@ public class ActivityController {
     private ClubActivityRepository clubActivityRepository;
 
     /**
-     * Returns a list of all activities.
+     * Returns a list of all Activities.
      * <br>Example: <a href="http://localhost:2019/activities/activities"></a>
      *
      * @return JSON list of all activities with a status of OK
@@ -56,7 +56,7 @@ public class ActivityController {
     }
 
     /**
-     * Returns a single Activity based on its id.
+     * Returns the Activity with the given id.
      * <br>Example: http://localhost:2019/activities/activity/4
      *
      * @param activityid The primary key of the activity you seek
@@ -104,8 +104,8 @@ public class ActivityController {
      * Updates the Activity record with the given id using the provided data.
      * <br> Example: <a href="http://localhost:2019/activities/activity/5"></a>
      *
-     * @param updateActivity An object containing values for just the fields being updated, all other fields left NULL.
-     * @param activityid     The primary key of the Activity you wish to replace.
+     * @param updateActivity An object containing values for just the fields being updated, all other fields left NULL
+     * @param activityid     The primary key of the Activity you wish to replace
      * @return status of OK
      */
     @PatchMapping(value = "/activity/{activityid}",
@@ -117,10 +117,10 @@ public class ActivityController {
     }
 
     /**
-     * Deletes a given Activity along with any associated ClubActivities.
+     * Deletes the Activity with the given id along with any associated ClubActivities.
      * <br>Example: <a href="http://localhost:2019/activities/activity/5"></a>
      *
-     * @param activityid the primary key of the Activity you wish to delete
+     * @param activityid The primary key of the Activity you wish to delete
      * @return Status of NO_CONTENT
      */
     @DeleteMapping(value = "/activity/{activityid}")

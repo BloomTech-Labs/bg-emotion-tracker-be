@@ -205,4 +205,12 @@ public class ClubServiceImpl implements ClubService{
     {
         clubrepos.deleteAll();
     }
+
+
+    @Override
+    public Club findClubByName(String name){
+        return clubrepos.findClubByClubname(name).orElseThrow(() -> new ResourceNotFoundException("Club with name " + name + " not found!"));
+    }
+
+
 }

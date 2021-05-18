@@ -46,4 +46,8 @@ public interface ClubService {
     void delete(long clubid);
 
     void deleteAll();
+
+    Club findClubByName(String name);
+
+
 }

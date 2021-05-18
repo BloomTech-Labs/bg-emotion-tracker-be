@@ -63,6 +63,13 @@ public class Club
     @JsonIgnoreProperties(value = "club", allowSetters = true)
     private Set<ClubUsers> users = new HashSet<>();
 
+    @OneToMany(mappedBy = "club",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonIgnoreProperties(value = "club", allowSetters = true)
+    private Set<ClubMembers> members = new HashSet<>();
+
+
     /**
      * The clubname (String). Cannot be null and must be unique
      */

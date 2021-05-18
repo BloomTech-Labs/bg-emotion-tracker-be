@@ -1,6 +1,9 @@
 package com.lambdaschool.oktafoundation.controllers;
 
+import com.lambdaschool.oktafoundation.models.Club;
+import com.lambdaschool.oktafoundation.models.ClubMembers;
 import com.lambdaschool.oktafoundation.models.Member;
+import com.lambdaschool.oktafoundation.repository.ClubMembersRepository;
 import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.MemberService;
 import org.h2.tools.Csv;
@@ -27,13 +30,16 @@ public class CSVController {
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private ClubMembersRepository clubMembersRepository;
+
 
     @PostMapping(value = "/upload")
     public String handleCSVUpload(@RequestParam("file") File file) throws Exception{
 
         var reader = new Scanner(file);
         var fields = new HashMap<String, Integer>();
-//        var clubcache = new HashMap<String, Club>();
+        var clubcache = new HashMap<String, Club>();
         fields.put("clubname",0);
         fields.put("memberid",1);
         while (reader.hasNextLine()){
@@ -48,20 +54,25 @@ public class CSVController {
                 }
                 continue;
             }
-            // We currently do not have club-member relationship, this is going to be confirmed with stakeholders. We're just adding new members to DB.
-            System.out.println("adding new member "+line[fields.get("memberid")]);
-            memberService.save(new Member(line[fields.get("memberid")]));
 
-//            System.out.println("adding new member"+line[fields.get("memberid")]+" to club "+line[fields.get("clubid")]);
 
-//            var mem
+            System.out.println("Creating new member "+line[fields.get("memberid")] + " if not existing");
+            var mem = memberService.save(new Member(line[fields.get("memberid")]));
 
-//            Club club;
-//            if(clubcache.get(line[fields.get("clubname")])!=null) {
-//                club = clubcache.get(line[fields.get("clubname")]);
-//            } else {
-//                club = clubService.findClubByName(line[fields.get("clubname")]);
-//            }
+
+            System.out.println("adding new member "+mem.getMemberid()+" to club "+line[fields.get("clubname")]);
+
+            // This requires the club to be present in DB.
+            Club club;
+            if(clubcache.get(line[fields.get("clubname")])!=null) {
+                club = clubcache.get(line[fields.get("clubname")]);
+            } else {
+                club = clubService.findClubByName(line[fields.get("clubname")]);
+                clubcache.put(line[fields.get("clubname")],club);
+            }
+
+            clubMembersRepository.save(new ClubMembers(club,mem));
+
 
         }
 

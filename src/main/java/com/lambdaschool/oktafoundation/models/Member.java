@@ -30,6 +30,10 @@ public class Member extends Auditable
     @JsonIgnoreProperties(value="member", allowSetters = true)
     public Set<MemberReactions> reactions = new HashSet<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value= "member", allowSetters = true)
+    public Set<ClubMembers> clubs = new HashSet<>();
+
     /**
      * Default constructor used primarily by the JPA.
      */

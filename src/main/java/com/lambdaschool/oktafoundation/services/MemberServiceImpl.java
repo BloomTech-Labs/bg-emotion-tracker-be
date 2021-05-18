@@ -39,6 +39,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findMemberByMemberId(String memberid) throws ResourceNotFoundException {
+        return memberrepos.findMemberByMemberid(memberid).orElseThrow(() -> new ResourceNotFoundException("Member with memberid" + memberid + " not found"));
+    }
+
+
+    @Override
     public Member save(Member member) {
         Member newMember = new Member();
 
@@ -47,6 +53,13 @@ public class MemberServiceImpl implements MemberService {
                     .orElseThrow(() -> new ResourceNotFoundException("Member id " + member.getMember_table_id() + " not found!!"));
             newMember.setMember_table_id(member.getMember_table_id());
         }
+
+        // if the memberid is already in the database, return it, no new member is created.
+        var temp = memberrepos.findMemberByMemberid(member.getMemberid());
+        if (temp.isPresent()) {
+            return temp.get();
+        }
+
 
         newMember.setMemberid(member.getMemberid());
 

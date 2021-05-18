@@ -10,6 +10,7 @@ import org.h2.tools.Csv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import java.io.File;
@@ -35,8 +36,8 @@ public class CSVController {
 
 
     @PostMapping(value = "/upload")
-    public String handleCSVUpload(@RequestParam("file") File file) throws Exception{
-
+    public String handleCSVUpload(@RequestParam("file") MultipartFile mfile) throws Exception{
+        var file = mfile.getInputStream();
         var reader = new Scanner(file);
         var fields = new HashMap<String, Integer>();
         var clubcache = new HashMap<String, Club>();

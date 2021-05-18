@@ -17,6 +17,9 @@
 - testmember3
 - testmember4
 
+## Testing clubname-memberid csv
+- https://transfer.sh/get/G0OG/test.csv
+
 
 # Major Endpoints for frontend features 
 
@@ -222,4 +225,27 @@ The above query shall return all reactions from testmember1 and testmember2 for 
 
 
 
+
+## Endpoints for Csv upload
+
+- This endpoint handles the import of a csv list of clubname, memberid.
+- The csv file can include a first line describing fields like the one in test.csv
+- or not having the firstline, which default to clubname, memberid.
+
+- Note: the current csv feature in the frontend is a simple read to list instead of handling the csv file itself
+    - If that would be used, regular endpoints handling jsons shall be used.
+- This endpoint requires a body of form data with the csv file.
+
+POST /csv/upload
+
+with form-data body of
+```
+{
+    file: {csvfile}
+}
+```
+where {csvfile} is a file stream of the csv file.
+
+- This feature can be tested in the Postman collection with the given test csv above.
+- Frontend can implement a feature to handle file if this endpoint is going to be used. 
 

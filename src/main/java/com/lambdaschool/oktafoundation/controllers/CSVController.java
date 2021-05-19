@@ -85,7 +85,7 @@ public class CSVController {
     @GetMapping(value = "/download")
     public StreamingResponseBody serveCsv(HttpServletResponse response) throws Exception{
         var fw = new FileWriter("temp.csv");
-
+        // currently returns all club-members relations in a csv format.
         clubMembersRepository.findAll().forEach(e -> {
             var temp = new StringBuilder();
             temp.append(e.getClub().getClubname()).append(",").append(e.getMember().getMemberid()).append("\n");

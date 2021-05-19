@@ -275,7 +275,7 @@ GET at /csv/download
 - We have two modes of report requesting
 
 ### Get averages of feedbacks given to activity
-GET /report/{cid}/activities?from={fromdate}&to={todate}
+GET /report/club/{cid}/activities?from={fromdate}&to={todate}
 
 - from-date and to-date are optional.
 - if cid is 0, then we return all club activities
@@ -319,7 +319,7 @@ GET /report/{cid}/activities?from={fromdate}&to={todate}
 
 
 ### Get averages of feedbacks member given to activities
-GET /report/{cid}/members?from={fromdate}&to={todate}
+GET /report/club/{cid}/members?from={fromdate}&to={todate}
 
 - Behaves the same way as above
 - Sample Response:

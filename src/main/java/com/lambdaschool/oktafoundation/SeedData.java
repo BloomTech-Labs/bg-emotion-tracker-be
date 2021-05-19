@@ -358,12 +358,13 @@ public class SeedData
         var cas = new ArrayList<>(c1.getActivities());
         for (int i = 0; i<100; i++){
             var curmem = allmem.get(ran.nextInt(allmem.size()));
-            curmem.getReactions().add(new MemberReactions(
+            var mr = memberReactionRepository.save(new MemberReactions(
                     curmem,
                     allreactions.get(ran.nextInt(allreactions.size())) ,
                     true,
                     cas.get(ran.nextInt(cas.size())
                     )));
+            curmem.getReactions().add(mr);
             curmem.getClubs().add(new ClubMembers(c1, curmem));
             memberService.save(curmem);
         }

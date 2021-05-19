@@ -24,6 +24,11 @@ public interface ClubRepository extends CrudRepository<Club, Long> {
    )
    List<ClubSummary> getClubsSummary();
 
-
+   /**
+    * Finds a Club with the given name.
+    *
+    * @param name The name (String) of the Club you seek
+    * @return The first Club object with the given name
+    */
    Optional<Club> findClubByClubname(String name);
 }

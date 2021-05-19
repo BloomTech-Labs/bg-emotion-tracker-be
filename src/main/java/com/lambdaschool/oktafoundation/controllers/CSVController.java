@@ -6,16 +6,21 @@ import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.repository.ClubMembersRepository;
 import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.MemberService;
+import org.apache.tomcat.jni.FileInfo;
 import org.h2.tools.Csv;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.persistence.EntityManager;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -73,27 +78,40 @@ public class CSVController {
             }
 
             clubMembersRepository.save(new ClubMembers(club,mem));
-
-
         }
-
-
         return "OK";
     }
 
-//    @GetMapping(value = "/download", produces = "text/csv")
-//    public ResponseEntity<?> serveCsv() throws Exception{
-//        var test = new Csv();
-//        test.setFieldDelimiter(',');
-//
-//        var q = entityManager.createQuery("select ");
-//
-//
-//
-//
-//        return new ResponseEntity<>()
-//
-//    }
+    @GetMapping(value = "/download")
+    public StreamingResponseBody serveCsv(HttpServletResponse response) throws Exception{
+        var fw = new FileWriter("temp.csv");
+        // currently returns all club-members relations in a csv format.
+        clubMembersRepository.findAll().forEach(e -> {
+            var temp = new StringBuilder();
+            temp.append(e.getClub().getClubname()).append(",").append(e.getMember().getMemberid()).append("\n");
+            try {
+                fw.append(temp);
+                System.out.println(temp);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        fw.close();
+        var file = new File("temp.csv");
+
+        response.setContentType("application/octet-stream");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"members.csv\"");
+
+        return outputStream -> {
+            int bytesRead;
+            byte[] buffer = new byte[4096];
+            InputStream inputStream = new FileInputStream(file);
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        };
+
+    }
 
 
 

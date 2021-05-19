@@ -2,12 +2,18 @@ package com.lambdaschool.oktafoundation;
 
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
+import com.lambdaschool.oktafoundation.repository.ReactionRepository;
 import com.lambdaschool.oktafoundation.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * SeedData puts both known and random data into the database. It implements CommandLineRunner.
@@ -48,6 +54,9 @@ public class SeedData
 
     @Autowired
     ReactionService reactionService;
+
+    @Autowired
+    ReactionRepository reactionRepository;
 
     @Autowired
     MemberReactionRepository memberReactionRepository;
@@ -322,18 +331,45 @@ public class SeedData
         rx4.setReactionvalue("1F641"); // -1 🙁
         Reaction rx5 = new Reaction();
         rx5.setReactionvalue("1F61E"); // -2 😞
-        Reaction rx6 = new Reaction();
-        rx6.setReactionvalue("testreaction");
+//        Reaction rx6 = new Reaction();
+//        rx6.setReactionvalue("testreaction");
 
         rx1 = reactionService.save(rx1);
         reactionService.save(rx2);
         reactionService.save(rx3);
         reactionService.save(rx4);
         reactionService.save(rx5);
-        reactionService.save(rx6);
+//        reactionService.save(rx6);
 
-        m1.getReactions().add(new MemberReactions(m1, rx1, true, c1.getActivities().stream().findFirst().get()));
-        memberService.save(m1);
+        var emojimap = new HashMap<Integer,String>();
+        emojimap.put(4,"1F601");
+        emojimap.put(3,"1F642");
+        emojimap.put(2,"1F610");
+        emojimap.put(1,"1F641");
+        emojimap.put(0,"1F61E");
+
+
+
+        // Generating 100 memberReactions
+        var ran = new Random();
+        var allmem = memberService.findAll();
+        ArrayList<Reaction> allreactions = new ArrayList<>();
+        reactionRepository.findAll().iterator().forEachRemaining(allreactions::add);
+        var cas = new ArrayList<>(c1.getActivities());
+        for (int i = 0; i<100; i++){
+            var curmem = allmem.get(ran.nextInt(allmem.size()));
+            var mr = memberReactionRepository.save(new MemberReactions(
+                    curmem,
+                    allreactions.get(ran.nextInt(allreactions.size())) ,
+                    true,
+                    cas.get(ran.nextInt(cas.size())
+                    )));
+            curmem.getReactions().add(mr);
+            curmem.getClubs().add(new ClubMembers(c1, curmem));
+            memberService.save(curmem);
+        }
+
+
 
 
         // The following is an example user!

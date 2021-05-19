@@ -6,4 +6,11 @@ import org.springframework.data.repository.CrudRepository;
  * The CRUD repository connecting MemberReaction to the rest of the application
  */
 public interface MemberReactionRepository extends CrudRepository<MemberReactions, Long> {
+
+
+
+
+
+
+
 }

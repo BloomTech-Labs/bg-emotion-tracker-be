@@ -53,4 +53,8 @@ public interface ClubService {
      * Deletes all Clubs and their associated records from the database.
      */
     void deleteAll();
+
+    Club findClubByName(String name);
+
+
 }

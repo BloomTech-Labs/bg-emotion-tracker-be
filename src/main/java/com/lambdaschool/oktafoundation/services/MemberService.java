@@ -23,6 +23,8 @@ public interface MemberService {
      */
     Member findMemberById(long id);
 
+    Member findMemberByMemberId(String memberid);
+
     /**
      * Given a complete Member object, saves that Member in the database.
      * If a primary key is provided, the record is completely replaced.

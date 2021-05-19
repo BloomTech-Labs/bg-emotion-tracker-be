@@ -23,4 +23,7 @@ public interface ClubRepository extends CrudRepository<Club, Long> {
            nativeQuery = true
    )
    List<ClubSummary> getClubsSummary();
+
+
+   Optional<Club> findClubByClubname(String name);
 }

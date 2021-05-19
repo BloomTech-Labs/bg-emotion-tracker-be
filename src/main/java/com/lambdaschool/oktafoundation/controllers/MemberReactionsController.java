@@ -47,6 +47,13 @@ public class MemberReactionsController {
     private ClubActivityRepository clubActivityRepository;
 
     @Autowired
+    private ClubMembersRepository  clubMembersRepository;
+
+
+    @Autowired
+    private ClubRepository  clubRepository;
+
+    @Autowired
     private ReactionRepository reactionRepository;
 
     @Autowired
@@ -101,11 +108,19 @@ public class MemberReactionsController {
         var ca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(
                 aid, cid
         ).orElseThrow();
+
+
+
+        clubMembersRepository.save(new ClubMembers(clubRepository.findById(cid).orElseThrow(),member));
+
+
         Reaction currentreaction;
         currentreaction = reactionRepository.findReactionByReactionvalue(rx).orElseThrow();
         // we no longer create any reaction, if the reaction is not in our DB, throw.
 
         MemberReactions temp = new MemberReactions(member, currentreaction, true, ca);
+
+
 
         memberReactionRepository.save(temp);
 

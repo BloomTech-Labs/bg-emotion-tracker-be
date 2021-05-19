@@ -2,11 +2,14 @@ package com.lambdaschool.oktafoundation.controllers;
 
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.lambdaschool.oktafoundation.models.Club;
+import com.lambdaschool.oktafoundation.models.ClubMembers;
 import com.lambdaschool.oktafoundation.models.ClubUsers;
 import com.lambdaschool.oktafoundation.models.User;
+import com.lambdaschool.oktafoundation.repository.ClubMembersRepository;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.repository.ClubUsersRepository;
 import com.lambdaschool.oktafoundation.services.ClubService;
+import com.lambdaschool.oktafoundation.services.MemberService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import com.lambdaschool.oktafoundation.views.ClubSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,12 @@ public class ClubController {
     @Autowired
     private ClubUsersRepository clubUsersRepository;
 
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
+    private ClubMembersRepository clubMembersRepository;
+
     /**
      * Returns a list of all Clubs.
      * <br>Example: <a href="http://localhost:2019/clubs/clubs"></a>
@@ -71,7 +80,7 @@ public class ClubController {
      * @return JSON object of the Club you seek
      * @see ClubService#findClubById(Long)  ClubService.findClubById(long)
      */
-    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/club/{clubid}",
         produces = "application/json")
     public ResponseEntity<?> getClubById(@PathVariable Long clubid)
@@ -194,8 +203,7 @@ public class ClubController {
      * @throws URISyntaxException
      */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
-    @DeleteMapping(value = "/club/{cid}/removeUser/{uid}",
-            consumes = "application/json")
+    @DeleteMapping(value = "/club/{cid}/removeUser/{uid}")
     public ResponseEntity<?> removeNewUser(
             @PathVariable Long cid, @PathVariable Long uid) throws URISyntaxException
     {
@@ -204,5 +212,32 @@ public class ClubController {
 
         return new ResponseEntity<>(null,
                 HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PostMapping(value = "/club/{cid}/addMember/{mid}")
+    public ResponseEntity<?> addNewMemberToClub(@PathVariable Long cid, @PathVariable String mid){
+        var club = clubService.findClubById(cid);
+        var member = memberService.findMemberByMemberId(mid);
+
+        clubMembersRepository.save(new ClubMembers(club,member));
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @DeleteMapping(value = "/club/{cid}/removeMember/{mid}")
+    public ResponseEntity<?> removeMemberFromClub(
+            @PathVariable Long cid, @PathVariable String mid) throws URISyntaxException
+    {
+        var cm = clubMembersRepository.findClubMembersByClub_ClubidAndMember_Memberid(cid,mid);
+        if(cm.isPresent()){
+            clubMembersRepository.delete(cm.get());
+            return new ResponseEntity<>(null,
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No Such Relationship",
+                    HttpStatus.NOT_MODIFIED);
+        }
     }
 }

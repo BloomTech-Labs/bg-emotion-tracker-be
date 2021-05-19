@@ -51,6 +51,8 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/memberreactions/**").hasAnyRole("ADMIN","CD") //YDP cannot GET reactions
                 .antMatchers(HttpMethod.GET,"/members/**").authenticated()
                 .antMatchers("/members/**").hasAnyRole("CD","ADMIN")
+                .antMatchers("/csv/**").hasAnyRole("CD","ADMIN")
+                .antMatchers("/report/**").hasAnyRole("CD","ADMIN")
                 // *** Endpoints not specified above are automatically denied
                 .anyRequest()
                 .denyAll()

@@ -2,12 +2,18 @@ package com.lambdaschool.oktafoundation;
 
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
+import com.lambdaschool.oktafoundation.repository.ReactionRepository;
 import com.lambdaschool.oktafoundation.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * SeedData puts both known and random data into the database. It implements CommandLineRunner.
@@ -17,14 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @ConditionalOnProperty(
-    prefix = "command.line.runner",
-    value = "enabled",
-    havingValue = "true",
-    matchIfMissing = true)
+        prefix = "command.line.runner",
+        value = "enabled",
+        havingValue = "true",
+        matchIfMissing = true)
 @Component
 public class SeedData
-    implements CommandLineRunner
-{
+        implements CommandLineRunner {
     /**
      * Connects the Role Service to this process
      */
@@ -51,6 +56,9 @@ public class SeedData
     ReactionService reactionService;
 
     @Autowired
+    ReactionRepository reactionRepository;
+
+    @Autowired
     MemberReactionRepository memberReactionRepository;
 
 
@@ -66,8 +74,7 @@ public class SeedData
     @Transactional
     @Override
     public void run(String[] args) throws
-                                   Exception
-    {
+            Exception {
 
         roleService.deleteAll();
         Role r1 = new Role("ADMIN");
@@ -138,7 +145,6 @@ public class SeedData
         userService.save(u8);
 
 
-
 //        Activities
         clubService.deleteAll();
         activityService.deleteAll();
@@ -149,6 +155,7 @@ public class SeedData
         Activity a5 = new Activity("Homework Help");
         Activity a6 = new Activity("Music");
         Activity a7 = new Activity("Soccer");
+        Activity a8 = new Activity("Club Checkout");
         activityService.save(a1);
         activityService.save(a2);
         activityService.save(a3);
@@ -156,23 +163,25 @@ public class SeedData
         activityService.save(a5);
         activityService.save(a6);
         activityService.save(a7);
+        activityService.save(a8);
 
 
 //       Club
         //Anderson has Attendance, Arts, Archery, Basketball, Homework
         Club c1 = new Club("Anderson");
         c1.getActivities()
-                .add(new ClubActivities(c1,a1));
+                .add(new ClubActivities(c1, a1));
         c1.getActivities()
-                .add(new ClubActivities(c1,a2));
+                .add(new ClubActivities(c1, a2));
         c1.getActivities()
-                .add(new ClubActivities(c1,a3));
+                .add(new ClubActivities(c1, a3));
         c1.getActivities()
-                .add(new ClubActivities(c1,a4));
+                .add(new ClubActivities(c1, a4));
         c1.getActivities()
-                .add(new ClubActivities(c1,a5));
+                .add(new ClubActivities(c1, a5));
+        c1.getActivities().add(new ClubActivities(c1, a8));
 
-        c1=clubService.save(c1);
+        c1 = clubService.save(c1);
         //Anderson has 3 staff
         c1.getUsers().add(new ClubUsers(c1, userService.findByName("llama001@maildrop.cc")));
         c1.getUsers().add(new ClubUsers(c1, userService.findByName("llama002@maildrop.cc")));
@@ -188,7 +197,9 @@ public class SeedData
                 .add(new ClubActivities(c2, a4));
         c2.getActivities()
                 .add(new ClubActivities(c2, a5));
-        c2=clubService.save(c2);
+        c2.getActivities().add(new ClubActivities(c2, a8));
+
+        c2 = clubService.save(c2);
         //Caitlin has 1 staff
         c2.getUsers().add(new ClubUsers(c2, userService.findByName("llama001@maildrop.cc")));
 
@@ -206,6 +217,8 @@ public class SeedData
                 .add(new ClubActivities(c3, a6));
         c3.getActivities()
                 .add(new ClubActivities(c3, a7));
+        c3.getActivities().add(new ClubActivities(c3, a8));
+
         clubService.save(c3);
 
         //Johnston has Attendance, Arts, Basketball, Homework, Music, Soccer
@@ -222,6 +235,8 @@ public class SeedData
                 .add(new ClubActivities(c4, a6));
         c4.getActivities()
                 .add(new ClubActivities(c4, a7));
+        c4.getActivities().add(new ClubActivities(c4, a8));
+
         clubService.save(c4);
 
         //Marley has Attendance, Arts, Basketball, Homework Help, Music, Soccer
@@ -238,10 +253,11 @@ public class SeedData
                 .add(new ClubActivities(c5, a6));
         c5.getActivities()
                 .add(new ClubActivities(c5, a7));
+        c5.getActivities().add(new ClubActivities(c5, a8));
         clubService.save(c5);
 
         //Morton has Attendance, Arts, Basketball, Homework, Soccer
-        Club c6 = new Club ("Morton");
+        Club c6 = new Club("Morton");
         c6.getActivities()
                 .add(new ClubActivities(c6, a1));
         c6.getActivities()
@@ -252,6 +268,7 @@ public class SeedData
                 .add(new ClubActivities(c6, a5));
         c6.getActivities()
                 .add(new ClubActivities(c6, a7));
+        c6.getActivities().add(new ClubActivities(c6, a8));
         clubService.save(c6);
         //Notter has Attendance, Arts, Basketball, Homework,
         Club c7 = new Club("Notter");
@@ -263,6 +280,7 @@ public class SeedData
                 .add(new ClubActivities(c7, a4));
         c7.getActivities()
                 .add(new ClubActivities(c7, a5));
+        c7.getActivities().add(new ClubActivities(c7, a8));
         clubService.save(c7);
 
         //Stelle has Attendance, Arts
@@ -271,6 +289,8 @@ public class SeedData
                 .add(new ClubActivities(c8, a1));
         c8.getActivities()
                 .add(new ClubActivities(c8, a2));
+        c8.getActivities().add(new ClubActivities(c8, a8));
+
         clubService.save(c8);
         //Jefferson has Attendance, Arts, Basketball, Homework, Music, Soccer
         Club c9 = new Club("Jefferson");
@@ -286,9 +306,9 @@ public class SeedData
                 .add(new ClubActivities(c9, a6));
         c9.getActivities()
                 .add(new ClubActivities(c9, a7));
+        c9.getActivities().add(new ClubActivities(c9, a8));
+
         clubService.save(c9);
-
-
 
 
         Member m1 = new Member("testmember1");
@@ -296,7 +316,7 @@ public class SeedData
         Member m3 = new Member("testmember3");
         Member m4 = new Member("testmember4");
 
-        m1=memberService.save(m1);
+        m1 = memberService.save(m1);
         memberService.save(m2);
         memberService.save(m3);
         memberService.save(m4);
@@ -311,18 +331,44 @@ public class SeedData
         rx4.setReactionvalue("1F641"); // -1 🙁
         Reaction rx5 = new Reaction();
         rx5.setReactionvalue("1F61E"); // -2 😞
-        Reaction rx6 = new Reaction();
-        rx6.setReactionvalue("testreaction");
+//        Reaction rx6 = new Reaction();
+//        rx6.setReactionvalue("testreaction");
 
-        rx1=reactionService.save(rx1);
+        rx1 = reactionService.save(rx1);
         reactionService.save(rx2);
         reactionService.save(rx3);
         reactionService.save(rx4);
         reactionService.save(rx5);
-        reactionService.save(rx6);
+//        reactionService.save(rx6);
 
-        m1.getReactions().add(new MemberReactions(m1,rx1,true, c1.getActivities().stream().findFirst().get()));
-        memberService.save(m1);
+        var emojimap = new HashMap<Integer,String>();
+        emojimap.put(4,"1F601");
+        emojimap.put(3,"1F642");
+        emojimap.put(2,"1F610");
+        emojimap.put(1,"1F641");
+        emojimap.put(0,"1F61E");
+
+
+
+        // Generating 100 memberReactions
+        var ran = new Random();
+        var allmem = memberService.findAll();
+        ArrayList<Reaction> allreactions = new ArrayList<>();
+        reactionRepository.findAll().iterator().forEachRemaining(allreactions::add);
+        var cas = new ArrayList<>(c1.getActivities());
+        for (int i = 0; i<100; i++){
+            var curmem = allmem.get(ran.nextInt(allmem.size()));
+            var mr = memberReactionRepository.save(new MemberReactions(
+                    curmem,
+                    allreactions.get(ran.nextInt(allreactions.size())) ,
+                    true,
+                    cas.get(ran.nextInt(cas.size())
+                    )));
+            curmem.getReactions().add(mr);
+            curmem.getClubs().add(new ClubMembers(c1, curmem));
+            memberService.save(curmem);
+        }
+
 
 
 

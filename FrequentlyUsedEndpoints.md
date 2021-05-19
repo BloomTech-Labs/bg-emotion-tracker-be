@@ -17,6 +17,9 @@
 - testmember3
 - testmember4
 
+## Testing clubname-memberid csv
+- https://cloud.obtl.me/index.php/s/rgEcS64bmHbTQ3B
+
 
 # Major Endpoints for frontend features 
 
@@ -136,6 +139,20 @@ https://bg-emotion-tracker-be-b.herokuapp.com/clubs/club/22/removeUser/8
 
 <br />
 
+
+### Removing a Member from a club 
+- Member would be added to the corresponding Club when posting new memberReaction, if the member is in the club yet.
+- So only the delete endpoint is documented here.
+
+DELETE /clubs/club/{cid}/removeMember/{mid}
+
+Example url
+```
+https://bg-emotion-tracker-be-b.herokuapp.com/clubs/club/21/removeMember/testmember1
+```
+
+<br />
+
 ##  Endpoints for Activities
 ### Posting new activity to club
 
@@ -180,10 +197,11 @@ Explanation with a example url:
 <br />
 
 
-### Searching for MemberReactions (Beta)
-- Can be used as a way to query general feedbacks to a specific club activity.
-- Can be used as a way to query how a particular member is doing.
-- Could be used in fancy ways as comparisons against multiple club activities and/or members
+### Searching for MemberReactions
+- This endpoint returns a list of all memberReactions given filters for
+   - members
+   - clubActivities
+   - time range
 
 POST /memberreactions/search?from={starttime}&to={endtime}
 
@@ -214,12 +232,114 @@ with sample body:
 ```
 The above query shall return all reactions from testmember1 and testmember2 for their submissions for club 20's activity 13 and 14.
 
-- Another endpoint that derives from the one above shall be made that would respond with formatted arrays specifically for plotting charts/analysis on the frontend.
-    - restrict to club-activities to up to 1
-        - A plot that compares how different members are feeling towards one specific club-activity 
-    - restrict members to up to 1
-        - A plot that compares how a single member feel towards different club-activities
+
+## CSV
+
+### Endpoint for CSV upload
+
+- This endpoint handles the import of a csv list of clubname, memberid.
+- The csv file can include a first line describing fields like the one in test.csv
+- or not having the firstline, which default to clubname, memberid.
+
+- Note: the current csv feature in the frontend is a simple read to list instead of handling the csv file itself
+    - If that would be used, regular endpoints handling jsons shall be used.
+- This endpoint requires a body of form data with the csv file.
+
+POST /csv/upload
+
+with form-data body of
+```
+{
+    file: {csvfile}
+}
+```
+where {csvfile} is a file stream of the csv file.
+
+- This feature can be tested in the Postman collection with the given test csv above.
+- Frontend can implement a feature to handle file if this endpoint is going to be used. 
+
+<br />
+
+### Endpoint for CSV download
+GET at /csv/download
+
+- This is not a file served by the server, so if frontend want a pop up for your typical download on the internet, maybe a new library is needed.
 
 
 
+<br />
 
+## Report
+
+- Simple calculations by averaging emoji values over time frame
+- We have two modes of report requesting
+
+### Get averages of feedbacks given to activity
+GET /report/club/{cid}/activities?from={fromdate}&to={todate}
+
+- from-date and to-date are optional.
+- if cid is 0, then we return all club activities
+- otherwise we only get activities from club {cid}
+- Sample response:
+```
+[
+    {
+        "clubname": "anderson",
+        "activityname": "Club Attendance",
+        "positivity": -0.05
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Club Checkout",
+        "positivity": -0.3333333333333333
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Basketball",
+        "positivity": 0.46153846153846156
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Homework Help",
+        "positivity": 0.09090909090909091
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Archery",
+        "positivity": 0.07142857142857142
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Arts & Crafts",
+        "positivity": 0.5625
+    }
+]
+```
+
+
+
+### Get averages of feedbacks member given to activities
+GET /report/club/{cid}/members?from={fromdate}&to={todate}
+
+- Behaves the same way as above
+- Sample Response:
+```
+[
+    {
+        "memberid": "testmember4",
+        "positivity": 0.2
+    },
+    {
+        "memberid": "testmember3",
+        "positivity": 0.3076923076923077
+    },
+    {
+        "memberid": "testmember2",
+        "positivity": 0.0
+    },
+    {
+        "memberid": "testmember1",
+        "positivity": -0.041666666666666664
+    }
+]
+```

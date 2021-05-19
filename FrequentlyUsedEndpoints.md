@@ -18,7 +18,7 @@
 - testmember4
 
 ## Testing clubname-memberid csv
-- https://transfer.sh/get/G0OG/test.csv
+- https://cloud.obtl.me/index.php/s/rgEcS64bmHbTQ3B
 
 
 # Major Endpoints for frontend features 

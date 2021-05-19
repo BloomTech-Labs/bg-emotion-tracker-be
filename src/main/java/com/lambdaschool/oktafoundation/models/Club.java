@@ -110,7 +110,7 @@ public class Club
     }
 
     /**
-     * Setter for clubid. Used primary for seeding data
+     * Setter for clubid. Used primarily for seeding data
      *
      * @param clubid The new clubid (long) of the Club
      */

@@ -79,7 +79,7 @@ public class Activity extends Auditable
     }
 
     /**
-     * Setter for activityid. Used primary for seeding data
+     * Setter for activityid. Used primarily for seeding data
      *
      * @param activityid The new activityid (long) of the Activity
      */

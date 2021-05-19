@@ -95,7 +95,7 @@ public class User
     }
 
     /**
-     * Setter for userid. Used primary for seeding data
+     * Setter for userid. Used primarily for seeding data
      *
      * @param userid The new userid (long) of the User
      */

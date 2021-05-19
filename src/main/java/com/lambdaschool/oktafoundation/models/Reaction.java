@@ -13,38 +13,37 @@ import java.util.Set;
 @Table(name = "reactions")
 public class Reaction extends Auditable {
     /**
-     * The primary key (long) of the reaction table.
+     * The primary key (long) of the reactions table.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long reactionid;
+
     /**
      * The reactionvalue (String). Cannot be null and must be unique
      */
     @Column(nullable = false, unique = true)
     private String reactionvalue;
-    /**
-     * Part of the join relationship between Member and Reactions
-     * connects reaction to the memberreaction combination
-     */
 
     /**
      * Default constructor used primarily by the JPA.
      */
     public Reaction() {
     }
+
     /**
      * Getter for reactionid
      *
-     * @return the reactionid (long) of the Reaction
+     * @return The reactionid (long) of the Reaction
      */
     public long getReactionid() {
         return reactionid;
     }
+
     /**
-     * Setter for reactionid. Used primary for seeding data
+     * Setter for reactionid. Used primarily for seeding data
      *
-     * @param reactionid the new reactionid (long) of the reaction
+     * @param reactionid The new reactionid (long) of the Reaction
      */
     public void setReactionid(long reactionid) {
         this.reactionid = reactionid;
@@ -53,15 +52,16 @@ public class Reaction extends Auditable {
     /**
      * Getter for reactionvalue
      *
-     * @return the reactionvalue (String)
+     * @return The reactionvalue (String) of the Reaction
      */
     public String getReactionvalue() {
         return reactionvalue;
     }
+
     /**
      * setter for reactionvalue
      *
-     * @param reactionvalue the new reactionvalue (String)
+     * @param reactionvalue the new reactionvalue (String) for this Reaction
      */
     public void setReactionvalue(String reactionvalue) {
         this.reactionvalue = reactionvalue;

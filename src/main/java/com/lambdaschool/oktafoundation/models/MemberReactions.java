@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * The entity allowing interaction with the memberreactions table.
- * The join table between member and activity.
+ * The join table between members and activities.
  * <p>
  * Table enforces a unique constraint of the combination of member_table_id and reactionid.
  * These two together form the primary key.
@@ -20,113 +20,133 @@ import java.io.Serializable;
 public class MemberReactions extends Auditable implements Serializable
 {
     /**
-     * 1/2 of the primary key (long) for memberreactions.
-     * Also is a foreign key into the member table
+     * The primary key (long) for memberreactions.
      */
-
     @Id
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private long memberreactionid;
 
-
+    /**
+     * The member with which this member reaction combination is associated.
+     */
     @ManyToOne
     @JoinColumn(name="member_table_id")
     @JsonIgnoreProperties(value="reactions", allowSetters = true)
     private Member member;
-    /**
-     * 1/2 of the primary key (long) for memberreactions.
-     * Also is a foreign key into the reaction table
-     */
 
+    /**
+     * The reaction with which this member reaction combination is associated.
+     */
     @ManyToOne
     @JoinColumn(name = "reactionid")
     @JsonIgnoreProperties(value="member", allowSetters = true)
     private Reaction reaction;
+
     /**
-     * The checkedin (Boolean). Cannot be null and must be unique
+     * The checkedin (Boolean). Cannot be null
      */
     @Column(nullable = false)
     private Boolean checkedin;
 
+    /**
+     * The club activity combination to which this member gave this reaction.
+     */
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "activityid"),
             @JoinColumn(name="clubid")})
     @JsonIgnoreProperties(value={"reactions"},allowSetters = true)
     private ClubActivities clubactivity;
+
     /**
      * Default constructor used primarily by the JPA.
      */
     public MemberReactions() {
     }
+
     /**
-     * Given the params, create a new club activity combination object
+     * Given the params, create a new member reactions combination object
      *
-     * @param member The club object of this relationship
-     * @param reaction The activity object of this relationship
-     * @param member The club object of this relationship
+     * @param member The Member object of this relationship
+     * @param reaction The Reaction object of this relationship
+     * @param checkedin The checkedin (boolean)
+     * @param clubactivity The club activity combination associated with this relationship
      */
-
-
     public MemberReactions(Member member, Reaction reaction, Boolean checkedin, ClubActivities clubactivity) {
         this.member = member;
         this.reaction = reaction;
         this.checkedin = checkedin;
         this.clubactivity = clubactivity;
     }
+
     /**
      * The getter for Member
      *
-     * @return the complete member object associated with member reaction combination
+     * @return The complete Member object associated with this member reaction combination
      */
     public Member getMember() {
         return member;
     }
+
     /**
      * Setter for Member
      *
-     * @param member change the member object associated with this member reaction combination to this one.
+     * @param member Change the Member object associated with this member reaction combination to this one
      */
     public void setMember(Member member) {
         this.member = member;
     }
+
     /**
      * The getter for Reaction
      *
-     * @return the complete reaction object associated with member reaction combination
+     * @return The complete Reaction object associated with this member reaction combination
      */
     public Reaction getReaction() {
         return reaction;
     }
+
     /**
      * Setter for Reaction
      *
-     * @param reaction change the reaction object associated with this member reaction combination to this one.
+     * @param reaction Change the Reaction object associated with this member reaction combination to this one
      */
     public void setReaction(Reaction reaction) {
         this.reaction = reaction;
     }
+
     /**
      * The getter for Checkedin
      *
-     * @return the checkedin (Boolean) of the MemberReaction
+     * @return The checkedin (Boolean) of this member reaction combination
      */
     public Boolean getCheckedin() {
         return checkedin;
     }
+
     /**
-     * Setter for checkedin. Used primary for seeding data
+     * Setter for checkedin. Used primarily for seeding data
      *
-     * @param checkedin the new checkedin (Boolean) of the MemberReaction
+     * @param checkedin The new checkedin (Boolean) of this member reaction combination
      */
     public void setCheckedin(Boolean checkedin) {
         this.checkedin = checkedin;
     }
 
+    /**
+     * The getter for the club activity combination
+     *
+     * @return The club activity combination associated with this member reaction combination
+     */
     public ClubActivities getClubactivity() {
         return clubactivity;
     }
 
+    /**
+     * The setter for the club activity combination
+     *
+     * @param clubactivity Change the club activity combination associated with this member reaction combination
+     */
     public void setClubactivity(ClubActivities clubactivity) {
         this.clubactivity = clubactivity;
     }

@@ -23,7 +23,7 @@ public class ClubUsers extends Auditable implements Serializable
 {
     /**
      * 1/2 of the primary key (long) for clubusers.
-     * Also is a foreign key into the club table
+     * Also is a foreign key into the clubs table
      */
     @Id
     @ManyToOne
@@ -31,9 +31,10 @@ public class ClubUsers extends Auditable implements Serializable
     @JoinColumn(name = "clubid")
     @JsonIgnoreProperties(value = {"users","activities"}, allowSetters = true)
     private Club club;
+
     /**
      * 1/2 of the primary key (long) for clubusers.
-     * Also is a foreign key into the user table
+     * Also is a foreign key into the users table
      */
     @Id
     @ManyToOne
@@ -52,10 +53,9 @@ public class ClubUsers extends Auditable implements Serializable
     /**
      * Given the params, create a new club user combination object
      *
-     * @param user The user object of this relationship
-     * @param club The club object of this relationship
+     * @param user The User object of this relationship
+     * @param club The Club object of this relationship
      */
-
     public ClubUsers(
             Club club,
             User user
@@ -64,38 +64,43 @@ public class ClubUsers extends Auditable implements Serializable
         this.club = club;
         this.user = user;
     }
+
     /**
      * The getter for Club
      *
-     * @return the complete club object associated with club user combination
+     * @return The complete Club object associated with club user combination
      */
     public Club getClub() {
         return club;
     }
+
     /**
-     * Setter for club
+     * Setter for Club
      *
-     * @param club change the club object associated with this club user combination to this one.
+     * @param club Change the Club object associated with this club user combination to this one
      */
     public void setClub(Club club) {
         this.club = club;
     }
+
     /**
      * The getter for User
      *
-     * @return the complete user object associated with club user combination
+     * @return The complete User object associated with club user combination
      */
     public User getUser() {
         return user;
     }
+
     /**
-     * Setter for user
+     * Setter for User
      *
-     * @param user change the user object associated with this club user combination to this one.
+     * @param user Change the User object associated with this club user combination to this one
      */
     public void setUser(User user) {
         this.user = user;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -57,8 +57,8 @@ public class UserRoles
     /**
      * Given the params, create a new user role combination object
      *
-     * @param user The user object of this relationship
-     * @param role The role object of this relationship
+     * @param user The User object of this relationship
+     * @param role The Role object of this relationship
      */
     public UserRoles(
         User user,
@@ -71,7 +71,7 @@ public class UserRoles
     /**
      * The getter for User
      *
-     * @return the complete user object associated with user role combination
+     * @return The complete User object associated with user role combination
      */
     public User getUser()
     {
@@ -79,9 +79,9 @@ public class UserRoles
     }
 
     /**
-     * Setter for user
+     * Setter for User
      *
-     * @param user change the user object associated with this user role combination to this one.
+     * @param user Change the User object associated with this user role combination to this one.
      */
     public void setUser(User user)
     {
@@ -89,9 +89,9 @@ public class UserRoles
     }
 
     /**
-     * Getter for role
+     * Getter for Role
      *
-     * @return the complete role object associated with this user role combination
+     * @return The complete Role object associated with this user role combination
      */
     public Role getRole()
     {
@@ -99,9 +99,9 @@ public class UserRoles
     }
 
     /**
-     * Setter for role
+     * Setter for Role
      *
-     * @param role change role object associated with this user role combination to this one.
+     * @param role Change Role object associated with this user role combination to this one.
      */
     public void setRole(Role role)
     {

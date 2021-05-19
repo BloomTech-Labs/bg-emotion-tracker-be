@@ -100,7 +100,7 @@ public class ReportController {
             temp.setMemberid(member);
             var memberreactions = prememberPositivty.get(member);
             var len = memberreactions.size();
-            temp.setPosivitiy(memberreactions.stream().reduce((a,b) -> a+b).get()/(double)len);
+            temp.setPositivity(memberreactions.stream().reduce((a,b) -> a+b).get()/(double)len);
             mplist.add(temp);
         }
 
@@ -158,7 +158,7 @@ public class ReportController {
             temp.setActivityname(ca.get(1));
             var activityreactions = preactivityPositivity.get(ca);
             var len = activityreactions.size();
-            temp.setPosivitiy(activityreactions.stream().reduce((a,b) -> a+b).get()/(double)len);
+            temp.setPositivity(activityreactions.stream().reduce((a,b) -> a+b).get()/(double)len);
             caplist.add(temp);
         }
 

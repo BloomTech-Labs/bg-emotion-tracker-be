@@ -4,7 +4,7 @@ package com.lambdaschool.oktafoundation.views;
 public class ClubActivityPosivity {
     private String clubname;
     private String activityname;
-    private Double posivitiy;
+    private Double positivity;
 
     public String getClubname() {
         return clubname;
@@ -22,12 +22,12 @@ public class ClubActivityPosivity {
         this.activityname = activityname;
     }
 
-    public Double getPosivitiy() {
-        return posivitiy;
+    public Double getPositivity() {
+        return positivity;
     }
 
-    public void setPosivitiy(Double posivitiy) {
-        this.posivitiy = posivitiy;
+    public void setPositivity(Double positivity) {
+        this.positivity = positivity;
     }
 
     public ClubActivityPosivity() {

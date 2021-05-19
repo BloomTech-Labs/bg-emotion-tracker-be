@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MemberPosivity {
     private String memberid;
-    private Double posivitiy;
+    private Double positivity;
 
     public String getMemberid() {
         return memberid;
@@ -17,12 +17,12 @@ public class MemberPosivity {
         this.memberid = memberid;
     }
 
-    public Double getPosivitiy() {
-        return posivitiy;
+    public Double getPositivity() {
+        return positivity;
     }
 
-    public void setPosivitiy(Double posivitiy) {
-        this.posivitiy = posivitiy;
+    public void setPositivity(Double positivity) {
+        this.positivity = positivity;
     }
 
     public MemberPosivity() {

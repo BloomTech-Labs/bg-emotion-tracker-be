@@ -225,8 +225,9 @@ The above query shall return all reactions from testmember1 and testmember2 for 
 
 
 
+##CSV
 
-## Endpoints for Csv upload
+### Endpoint for CSV upload
 
 - This endpoint handles the import of a csv list of clubname, memberid.
 - The csv file can include a first line describing fields like the one in test.csv
@@ -249,3 +250,88 @@ where {csvfile} is a file stream of the csv file.
 - This feature can be tested in the Postman collection with the given test csv above.
 - Frontend can implement a feature to handle file if this endpoint is going to be used. 
 
+<br />
+
+### Endpoint for CSV download
+- GET at /csv/download
+
+- This is not a file served by the server, so if frontend want a pop up for your typical download on the internet, maybe a new library is needed.
+
+
+
+<br />
+
+## Report
+
+- Simple calculations by averaging emoji values over time frame
+- We have two modes of report requesting
+
+### Get averages of feedbacks given to activity
+GET /report/{cid}/activities?from={fromdate}&to={todate}
+
+- from-date and to-date are optional.
+- if cid is 0, then we return all club activities
+- otherwise we only get activities from club {cid}
+- Sample response:
+```
+[
+    {
+        "clubname": "anderson",
+        "activityname": "Club Attendance",
+        "posivitiy": -0.14285714285714285
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Club Checkout",
+        "posivitiy": -0.1111111111111111
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Basketball",
+        "posivitiy": -0.07692307692307693
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Homework Help",
+        "posivitiy": 0.5
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Archery",
+        "posivitiy": -0.5454545454545454
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Arts & Crafts",
+        "posivitiy": 0.2857142857142857
+    }
+]
+```
+
+
+
+### Get averages of feedbacks member given to activities
+GET /report/{cid}/members?from={fromdate}&to={todate}
+
+- Behaves the same way as above
+- Sample Response:
+```
+[
+    {
+        "memberid": "testmember4",
+        "posivitiy": 0.125
+    },
+    {
+        "memberid": "testmember3",
+        "posivitiy": -0.058823529411764705
+    },
+    {
+        "memberid": "testmember2",
+        "posivitiy": -0.5
+    },
+    {
+        "memberid": "testmember1",
+        "posivitiy": 0.21052631578947367
+    }
+]
+```

@@ -139,6 +139,20 @@ https://bg-emotion-tracker-be-b.herokuapp.com/clubs/club/22/removeUser/8
 
 <br />
 
+
+### Removing a Member from a club 
+- Member would be added to the corresponding Club when posting new memberReaction, if the member is in the club yet.
+- So only the delete endpoint is documented here.
+
+DELETE /clubs/club/{cid}/removeMember/{mid}
+
+Example url
+```
+https://bg-emotion-tracker-be-b.herokuapp.com/clubs/club/21/removeMember/testmember1
+```
+
+<br />
+
 ##  Endpoints for Activities
 ### Posting new activity to club
 
@@ -183,10 +197,11 @@ Explanation with a example url:
 <br />
 
 
-### Searching for MemberReactions (Beta)
-- Can be used as a way to query general feedbacks to a specific club activity.
-- Can be used as a way to query how a particular member is doing.
-- Could be used in fancy ways as comparisons against multiple club activities and/or members
+### Searching for MemberReactions
+- This endpoint returns a list of all memberReactions given filters for
+   - members
+   - clubActivities
+   - time range
 
 POST /memberreactions/search?from={starttime}&to={endtime}
 
@@ -217,15 +232,8 @@ with sample body:
 ```
 The above query shall return all reactions from testmember1 and testmember2 for their submissions for club 20's activity 13 and 14.
 
-- Another endpoint that derives from the one above shall be made that would respond with formatted arrays specifically for plotting charts/analysis on the frontend.
-    - restrict to club-activities to up to 1
-        - A plot that compares how different members are feeling towards one specific club-activity 
-    - restrict members to up to 1
-        - A plot that compares how a single member feel towards different club-activities
 
-
-
-##CSV
+## CSV
 
 ### Endpoint for CSV upload
 
@@ -253,7 +261,7 @@ where {csvfile} is a file stream of the csv file.
 <br />
 
 ### Endpoint for CSV download
-- GET at /csv/download
+GET at /csv/download
 
 - This is not a file served by the server, so if frontend want a pop up for your typical download on the internet, maybe a new library is needed.
 

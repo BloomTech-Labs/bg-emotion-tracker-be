@@ -286,32 +286,32 @@ GET /report/club/{cid}/activities?from={fromdate}&to={todate}
     {
         "clubname": "anderson",
         "activityname": "Club Attendance",
-        "posivitiy": -0.14285714285714285
+        "positivity": -0.05
     },
     {
         "clubname": "anderson",
         "activityname": "Club Checkout",
-        "posivitiy": -0.1111111111111111
+        "positivity": -0.3333333333333333
     },
     {
         "clubname": "anderson",
         "activityname": "Basketball",
-        "posivitiy": -0.07692307692307693
+        "positivity": 0.46153846153846156
     },
     {
         "clubname": "anderson",
         "activityname": "Homework Help",
-        "posivitiy": 0.5
+        "positivity": 0.09090909090909091
     },
     {
         "clubname": "anderson",
         "activityname": "Archery",
-        "posivitiy": -0.5454545454545454
+        "positivity": 0.07142857142857142
     },
     {
         "clubname": "anderson",
         "activityname": "Arts & Crafts",
-        "posivitiy": 0.2857142857142857
+        "positivity": 0.5625
     }
 ]
 ```
@@ -327,19 +327,19 @@ GET /report/club/{cid}/members?from={fromdate}&to={todate}
 [
     {
         "memberid": "testmember4",
-        "posivitiy": 0.125
+        "positivity": 0.2
     },
     {
         "memberid": "testmember3",
-        "posivitiy": -0.058823529411764705
+        "positivity": 0.3076923076923077
     },
     {
         "memberid": "testmember2",
-        "posivitiy": -0.5
+        "positivity": 0.0
     },
     {
         "memberid": "testmember1",
-        "posivitiy": 0.21052631578947367
+        "positivity": -0.041666666666666664
     }
 ]
 ```

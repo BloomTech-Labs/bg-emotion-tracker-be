@@ -1,15 +1,11 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 
-import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
-import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
-import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.MemberReactionService;
-import com.lambdaschool.oktafoundation.views.ClubActivityPosivity;
-import com.lambdaschool.oktafoundation.views.MemberPosivity;
-import org.hibernate.transform.AliasToEntityMapResultTransformer;
+import com.lambdaschool.oktafoundation.views.ClubActivityPositivity;
+import com.lambdaschool.oktafoundation.views.MemberPositivity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/report")
@@ -52,7 +46,7 @@ public class ReportController {
      */
 
     // Currently we have the simple feature of calculating the avgs of positivity value of all members
-    // and avgs of the received posivity regarding activities in a club.
+    // and avgs of the received positivity regarding activities in a club.
 
 
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
@@ -81,24 +75,24 @@ public class ReportController {
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'"  + clubfilter,MemberReactions.class);
         List<MemberReactions> mrlist = q.getResultList();
-        var prememberPositivty = new HashMap<String, ArrayList<Integer>>();
+        var prememberPositivity = new HashMap<String, ArrayList<Integer>>();
 //        System.out.println(mrlist.get(0));
         mrlist.forEach(e -> {
-            if(prememberPositivty.containsKey(e.getMember().getMemberid())){
-                prememberPositivty.get(e.getMember().getMemberid()).add(emojimap.get(e.getReaction().getReactionvalue()));
+            if(prememberPositivity.containsKey(e.getMember().getMemberid())){
+                prememberPositivity.get(e.getMember().getMemberid()).add(emojimap.get(e.getReaction().getReactionvalue()));
             } else {
                 var templ = new ArrayList<Integer> ();
                 templ.add(emojimap.get(e.getReaction().getReactionvalue()));
-                prememberPositivty.put(e.getMember().getMemberid(),templ);
+                prememberPositivity.put(e.getMember().getMemberid(),templ);
             }
         });
 
-        List<MemberPosivity> mplist = new ArrayList<>();
-        var members = new ArrayList<>(prememberPositivty.keySet());
+        List<MemberPositivity> mplist = new ArrayList<>();
+        var members = new ArrayList<>(prememberPositivity.keySet());
         for (var member: members) {
-            var temp = new MemberPosivity();
+            var temp = new MemberPositivity();
             temp.setMemberid(member);
-            var memberreactions = prememberPositivty.get(member);
+            var memberreactions = prememberPositivity.get(member);
             var len = memberreactions.size();
             temp.setPositivity(memberreactions.stream().reduce((a,b) -> a+b).get()/(double)len);
             mplist.add(temp);
@@ -150,10 +144,10 @@ public class ReportController {
             }
         });
 
-        List<ClubActivityPosivity> caplist = new ArrayList<>();
+        List<ClubActivityPositivity> caplist = new ArrayList<>();
         var activities = new ArrayList<>(preactivityPositivity.keySet());
         for (var ca: activities) {
-            var temp = new ClubActivityPosivity();
+            var temp = new ClubActivityPositivity();
             temp.setClubname(ca.get(0));
             temp.setActivityname(ca.get(1));
             var activityreactions = preactivityPositivity.get(ca);

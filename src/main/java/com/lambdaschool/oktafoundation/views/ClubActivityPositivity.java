@@ -1,7 +1,7 @@
 package com.lambdaschool.oktafoundation.views;
 
 
-public class ClubActivityPosivity {
+public class ClubActivityPositivity {
     private String clubname;
     private String activityname;
     private Double positivity;
@@ -30,7 +30,7 @@ public class ClubActivityPosivity {
         this.positivity = positivity;
     }
 
-    public ClubActivityPosivity() {
+    public ClubActivityPositivity() {
     }
 
 

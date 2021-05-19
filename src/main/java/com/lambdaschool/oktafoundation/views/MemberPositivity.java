@@ -5,7 +5,7 @@ import com.lambdaschool.oktafoundation.models.Member;
 
 import java.util.List;
 
-public class MemberPosivity {
+public class MemberPositivity {
     private String memberid;
     private Double positivity;
 
@@ -25,7 +25,7 @@ public class MemberPosivity {
         this.positivity = positivity;
     }
 
-    public MemberPosivity() {
+    public MemberPositivity() {
     }
 
 

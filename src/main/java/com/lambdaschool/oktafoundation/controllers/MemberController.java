@@ -1,6 +1,7 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.Member;
+import com.lambdaschool.oktafoundation.repository.MemberRepository;
 import com.lambdaschool.oktafoundation.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,8 @@ public class MemberController {
      */
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/members", produces = "application/json")
@@ -30,6 +33,12 @@ public class MemberController {
         List<Member> allMembers = memberService.findAll();
         return new ResponseEntity<>(allMembers, HttpStatus.OK);
     }
+
+    @GetMapping(value="/check")
+    public ResponseEntity<?> checkMember(@RequestParam(value = "mid") String mid){
+        return new ResponseEntity<>(memberRepository.findMemberByMemberid(mid).isPresent(),HttpStatus.OK);
+    }
+
 
     @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/member/{member_table_id}", produces = "application/json")

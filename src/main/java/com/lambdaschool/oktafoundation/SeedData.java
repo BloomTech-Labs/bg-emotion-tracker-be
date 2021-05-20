@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -219,7 +220,7 @@ public class SeedData
                 .add(new ClubActivities(c3, a7));
         c3.getActivities().add(new ClubActivities(c3, a8));
 
-        clubService.save(c3);
+        c3=clubService.save(c3);
 
         //Johnston has Attendance, Arts, Basketball, Homework, Music, Soccer
         Club c4 = new Club("Johnston");
@@ -237,7 +238,7 @@ public class SeedData
                 .add(new ClubActivities(c4, a7));
         c4.getActivities().add(new ClubActivities(c4, a8));
 
-        clubService.save(c4);
+        c4=clubService.save(c4);
 
         //Marley has Attendance, Arts, Basketball, Homework Help, Music, Soccer
         Club c5 = new Club("Marley");
@@ -254,7 +255,7 @@ public class SeedData
         c5.getActivities()
                 .add(new ClubActivities(c5, a7));
         c5.getActivities().add(new ClubActivities(c5, a8));
-        clubService.save(c5);
+        c5=clubService.save(c5);
 
         //Morton has Attendance, Arts, Basketball, Homework, Soccer
         Club c6 = new Club("Morton");
@@ -269,7 +270,7 @@ public class SeedData
         c6.getActivities()
                 .add(new ClubActivities(c6, a7));
         c6.getActivities().add(new ClubActivities(c6, a8));
-        clubService.save(c6);
+        c6=clubService.save(c6);
         //Notter has Attendance, Arts, Basketball, Homework,
         Club c7 = new Club("Notter");
         c7.getActivities()
@@ -281,7 +282,7 @@ public class SeedData
         c7.getActivities()
                 .add(new ClubActivities(c7, a5));
         c7.getActivities().add(new ClubActivities(c7, a8));
-        clubService.save(c7);
+        c7=clubService.save(c7);
 
         //Stelle has Attendance, Arts
         Club c8 = new Club("Stelle");
@@ -291,7 +292,7 @@ public class SeedData
                 .add(new ClubActivities(c8, a2));
         c8.getActivities().add(new ClubActivities(c8, a8));
 
-        clubService.save(c8);
+        c8=clubService.save(c8);
         //Jefferson has Attendance, Arts, Basketball, Homework, Music, Soccer
         Club c9 = new Club("Jefferson");
         c9.getActivities()
@@ -308,7 +309,7 @@ public class SeedData
                 .add(new ClubActivities(c9, a7));
         c9.getActivities().add(new ClubActivities(c9, a8));
 
-        clubService.save(c9);
+        c9=clubService.save(c9);
 
 
         Member m1 = new Member("testmember1");
@@ -321,49 +322,76 @@ public class SeedData
         memberService.save(m3);
         memberService.save(m4);
 
-        Reaction rx1 = new Reaction();
-        rx1.setReactionvalue("1F601"); // +2 😁
-        Reaction rx2 = new Reaction();
-        rx2.setReactionvalue("1F642"); //+1 🙂
-        Reaction rx3 = new Reaction();
-        rx3.setReactionvalue("1F610"); //0 😐
-        Reaction rx4 = new Reaction();
-        rx4.setReactionvalue("1F641"); // -1 🙁
-        Reaction rx5 = new Reaction();
-        rx5.setReactionvalue("1F61E"); // -2 😞
-//        Reaction rx6 = new Reaction();
-//        rx6.setReactionvalue("testreaction");
 
-        rx1 = reactionService.save(rx1);
-        reactionService.save(rx2);
-        reactionService.save(rx3);
-        reactionService.save(rx4);
-        reactionService.save(rx5);
-//        reactionService.save(rx6);
+        String[] rval = {
+                "1F601",
+                "1F642",
+                "1F610",
+                "1F641",
+                "1F61E",
+                "1F605",
+                "1F61B",
+                "1F61C",
+                "1F61D",
+                "1F92A",
+                "1F636",
+                "1F611",
+                "1F644",
+                "1F971",
+                "1F624",
+                "1F620",
+                "1F628",
+                "1F62D",
+                "1F622",
+                "1F634",};
 
-        var emojimap = new HashMap<Integer,String>();
-        emojimap.put(4,"1F601");
-        emojimap.put(3,"1F642");
-        emojimap.put(2,"1F610");
-        emojimap.put(1,"1F641");
-        emojimap.put(0,"1F61E");
+        var rlist = new ArrayList<Reaction>();
+        for(var i :rval){
+            Reaction rx1 = new Reaction();
+            rx1.setReactionvalue(i);
+            reactionService.save(rx1);
+        }
 
 
+        var normalReactionsList = new ArrayList<Reaction>();
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F601").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F642").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F610").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F641").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F61E").orElseThrow());
 
-        // Generating 100 memberReactions
+
+        // Generating 300 memberReactions
+//        Club[] clist = {c1,c2,c3,c4,c5,c6,c7,c8,c9};
+        Club[] clist = {c1,c2};
         var ran = new Random();
         var allmem = memberService.findAll();
         ArrayList<Reaction> allreactions = new ArrayList<>();
         reactionRepository.findAll().iterator().forEachRemaining(allreactions::add);
-        var cas = new ArrayList<>(c1.getActivities());
-        for (int i = 0; i<100; i++){
+        var cas = new ArrayList<ClubActivities>();
+        Arrays.stream(clist).forEach(i -> cas.addAll(i.getActivities()));
+
+        for (int i = 0; i<300; i++){
             var curmem = allmem.get(ran.nextInt(allmem.size()));
-            var mr = memberReactionRepository.save(new MemberReactions(
-                    curmem,
-                    allreactions.get(ran.nextInt(allreactions.size())) ,
-                    true,
-                    cas.get(ran.nextInt(cas.size())
-                    )));
+            var curca = cas.get(ran.nextInt(cas.size()));
+            MemberReactions mr;
+            if (curca.getActivity().getActivityname().equals("Club Attendance") ||
+                    curca.getActivity().getActivityname().equals("Club Checkout")){
+                mr = memberReactionRepository.save(new MemberReactions(
+                        curmem,
+                        allreactions.get(ran.nextInt(allreactions.size())) ,
+                        true,
+                        curca
+                        ));
+            } else {
+                mr = memberReactionRepository.save(new MemberReactions(
+                        curmem,
+                        normalReactionsList.get(ran.nextInt(normalReactionsList.size())),
+                        true,
+                        curca
+                        ));
+            }
+
             curmem.getReactions().add(mr);
             curmem.getClubs().add(new ClubMembers(c1, curmem));
             memberService.save(curmem);

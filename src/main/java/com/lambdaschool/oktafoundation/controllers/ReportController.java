@@ -3,36 +3,32 @@ package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.MemberReactions;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
+import com.lambdaschool.oktafoundation.repository.ReactionRepository;
 import com.lambdaschool.oktafoundation.services.MemberReactionService;
 import com.lambdaschool.oktafoundation.views.ClubActivityPositivity;
 import com.lambdaschool.oktafoundation.views.ClubActivityReactionCounts;
 import com.lambdaschool.oktafoundation.views.MemberPositivity;
 import com.lambdaschool.oktafoundation.views.MemberReactionCounts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
+import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 
 @RestController
 @RequestMapping("/report")
 public class ReportController {
 
-    private HashMap<String,Integer> emojimap;
-
-    public ReportController(){
-        emojimap = new HashMap<>();
-        emojimap.put("1F601", 2);
-        emojimap.put("1F642", 1);
-        emojimap.put("1F610", 0);
-        emojimap.put("1F641", -1);
-        emojimap.put("1F61E", -2);
-    }
 
     @Autowired
     private MemberReactionService memberReactionService;
@@ -42,6 +38,17 @@ public class ReportController {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private ReactionRepository reactionRepository;
+
+
+    private HashMap<String,Integer> emojimap;
+
+    public ReportController(){
+
+    }
+
 
     /* The endpoints shall serve data analysis of the member reactions
     with respect to club/activity/member.
@@ -72,6 +79,25 @@ public class ReportController {
         return x;
     }
 
+    private HashMap<String,Integer> initEmojimap(){
+        var allReactions =  StreamSupport
+                .stream(reactionRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+        emojimap = new HashMap<>();
+        emojimap.put("1F601", 2);
+        emojimap.put("1F642", 1);
+        emojimap.put("1F610", 0);
+        emojimap.put("1F641", -1);
+        emojimap.put("1F61E", -2);
+
+        for (var i: allReactions){
+            if(emojimap.containsKey(i.getReactionvalue())){continue;}
+            emojimap.put(i.getReactionvalue(),0);
+        }
+
+        return emojimap;
+    }
+
 
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @GetMapping(value = "/club/{cid}/members/avgs")
@@ -84,6 +110,8 @@ public class ReportController {
         var fromdate = filters.get(0);
         var todate = filters.get(1);
         var clubfilter = filters.get(2);
+        var emojimap = initEmojimap();
+
 
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'"  + clubfilter,MemberReactions.class);
@@ -127,6 +155,7 @@ public class ReportController {
         var fromdate = filters.get(0);
         var todate = filters.get(1);
         var clubfilter = filters.get(2);
+        var emojimap = initEmojimap();
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'" + clubfilter,MemberReactions.class);
         List<MemberReactions> mrlist = q.getResultList();
@@ -179,6 +208,7 @@ public class ReportController {
         var fromdate = filters.get(0);
         var todate = filters.get(1);
         var clubfilter = filters.get(2);
+        var emojimap = initEmojimap();
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'" + clubfilter,MemberReactions.class);
         List<MemberReactions> mrlist = q.getResultList();
@@ -225,6 +255,7 @@ public class ReportController {
         var fromdate = filters.get(0);
         var todate = filters.get(1);
         var clubfilter = filters.get(2);
+        var emojimap = initEmojimap();
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'" + clubfilter,MemberReactions.class);
         List<MemberReactions> mrlist = q.getResultList();

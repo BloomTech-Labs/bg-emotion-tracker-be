@@ -20,10 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * The entry point for clients to access memberreactions data
@@ -59,6 +56,7 @@ public class MemberReactionsController {
     @Autowired
     private EntityManager entityManager;
 
+  
     /**
      * Returns a list of all MemberReactions.
      * <br>Example: <a href="http://localhost:2019/memberreactions/memberreactions"></a>
@@ -104,10 +102,28 @@ public class MemberReactionsController {
             @RequestParam(value = "cid") Long cid,
             @RequestParam(value = "rx") String rx
     ) {
+
+        var normallist = new HashMap<String,Integer>();
+        normallist.put("1F601",0);
+        normallist.put("1F642",0);
+        normallist.put("1F610",0);
+        normallist.put("1F641",0);
+        normallist.put("1F61E",0);
+
+
         var member = memberRepository.findMemberByMemberid(mid).orElseThrow();
         var ca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(
                 aid, cid
         ).orElseThrow();
+
+
+        if (!ca.getActivity().getActivityname().equalsIgnoreCase("Club Attendance") &&
+                !ca.getActivity().getActivityname().equalsIgnoreCase("Club Checkout")){
+            if (!normallist.containsKey(rx)){
+                return new ResponseEntity<>("This emoji can't be used in regular activity", HttpStatus.NOT_ACCEPTABLE);
+            }
+
+        }
 
 
 
@@ -187,7 +203,7 @@ public class MemberReactionsController {
      */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PostMapping(value = "/search")
-    public ResponseEntity<?> getReport(
+    public ResponseEntity<?> search(
             @RequestParam(value = "from", required = false) String from,
             @RequestParam(value = "to", required = false) String to,
             @RequestBody SearchPost sp

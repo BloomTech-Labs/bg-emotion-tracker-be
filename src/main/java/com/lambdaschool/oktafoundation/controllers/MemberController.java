@@ -1,6 +1,7 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.Member;
+import com.lambdaschool.oktafoundation.repository.MemberRepository;
 import com.lambdaschool.oktafoundation.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,8 @@ public class MemberController {
      */
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
 
     /**
      * Returns a list of all Members.
@@ -37,6 +40,18 @@ public class MemberController {
     public ResponseEntity<?> listAllMembers() {
         List<Member> allMembers = memberService.findAll();
         return new ResponseEntity<>(allMembers, HttpStatus.OK);
+    }
+
+
+   /**
+     * Returns whether the Member with given id exists in DB
+     *
+     * @param memberid The member's ID value (Username).
+     * @return a boolean value
+     */
+    @GetMapping(value="/check")
+    public ResponseEntity<?> checkMember(@RequestParam(value = "mid") String mid){
+        return new ResponseEntity<>(memberRepository.findMemberByMemberid(mid).isPresent(),HttpStatus.OK);
     }
 
     /**

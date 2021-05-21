@@ -10,14 +10,12 @@ import com.lambdaschool.oktafoundation.views.ClubActivityReactionCounts;
 import com.lambdaschool.oktafoundation.views.MemberPositivity;
 import com.lambdaschool.oktafoundation.views.MemberReactionCounts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +40,7 @@ public class ReportController {
     @Autowired
     private ReactionRepository reactionRepository;
 
-
+    // A helper field to map emoji to value
     private HashMap<String,Integer> emojimap;
 
     public ReportController(){
@@ -58,6 +56,14 @@ public class ReportController {
     // and avgs of the received positivity regarding activities in a club.
 
 
+    /**
+     * Helper method to help build the filters for club and date range
+     *
+     * @param from Search starts from which date
+     * @param to Search until which date
+     * @param cid What club is we searching within
+     * @return An ensemble of the processed filter strings
+     */
     private ArrayList<String> initFilters(String from, String to, Long cid) {
         var fromdate = from;
         var todate = to;
@@ -79,6 +85,11 @@ public class ReportController {
         return x;
     }
 
+    /**
+     * Helper method to help build the emoji to value map
+     *
+     * @return A hashmap that turns emoji into value
+     */
     private HashMap<String,Integer> initEmojimap(){
         var allReactions =  StreamSupport
                 .stream(reactionRepository.findAll().spliterator(), false)
@@ -98,7 +109,14 @@ public class ReportController {
         return emojimap;
     }
 
-
+    /**
+     * Returns the positivity value (avgs) from all the Members within certain Club over certain date range.
+     *
+     * @param from Search starts from which date
+     * @param to Search until which date
+     * @param cid Search range restricted to which club activities
+     * @return The averages of positivities value for all members of the given filters.
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @GetMapping(value = "/club/{cid}/members/avgs")
     public ResponseEntity<?> getAvgsByMembers(
@@ -113,11 +131,11 @@ public class ReportController {
         var emojimap = initEmojimap();
 
 
-
+        // Get initial list of all memberReactions within date range
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'"  + clubfilter,MemberReactions.class);
         List<MemberReactions> mrlist = q.getResultList();
         var prememberPositivity = new HashMap<String, ArrayList<Integer>>();
-//        System.out.println(mrlist.get(0));
+        // init count object for all members which is a map from memberID to a list of value that the member gave out.
         mrlist.forEach(e -> {
             if(prememberPositivity.containsKey(e.getMember().getMemberid())){
                 prememberPositivity.get(e.getMember().getMemberid()).add(emojimap.get(e.getReaction().getReactionvalue()));
@@ -128,6 +146,7 @@ public class ReportController {
             }
         });
 
+        // calculating all member's avg value of the emoji value list into a number
         List<MemberPositivity> mplist = new ArrayList<>();
         var members = new ArrayList<>(prememberPositivity.keySet());
         for (var member: members) {
@@ -143,7 +162,14 @@ public class ReportController {
         return new ResponseEntity<>(mplist,HttpStatus.OK);
     }
 
-
+    /**
+     * Returns the positivity value (avgs) given to all the Activities within certain Club over certain date range.
+     *
+     * @param from Search starts from which date
+     * @param to Search until which date
+     * @param cid Search range restricted to which club activities
+     * @return The averages of positivities value for all members of the given filters.
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @GetMapping(value = "/club/{cid}/activities/avgs")
     public ResponseEntity<?> getAvgsByActivities(
@@ -151,6 +177,7 @@ public class ReportController {
         @RequestParam(value = "from", required = false) String from,
         @RequestParam(value = "to", required = false) String to
     ){
+        // This endpoint mirrors the one from above, but to activities instead.
         var filters = initFilters(from,to,cid);
         var fromdate = filters.get(0);
         var todate = filters.get(1);
@@ -196,7 +223,14 @@ public class ReportController {
         return templ;
     }
 
-
+    /**
+     * Returns the counts of different emojis submitted to all the Activities within certain Club over certain date range.
+     *
+     * @param from Search starts from which date
+     * @param to Search until which date
+     * @param cid Search range restricted to which club activities
+     * @return The averages of positivities value for all members of the given filters.
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @GetMapping(value = "/club/{cid}/activities/counts")
     public ResponseEntity<?> getCountsByActivities(
@@ -212,19 +246,23 @@ public class ReportController {
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'" + clubfilter,MemberReactions.class);
         List<MemberReactions> mrlist = q.getResultList();
+        // this map takes in key of [clubname,activityname] and hashes into a hashmap that map emojis with their counts.
         var resmap = new HashMap<List<String>, HashMap<String,Integer>>();
+        // iterate over the memberReactions list returned by the query and count occurences of emojis given to certain activities.
         mrlist.forEach(e -> {
             var ckey = new ArrayList<String>();
             ckey.add(e.getClubactivity().getClub().getClubname());
             ckey.add(e.getClubactivity().getActivity().getActivityname());
             if(resmap.containsKey(ckey)){
                 var curcount = resmap.get(ckey).get(e.getReaction().getReactionvalue());
+                // count increase for this particular emoji
                 resmap.get(ckey).put(e.getReaction().getReactionvalue(), curcount+1);
             } else {
                 resmap.put(ckey,createNewCountMap());
             }
         });
 
+        // building return object
         var reslis = new ArrayList<ClubActivityReactionCounts>();
         for (var e: resmap.keySet()){
             var temp = new ClubActivityReactionCounts();
@@ -244,6 +282,14 @@ public class ReportController {
     }
 
 
+    /**
+     * Returns the counts of different emojis submitted by all members within certain Club over certain date range.
+     *
+     * @param from Search starts from which date
+     * @param to Search until which date
+     * @param cid Search range restricted to which club activities
+     * @return The averages of positivities value for all members of the given filters.
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @GetMapping(value = "/club/{cid}/members/counts")
     public ResponseEntity<?> getCounts(
@@ -251,6 +297,7 @@ public class ReportController {
             @RequestParam(value = "from", required = false) String from,
             @RequestParam(value = "to", required = false) String to
     ) {
+        // This endpoint mirrors the one above, but counts emojis that member give rather than emojis that activity receives
         var filters = initFilters(from,to,cid);
         var fromdate = filters.get(0);
         var todate = filters.get(1);

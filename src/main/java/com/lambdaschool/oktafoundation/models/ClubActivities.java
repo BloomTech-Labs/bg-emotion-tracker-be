@@ -27,12 +27,9 @@ import java.util.Set;
 @IdClass(ClubActivitiesId.class)
 public class ClubActivities extends Auditable implements Serializable
 {
-//    @EmbeddedId
-//    private ClubActivitiesId clubActivitiesId;
-
     /**
      * 1/2 of the primary key (long) for clubactivities.
-     * Also is a foreign key into the club table
+     * Also is a foreign key into the clubs table
      */
     @Id
     @ManyToOne
@@ -40,9 +37,10 @@ public class ClubActivities extends Auditable implements Serializable
     @JoinColumn(name = "clubid")
     @JsonIgnoreProperties(value = {"activities","activity","users"}, allowSetters = true)
     private Club club;
+
     /**
     * 1/2 of the primary key (long) for clubactivities.
-    * Also is a foreign key into the activity table
+    * Also is a foreign key into the activities table
     */
     @Id
     @ManyToOne
@@ -50,9 +48,10 @@ public class ClubActivities extends Auditable implements Serializable
     @JoinColumn(name = "activityid")
     @JsonIgnoreProperties(value = {"clubs","club"}, allowSetters = true)
     private Activity activity;
+
     /**
-     * Part of the join relationship between member and reactions
-     * connects clubactivities to the member reactions combination
+     * Part of the join relationship between Member and Reaction
+     * Connects clubactivities to the member reactions combination
      */
     @Column
     @OneToMany(
@@ -63,17 +62,17 @@ public class ClubActivities extends Auditable implements Serializable
     //however, this doesn't break anything, but if this can be fixed that'll be good.
     private Set<MemberReactions> reactions = new HashSet<>();
 
-
     /**
      * Default constructor used primarily by the JPA.
      */
     public ClubActivities() {
     }
+
     /**
      * Given the params, create a new club activity combination object
      *
-     * @param club The club object of this relationship
-     * @param activity The activity object of this relationship
+     * @param club The Club object of this relationship
+     * @param activity The Activity object of this relationship
      */
     public ClubActivities(
 
@@ -86,46 +85,52 @@ public class ClubActivities extends Auditable implements Serializable
 
     }
 
-
+    /**
+     * Given the params, create a new club activities combination object
+     *
+     * @param club The Club object of this relationship
+     * @param activity The Activity object of this relationship
+     * @param reactions The MemberReactions combination object associated with this relationship
+     */
     public ClubActivities(Club club, Activity activity, Set<MemberReactions> reactions) {
-//        this.id = id;
         this.club = club;
         this.activity = activity;
         this.reactions = reactions;
 
     }
 
-    // Getters + Setters
-
     /**
      * The getter for Club
      *
-     * @return the complete user object associated with club activity combination
+     * @return The complete Club object associated with this club activity combination
      */
     public Club getClub() {
         return club;
 
     }
+
     /**
-     * Setter for club
+     * Setter for Club
      *
-     * @param club change the club object associated with this club activity combination to this one.
+     * @param club Change the Club object associated with this club activity combination to this one.
      */
     public void setClub(Club club) {
         this.club = club;
     }
+
     /**
      * The getter for Activity
      *
-     * @return the complete activity object associated with club activity combination
+     * @return The complete Activity object associated with this club activity combination
      */
     public Activity getActivity() {
         return activity;
     }
+
     /**
-     * Setter for activity
+     * Setter for Activity
      *
-     * @param activity change the activity object associated with this club activity combination to this one.
+     * @param activity Change the Activity object associated with this club activity combination to this one.
      */
     public void setActivity(Activity activity) {
         this.activity = activity;
@@ -134,20 +139,20 @@ public class ClubActivities extends Auditable implements Serializable
     /**
      * Getter for member reaction combinations
      *
-     * @return A list of member reaction combinations associated with this clubactivity
+     * @return A list of member reaction combinations associated with this club activity combination
      */
     public Set<MemberReactions> getReactions() {
         return reactions;
     }
+
     /**
      * Setter for club activity combinations
      *
-     * @param reactions Change the list of member reaction combinations associated with this clubactivities to this one
+     * @param reactions Change the list of member reaction combinations associated with this club activity combination to this one
      */
     public void setReactions(Set<MemberReactions> reactions) {
         this.reactions = reactions;
     }
-
 
     @Override
     public boolean equals(Object o) {

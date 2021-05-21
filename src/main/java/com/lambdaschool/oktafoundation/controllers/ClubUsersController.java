@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 /**
  * The entry point for clients to access clubusers data
  */
@@ -20,15 +21,16 @@ import java.util.List;
 @RequestMapping("/clubusers")
 public class ClubUsersController {
     /**
-     * Using the ClubUsers service to process user data
+     * Using the ClubUsers service to process clubusers data
      */
     @Autowired
     private ClubUsersService clubUsersService;
+
     /**
-     * Returns a list of all clubusers
+     * Returns a list of all Clubusers.
      * <br>Example: <a href="http://localhost:2019/clubusers/clubusers"></a>
      *
-     * @return JSON list of all clubusers with a status of OK
+     * @return JSON list of all Clubusers with a status of OK
      */
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/clubusers",
@@ -38,12 +40,13 @@ public class ClubUsersController {
         List<ClubUsers> allClubUsers = clubUsersService.findAll();
         return new ResponseEntity<>(allClubUsers, HttpStatus.OK);
     }
+
     /**
-     * Returns a single clubusers based off a clubuser id number
+     * Returns the ClubUsers object with the given id.
      * <br>Example: http://localhost:2019/clubusers/clubusers/7
      *
-     * @param clubuserid The primary key of the club you seek
-     * @return JSON object of the clubuser you seek
+     * @param clubuserid The primary key of the ClubUser you seek
+     * @return JSON object of the ClubUser you seek
      * @see ClubUsersService
      */
     @PreAuthorize("hasAnyRole('ADMIN')")

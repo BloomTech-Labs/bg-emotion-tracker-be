@@ -33,10 +33,10 @@ public class RolesController
     RoleService roleService;
 
     /**
-     * List of all roles
+     * Returns a list of all Roles.
      * <br>Example: <a href="http://localhost:2019/roles/roles">http://localhost:2019/roles/roles</a>
      *
-     * @return JSON List of all the roles and their associated users
+     * @return JSON List of all the roles and their associated Users
      * @see RoleService#findAll() RoleService.findAll()
      */
     @GetMapping(value = "/roles",
@@ -49,11 +49,11 @@ public class RolesController
     }
 
     /**
-     * The Role referenced by the given primary key
+     * Returns the Role with the given primary key.
      * <br>Example: <a href="http://localhost:2019/roles/role/3">http://localhost:2019/roles/role/3</a>
      *
-     * @param roleId The primary key (long) of the role you seek
-     * @return JSON object of the role you seek
+     * @param roleId The primary key (long) of the Role you seek
+     * @return JSON object of the Role you seek
      * @see RoleService#findRoleById(long) RoleService.findRoleById(long)
      */
     @GetMapping(value = "/role/{roleId}",
@@ -68,11 +68,11 @@ public class RolesController
     }
 
     /**
-     * The Role with the given name
+     * Returns the Role with the given name.
      * <br>Example: <a href="http://localhost:2019/roles/role/name/data">http://localhost:2019/roles/role/name/data</a>
      *
-     * @param roleName The name of the role you seek
-     * @return JSON object of the role you seek
+     * @param roleName The name of the Role you seek
+     * @return JSON object of the Role you seek
      * @see RoleService#findByName(String) RoleService.findByName(String)
      */
     @GetMapping(value = "/role/name/{roleName}",
@@ -87,11 +87,11 @@ public class RolesController
     }
 
     /**
-     * Given a complete Role object, create a new Role record
+     * Given a complete Role object, creates a new Role record.
      * <br>Example: <a href="http://localhost:2019/roles/role">http://localhost:2019/roles/role</a>
      *
      * @param newRole A complete new Role object
-     * @return A location header with the URI to the newly created role and a status of CREATED
+     * @return A location header with the URI to the newly created Role and a status of CREATED
      * @see RoleService#save(Role) RoleService.save(Role)
      */
     @PostMapping(value = "/role",
@@ -119,11 +119,11 @@ public class RolesController
     }
 
     /**
-     * The process allows you to update a role name only!
+     * Updates the name of the Role that has the given id.
      * <br>Example: <a href="http://localhost:2019/roles/role/3">http://localhost:2019/roles/role/3</a>
      *
-     * @param roleid  The primary key (long) of the role you wish to update
-     * @param newRole The new name (String) for the role
+     * @param roleid  The primary key (long) of the Role you wish to update
+     * @param newRole The new name (String) for the Role
      * @return Status of OK
      */
     @PreAuthorize("hasAnyRole('ADMIN')")

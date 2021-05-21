@@ -54,17 +54,22 @@ public class ClubMembers
     {
     }
 
+    /**
+     * Given the params, create a new club member combination object
+     *
+     * @param c The Club object of this relationship
+     * @param m The Member object of this relationship
+     */
     public ClubMembers(Club c, Member m)
     {
         this.club = c;
         this.member = m;
     }
 
-
     /**
      * The getter for Club
      *
-     * @return the complete club object associated with club member combination
+     * @return The complete Club object associated with this club member combination
      */
     public Club getClub()
     {
@@ -72,9 +77,9 @@ public class ClubMembers
     }
 
     /**
-     * Setter for club
+     * Setter for Club
      *
-     * @param club change the club object associated with this club member combination to this one.
+     * @param club Change the Club object associated with this club member combination to this one
      */
     public void setClub(Club club)
     {
@@ -82,9 +87,9 @@ public class ClubMembers
     }
 
     /**
-     * Getter for member
+     * Getter for Member
      *
-     * @return the complete member object associated with this club member combination
+     * @return The complete Member object associated with this club member combination
      */
     public Member getMember()
     {
@@ -92,9 +97,9 @@ public class ClubMembers
     }
 
     /**
-     * Setter for member
+     * Setter for Member
      *
-     * @param member change member object associated with this club member combination to this one.
+     * @param member Change the Member object associated with this club member combination to this one
      */
     public void setMember(Member member)
     {

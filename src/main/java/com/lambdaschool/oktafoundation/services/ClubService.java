@@ -5,46 +5,53 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * The Service that works with Club Model.
+ */
 public interface ClubService {
 
     /**
-     * Returns a List of all the Clubs
+     * Returns a List of all the Clubs.
      *
-     * @return LIst of Clubs. If no clubs, empty list.
+     * @return List of Clubs; if no Clubs, empty list
      */
     List<Club> findAll();
 
     /**
-     * REturns the club with the given primary key.
+     * Returns the Club with the given primary key.
      *
-     * @param clubid The primary key (long) of hte club you seek.
-     * @return The given Club or throws an exception if not found.
+     * @param clubid The primary key (long) of the club you seek
+     * @return The given Club or throws an exception if not found
      */
     Club findClubById(Long clubid);
 
     /**
-     * Given a complete club object, saves that club object in the database. Only a Role with 'ADMIN' can save a club.
+     * Given a complete Club object, saves that Club object in the database. Only a User with Role 'ADMIN' can save a Club.
      * If a primary key is provided the record is completely replaced.
-     * If no primary key is provided, one is automatically generated and the record is added to the databse by an ADMIN
-     * @param club the club object to be saved
-     * @return the saved club object including any automatically generated fields.
+     * If no primary key is provided, one is automatically generated and the record is added to the database by an ADMIN.
+     *
+     * @param club The Club object to be saved
+     * @return The saved Club object including any automatically generated fields
      */
-
     Club save(Club club);
 
     /**
-     * Updates the provided fields in the club record provided by reference with the primary key.
-     * @param club The club fields to be updated.
-     * @param clubid the primary key (long) of the club to update
+     * Updates the provided fields in the Club record provided by reference with the primary key.
+     * @param club An object containing the Club fields to be updated
+     * @param clubid The primary key (long) of the Club to update
      */
     Club update(Club club, long clubid);
 
     /**
-     * Deletes the record by club (primary key) from the database.
+     * Deletes the record by Club (primary key) from the database.
+     *
      * @param clubid
      */
     void delete(long clubid);
 
+    /**
+     * Deletes all Clubs and their associated records from the database.
+     */
     void deleteAll();
 
     Club findClubByName(String name);

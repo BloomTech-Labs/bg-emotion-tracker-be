@@ -275,7 +275,7 @@ GET at /csv/download
 - We have two modes of report requesting
 
 ### Get averages of feedbacks given to activity
-GET /report/club/{cid}/activities?from={fromdate}&to={todate}
+GET /report/club/{cid}/activities/avgs?from={fromdate}&to={todate}
 
 - from-date and to-date are optional.
 - if cid is 0, then we return all club activities
@@ -319,7 +319,7 @@ GET /report/club/{cid}/activities?from={fromdate}&to={todate}
 
 
 ### Get averages of feedbacks member given to activities
-GET /report/club/{cid}/members?from={fromdate}&to={todate}
+GET /report/club/{cid}/members/avgs?from={fromdate}&to={todate}
 
 - Behaves the same way as above
 - Sample Response:
@@ -340,6 +340,133 @@ GET /report/club/{cid}/members?from={fromdate}&to={todate}
     {
         "memberid": "testmember1",
         "positivity": -0.041666666666666664
+    }
+]
+```
+
+
+### Get counts of feedbacks member given to activities
+GET /report/club/{cid}/members/counts?from={fromdate}&to={todate}
+
+- Sample Response:
+```
+[
+    {
+        "memberid": "testmember4",
+        "reactionCounts": {
+            "1F601": 3,
+            "1F610": 7,
+            "1F61E": 6,
+            "1F642": 5,
+            "1F641": 4
+        }
+    },
+    {
+        "memberid": "testmember3",
+        "reactionCounts": {
+            "1F601": 3,
+            "1F610": 2,
+            "1F61E": 7,
+            "1F642": 7,
+            "1F641": 6
+        }
+    },
+    {
+        "memberid": "testmember2",
+        "reactionCounts": {
+            "1F601": 7,
+            "1F610": 3,
+            "1F61E": 5,
+            "1F642": 5,
+            "1F641": 6
+        }
+    },
+    {
+        "memberid": "testmember1",
+        "reactionCounts": {
+            "1F601": 5,
+            "1F610": 4,
+            "1F61E": 3,
+            "1F642": 3,
+            "1F641": 5
+        }
+    }
+]
+```
+
+
+
+### Get counts of feedbacks given to activity by members
+GET /report/club/{cid}/activities/counts?from={fromdate}&to={todate}
+
+- Sample Response:
+```
+[
+    {
+        "clubname": "anderson",
+        "activityname": "Club Attendance",
+        "reactionCounts": {
+            "1F601": 4,
+            "1F610": 1,
+            "1F61E": 7,
+            "1F642": 2,
+            "1F641": 1
+        }
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Club Checkout",
+        "reactionCounts": {
+            "1F601": 2,
+            "1F610": 6,
+            "1F61E": 4,
+            "1F642": 1,
+            "1F641": 2
+        }
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Basketball",
+        "reactionCounts": {
+            "1F601": 1,
+            "1F610": 2,
+            "1F61E": 3,
+            "1F642": 7,
+            "1F641": 4
+        }
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Homework Help",
+        "reactionCounts": {
+            "1F601": 4,
+            "1F610": 3,
+            "1F61E": 0,
+            "1F642": 4,
+            "1F641": 3
+        }
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Archery",
+        "reactionCounts": {
+            "1F601": 3,
+            "1F610": 2,
+            "1F61E": 6,
+            "1F642": 4,
+            "1F641": 3
+        }
+    },
+    {
+        "clubname": "anderson",
+        "activityname": "Arts & Crafts",
+        "reactionCounts": {
+            "1F601": 3,
+            "1F610": 3,
+            "1F61E": 1,
+            "1F642": 2,
+            "1F641": 6
+        }
     }
 ]
 ```

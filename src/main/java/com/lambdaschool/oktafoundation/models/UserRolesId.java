@@ -11,12 +11,12 @@ public class UserRolesId
     implements Serializable
 {
     /**
-     * The id of the user
+     * The id of the User
      */
     private long user;
 
     /**
-     * The id of the role
+     * The id of the Role
      */
     private long role;
 
@@ -30,7 +30,7 @@ public class UserRolesId
     /**
      * Getter for the user id
      *
-     * @return long the user id
+     * @return The user id (long)
      */
     public long getUser()
     {
@@ -40,7 +40,7 @@ public class UserRolesId
     /**
      * Setter for the user id
      *
-     * @param user the new user id for this object
+     * @param user The new user id for this object
      */
     public void setUser(long user)
     {
@@ -50,7 +50,7 @@ public class UserRolesId
     /**
      * Getter for the role id
      *
-     * @return long the role id
+     * @return The role id (long)
      */
     public long getRole()
     {
@@ -60,7 +60,7 @@ public class UserRolesId
     /**
      * The setter for the role id
      *
-     * @param role the new role id for this object
+     * @param role The new role id for this object
      */
     public void setRole(long role)
     {

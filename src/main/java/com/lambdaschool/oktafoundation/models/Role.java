@@ -29,9 +29,8 @@ public class Role
     @Column(unique = true)
     private String name;
 
-
     /**
-     * Part of the join relationship between user and role
+     * Part of the join relationship between User and Role
      * connects roles to the user role combination
      */
     @OneToMany(mappedBy = "role",
@@ -49,9 +48,9 @@ public class Role
     }
 
     /**
-     * Given the name, create a new role object. User gets added later
+     * Given the name, create a new Role object. User gets added later
      *
-     * @param name the name of the role in uppercase
+     * @param name the name of the Role in uppercase
      */
     public Role(String name)
     {
@@ -61,7 +60,7 @@ public class Role
     /**
      * Getter for role id
      *
-     * @return the role id, primary key, (long) of this role
+     * @return The role id, primary key, (long) of this Role
      */
     public long getRoleid()
     {
@@ -71,7 +70,7 @@ public class Role
     /**
      * Setter for role id, used for seeding data
      *
-     * @param roleid the new role id, primary key, (long) for this role
+     * @param roleid The new role id, primary key, (long) for this Role
      */
     public void setRoleid(long roleid)
     {
@@ -81,7 +80,7 @@ public class Role
     /**
      * Getter for role name
      *
-     * @return role name (String) in uppercase
+     * @return The role name (String) in uppercase
      */
     public String getName()
     {
@@ -91,7 +90,7 @@ public class Role
     /**
      * Setter for role name
      *
-     * @param name the new role name (String) for this role, in uppercase
+     * @param name The new role name (String) for this Role, in uppercase
      */
     public void setName(String name)
     {
@@ -101,7 +100,7 @@ public class Role
     /**
      * Getter for user role combinations
      *
-     * @return A list of user role combinations associated with this role
+     * @return A list of user role combinations associated with this Role
      */
     public Set<UserRoles> getUsers()
     {
@@ -111,7 +110,7 @@ public class Role
     /**
      * Setter for user role combinations
      *
-     * @param users Change the list of user role combinations associated with this role to this one
+     * @param users Change the list of user role combinations associated with this Role to this one
      */
     public void setUsers(Set<UserRoles> users)
     {

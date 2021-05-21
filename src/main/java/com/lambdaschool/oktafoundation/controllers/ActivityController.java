@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+
 /**
  * The entry point for clients to access activity data
  */
@@ -40,10 +41,10 @@ public class ActivityController {
     private ClubActivityRepository clubActivityRepository;
 
     /**
-     * Returns a list of all activities
+     * Returns a list of all Activities.
      * <br>Example: <a href="http://localhost:2019/activities/activities"></a>
      *
-     * @return JSON list of all activities with a status of OK
+     * @return JSON list of all Activities with a status of OK
      * @see ActivityService#findAll() ActivityService.findAll()
      */
     @GetMapping(value = "/activities",
@@ -53,12 +54,13 @@ public class ActivityController {
         List<Activity> allActivities = activityService.findAll();
         return new ResponseEntity<>(allActivities, HttpStatus.OK);
     }
+
     /**
-     * Returns a single activity based off a activity id number
+     * Returns the Activity with the given id.
      * <br>Example: http://localhost:2019/activities/activity/4
      *
-     * @param activityid The primary key of the activity you seek
-     * @return JSON object of the activity you seek
+     * @param activityid The primary key of the Activity you seek
+     * @return JSON object of the Activity you seek
      * @see ActivityService#findActivityById(Long)  ActivityService.findActivityById(long)
      */
     @GetMapping(value = "/activity/{activityid}",
@@ -68,15 +70,13 @@ public class ActivityController {
         Activity a = activityService.findActivityById(activityid);
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
+
     /**
-     * Given a complete Activity Object, Super Admin, CD can , create a new Activity record, assign an accompanything club,
-     * memberreaction, the members, and reactions.
-     * @param newActivity A complete new activity
+     * Given a complete Activity object, creates a new Activity, assigning it an accompanying Club.
      *
-     * @return A location header with the URI to the newly created activity of CREATED
-     *
+     * @param newActivity A complete new Activity
+     * @return A location header with the URI to the newly created Activity and a status of CREATED
      * @throws URISyntaxException Exception if something does not work in creating the location header
-     *
      * @see ActivityService#save(Activity) ActivityService.save(newActivity)
      */
     @PostMapping(value = "/activity",
@@ -99,15 +99,14 @@ public class ActivityController {
                 responseHeaders,
                 HttpStatus.CREATED);
     }
+
     /**
-     * Given a complete Activity Object
-     * Given the activity id, primary key, is in the Activity table,
-     * replace the Activity record, all records associated.
+     * Updates the Activity record with the given id using the provided data.
      * <br> Example: <a href="http://localhost:2019/activities/activity/5"></a>
      *
-     * @param updateActivity A complete Activity it replace the Activity.
-     * @param activityid     The primary key of the activity you wish to replace.
-     * @return status of NO_CONTENT
+     * @param updateActivity An object containing values for just the fields being updated, all other fields left NULL
+     * @param activityid     The primary key of the Activity you wish to replace
+     * @return status of OK
      */
     @PatchMapping(value = "/activity/{activityid}",
     consumes = "application/json")
@@ -116,17 +115,14 @@ public class ActivityController {
         activityService.update(updateActivity, activityid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     /**
-     * Deletes a given activity along with associated clubactivities
+     * Deletes the Activity with the given id along with any associated ClubActivities.
      * <br>Example: <a href="http://localhost:2019/activities/activity/5"></a>
      *
-     * @param activityid the primary key of the activity you wish to delete
+     * @param activityid The primary key of the Activity you wish to delete
      * @return Status of NO_CONTENT
      */
-
-
-
-
     @DeleteMapping(value = "/activity/{activityid}")
     public ResponseEntity<?> deleteActivityById(@PathVariable long activityid)
     {
@@ -134,7 +130,12 @@ public class ActivityController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
+    /**
+     * Given a complete Activity object and a clubId, adds the activity to the Club with the given id.
+     *
+     * @param activity A complete new Activity to add to an existing Club
+     * @param clubid The id of the club to which the Activity should be added
+     */
     @PostMapping(value = "/activity/addclub/{clubid}",consumes = "application/json")
     public ResponseEntity<?> addActivityToClub(@RequestBody Activity activity, @PathVariable long clubid){
         Activity newact;
@@ -154,11 +155,5 @@ public class ActivityController {
         club.getActivities().add(temp);
         clubRepository.save(club);
         return new ResponseEntity<>(HttpStatus.OK);
-
-
-
-
     }
-
-
 }

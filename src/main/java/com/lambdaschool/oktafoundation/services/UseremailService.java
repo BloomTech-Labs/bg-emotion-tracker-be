@@ -4,7 +4,6 @@ import com.lambdaschool.oktafoundation.models.Useremail;
 
 import java.util.List;
 
-
 /**
  * The Service that works with the Useremail Model
  * <p>
@@ -13,14 +12,14 @@ import java.util.List;
 public interface UseremailService
 {
     /**
-     * Returns a list of all users and their emails
+     * Returns a list of all Users and their emails.
      *
-     * @return List of users and their emails
+     * @return List of Users and their emails
      */
     List<Useremail> findAll();
 
     /**
-     * Returns the user email combination associated with the given id
+     * Returns the user email combination associated with the given id.
      *
      * @param id The primary key (long) of the user email combination you seek
      * @return The user email combination (Useremail) you seek
@@ -28,14 +27,14 @@ public interface UseremailService
     Useremail findUseremailById(long id);
 
     /**
-     * Remove the user email combination referenced by the given id
+     * Removes the user email combination referenced by the given id.
      *
      * @param id The primary key (long) of the user email combination you seek
      */
     void delete(long id);
 
     /**
-     * Replaces the email of the user email combination you seek
+     * Replaces the email of the user email combination you seek.
      *
      * @param useremailid  The primary key (long) of the user email combination you seek
      * @param emailaddress The new email address (String) for this user email combination
@@ -46,7 +45,7 @@ public interface UseremailService
         String emailaddress);
 
     /**
-     * Add a new User Email combination
+     * Add a new user email combination
      *
      * @param userid       the userid of the new user email combination
      * @param emailaddress the email address of the new user email combination

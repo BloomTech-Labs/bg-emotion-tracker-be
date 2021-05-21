@@ -9,11 +9,12 @@ import java.io.Serializable;
 @Embeddable
 public class ClubActivitiesId implements Serializable {
     /**
-     * The id of the club
+     * The id of the Club
      */
     private Long club;
+
     /**
-     * The id of the activity
+     * The id of the Activity
      */
     private Long activity;
 
@@ -26,31 +27,34 @@ public class ClubActivitiesId implements Serializable {
     /**
      * Getter for the club id
      *
-     * @return long the club id
+     * @return The club id (long)
      */
     public long getClub() {
         return club;
     }
+
     /**
      * Setter for the club id
      *
-     * @return long the club id
+     * @return The new club id for this object
      */
     public void setClub(long club) {
         this.club = club;
     }
+
     /**
      * Getter for the activity id
      *
-     * @return long the activity id
+     * @return The activity id (long)
      */
     public long getActivity() {
         return activity;
     }
+
     /**
      * Setter for the activity id
      *
-     * @return long the activity id
+     * @return The new activity id for this object
      */
     public void setActivity(long activity) {
         this.activity = activity;

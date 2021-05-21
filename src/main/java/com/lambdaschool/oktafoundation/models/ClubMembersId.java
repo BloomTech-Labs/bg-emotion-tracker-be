@@ -10,15 +10,13 @@ import java.io.Serializable;
 public class ClubMembersId
     implements Serializable
 {
-
     /**
-     * The id of the club
+     * The id of the Club
      */
     private long club;
 
-
     /**
-     * The id of the member
+     * The id of the Member
      */
     private long member;
 
@@ -32,7 +30,7 @@ public class ClubMembersId
     /**
      * Getter for the member id
      *
-     * @return long the member id
+     * @return The member id (long)
      */
     public long getMember()
     {
@@ -42,7 +40,7 @@ public class ClubMembersId
     /**
      * Setter for the member id
      *
-     * @param member the new member id for this object
+     * @param member The new member id for this object
      */
     public void setMember(long member)
     {
@@ -52,7 +50,7 @@ public class ClubMembersId
     /**
      * Getter for the club id
      *
-     * @return long the club id
+     * @return The club id (long)
      */
     public long getClub()
     {
@@ -60,9 +58,9 @@ public class ClubMembersId
     }
 
     /**
-     * The setter for the club id
+     * Setter for the club id
      *
-     * @param club the new club id for this object
+     * @param club The new club id for this object
      */
     public void setClub(long club)
     {
@@ -91,5 +89,4 @@ public class ClubMembersId
     {
         return 37;
     }
-
 }

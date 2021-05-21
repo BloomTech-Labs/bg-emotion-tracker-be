@@ -10,5 +10,12 @@ import java.util.Optional;
  */
 public interface ClubMembersRepository extends CrudRepository<ClubMembers, Long> {
 
+    /**
+     * Finds an Club-Member pair by their primary keys
+     *
+     * @param cid The primary key of the Club
+     * @param memberid The memberID string (not Member's primary key)
+     * @return The ClubMember object, if exists.
+     */
     Optional<ClubMembers> findClubMembersByClub_ClubidAndMember_Memberid(Long cid, String memberid);
 }

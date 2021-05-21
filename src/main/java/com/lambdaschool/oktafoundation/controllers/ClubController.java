@@ -74,7 +74,7 @@ public class ClubController {
 
     /**
      * Returns the Club with the given id.
-     * <br>Example: http://localhost:2019/clubs/club/7
+     * <br>Example: http://localhost:2019/clubs/club/22
      *
      * @param clubid The primary key of the club you seek
      * @return JSON object of the Club you seek
@@ -92,7 +92,7 @@ public class ClubController {
 
     /**
      * Given a complete Club object, creates a new Club.
-     * <br> Example: <a href="http://localhost:2019/users/user">http://localhost:2019/users/user</a>
+     * <br> Example: <a href="http://localhost:2019/clubs/newClub">http://localhost:2019/clubs/newClub</a>
      *
      * @param club A complete new Club to be added
      * @return A location header with the URI to the newly created Club and a status of CREATED
@@ -122,10 +122,10 @@ public class ClubController {
 
     /**
      * Updates the Club record with the given id using the provided data
-     * <br> Example: <a href="http://localhost:2019/users/user/15">http://localhost:2019/users/user/15</a>
+     * <br> Example: <a href="http://localhost:2019/clubs/club/22">http://localhost:2019/clubs/club/22</a>
      *
      * @param club An object containing values for just the fields being updated, all other fields left NULL
-     * @param clubid     The primary key of the Club you wish to replace
+     * @param clubid The primary key of the Club you wish to replace
      * @return status of OK
      * @see ClubService#save(Club) ClubService.save(Club)
      */
@@ -214,6 +214,14 @@ public class ClubController {
                 HttpStatus.OK);
     }
 
+
+    /**
+     * Given a Club key and memberID, add the member to the club.
+     * <br> Example: <a href="http://localhost:2019/club/22/addMember/testmember2">http://localhost:2019/club/22/addMember/testmember2</a>
+     *
+     * @param cid The primary key of the club
+     * @param mid The String value of the memberID
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PostMapping(value = "/club/{cid}/addMember/{mid}")
     public ResponseEntity<?> addNewMemberToClub(@PathVariable Long cid, @PathVariable String mid){
@@ -225,6 +233,13 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Given a Club key and memberID, remove the member from the club if the member is found in.
+     * <br> Example: <a href="http://localhost:2019/club/22/removeMember/testmember2">http://localhost:2019/club/22/removeMember/testmember2</a>
+     *
+     * @param cid The primary key of the club
+     * @param mid The String value of the memberID
+     */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @DeleteMapping(value = "/club/{cid}/removeMember/{mid}")
     public ResponseEntity<?> removeMemberFromClub(

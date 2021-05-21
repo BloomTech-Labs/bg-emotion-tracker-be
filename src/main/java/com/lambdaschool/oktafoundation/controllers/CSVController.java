@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +41,13 @@ public class CSVController {
     private ClubMembersRepository clubMembersRepository;
 
 
+    /**
+     * Upload a CSV as a form-data object
+     * <br> Example: <a href="http://localhost:2019/csv/upload">http://localhost:2019/csv/upload</a>
+     *
+     * @param mfile A csv file
+     * @throws Exception Exception if a club name is not found it the DB
+     */
     @PostMapping(value = "/upload")
     public String handleCSVUpload(@RequestParam("file") MultipartFile mfile) throws Exception{
         var file = mfile.getInputStream();
@@ -82,6 +90,13 @@ public class CSVController {
         return "OK";
     }
 
+
+    /**
+     * Download all club-member pairs as CSV
+     * <br> Example: <a href="http://localhost:2019/csv/download">http://localhost:2019/csv/download</a>
+     *
+     * @throws Exception Exception if there is any IO issues.
+     */
     @GetMapping(value = "/download")
     public StreamingResponseBody serveCsv(HttpServletResponse response) throws Exception{
         var fw = new FileWriter("temp.csv");

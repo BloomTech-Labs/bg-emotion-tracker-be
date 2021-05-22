@@ -2,9 +2,7 @@ package com.lambdaschool.oktafoundation.controllers;
 
 
 import com.lambdaschool.oktafoundation.models.MemberReactions;
-import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.repository.ReactionRepository;
-import com.lambdaschool.oktafoundation.services.MemberReactionService;
 import com.lambdaschool.oktafoundation.views.ClubActivityPositivity;
 import com.lambdaschool.oktafoundation.views.ClubActivityReactionCounts;
 import com.lambdaschool.oktafoundation.views.MemberPositivity;
@@ -27,13 +25,6 @@ import java.util.stream.StreamSupport;
 @RequestMapping("/report")
 public class ReportController {
 
-
-    @Autowired
-    private MemberReactionService memberReactionService;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
     @Autowired
     private EntityManager entityManager;
 
@@ -43,17 +34,16 @@ public class ReportController {
     // A helper field to map emoji to value
     private HashMap<String,Integer> emojimap;
 
-    public ReportController(){
-
-    }
 
 
-    /* The endpoints shall serve data analysis of the member reactions
+
+    /* The endpoints shall serve basic data aggregate of the member reactions
     with respect to club/activity/member.
      */
 
     // Currently we have the simple feature of calculating the avgs of positivity value of all members
     // and avgs of the received positivity regarding activities in a club.
+    // Likewise the counts of all emojis submitted to activities and submitted by members
 
 
     /**
@@ -78,7 +68,7 @@ public class ReportController {
         // if cid = 0; we search all clubs
         var clubfilter = "";
         if (cid.intValue() != 0){
-            clubfilter = "and clubid = " + cid.toString()+ " ";
+            clubfilter = "and clubid = " + cid + " ";
         }
         ArrayList<String> x = new ArrayList<>();
         x.add(fromdate); x.add(todate); x.add(clubfilter);
@@ -132,7 +122,8 @@ public class ReportController {
 
 
         // Get initial list of all memberReactions within date range
-        var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'"  + clubfilter,MemberReactions.class);
+        var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'"  + clubfilter, MemberReactions.class);
+        @SuppressWarnings("unchecked")
         List<MemberReactions> mrlist = q.getResultList();
         var prememberPositivity = new HashMap<String, ArrayList<Integer>>();
         // init count object for all members which is a map from memberID to a list of value that the member gave out.
@@ -154,7 +145,7 @@ public class ReportController {
             temp.setMemberid(member);
             var memberreactions = prememberPositivity.get(member);
             var len = memberreactions.size();
-            temp.setPositivity(memberreactions.stream().reduce((a,b) -> a+b).get()/(double)len);
+            temp.setPositivity(memberreactions.stream().reduce(Integer::sum).get()/(double)len);
             mplist.add(temp);
         }
 
@@ -185,6 +176,7 @@ public class ReportController {
         var emojimap = initEmojimap();
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'" + clubfilter,MemberReactions.class);
+        @SuppressWarnings("unchecked")
         List<MemberReactions> mrlist = q.getResultList();
         var preactivityPositivity = new HashMap<List<String>, ArrayList<Integer>>();
         mrlist.forEach(e -> {
@@ -208,7 +200,7 @@ public class ReportController {
             temp.setActivityname(ca.get(1));
             var activityreactions = preactivityPositivity.get(ca);
             var len = activityreactions.size();
-            temp.setPositivity(activityreactions.stream().reduce((a,b) -> a+b).get()/(double)len);
+            temp.setPositivity(activityreactions.stream().reduce(Integer::sum).get()/(double)len);
             caplist.add(temp);
         }
 
@@ -245,6 +237,7 @@ public class ReportController {
         var emojimap = initEmojimap();
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'" + clubfilter,MemberReactions.class);
+        @SuppressWarnings("unchecked")
         List<MemberReactions> mrlist = q.getResultList();
         // this map takes in key of [clubname,activityname] and hashes into a hashmap that map emojis with their counts.
         var resmap = new HashMap<List<String>, HashMap<String,Integer>>();
@@ -305,6 +298,7 @@ public class ReportController {
         var emojimap = initEmojimap();
 
         var q = entityManager.createNativeQuery("select * from memberreactions where created_date >= date'" + fromdate + "'" +" and created_date <= date'" + todate + "'" + clubfilter,MemberReactions.class);
+        @SuppressWarnings("unchecked")
         List<MemberReactions> mrlist = q.getResultList();
         var resmap = new HashMap<String, HashMap<String,Integer>>();
         mrlist.forEach(e -> {

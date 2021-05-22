@@ -16,7 +16,6 @@ import java.io.Serializable;
  */
 @Entity(name = "MemberReaction")
 @Table(name = "memberreactions")
-//@IdClass(MemberReactionsId.class)
 public class MemberReactions extends Auditable implements Serializable
 {
     /**
@@ -43,12 +42,6 @@ public class MemberReactions extends Auditable implements Serializable
     private Reaction reaction;
 
     /**
-     * The checkedin (Boolean). Cannot be null
-     */
-    @Column(nullable = false)
-    private Boolean checkedin;
-
-    /**
      * The club activity combination to which this member gave this reaction.
      */
     @ManyToOne
@@ -69,13 +62,11 @@ public class MemberReactions extends Auditable implements Serializable
      *
      * @param member The Member object of this relationship
      * @param reaction The Reaction object of this relationship
-     * @param checkedin The checkedin (boolean)
      * @param clubactivity The club activity combination associated with this relationship
      */
-    public MemberReactions(Member member, Reaction reaction, Boolean checkedin, ClubActivities clubactivity) {
+    public MemberReactions(Member member, Reaction reaction, ClubActivities clubactivity) {
         this.member = member;
         this.reaction = reaction;
-        this.checkedin = checkedin;
         this.clubactivity = clubactivity;
     }
 
@@ -113,24 +104,6 @@ public class MemberReactions extends Auditable implements Serializable
      */
     public void setReaction(Reaction reaction) {
         this.reaction = reaction;
-    }
-
-    /**
-     * The getter for Checkedin
-     *
-     * @return The checkedin (Boolean) of this member reaction combination
-     */
-    public Boolean getCheckedin() {
-        return checkedin;
-    }
-
-    /**
-     * Setter for checkedin. Used primarily for seeding data
-     *
-     * @param checkedin The new checkedin (Boolean) of this member reaction combination
-     */
-    public void setCheckedin(Boolean checkedin) {
-        this.checkedin = checkedin;
     }
 
     /**

@@ -2,15 +2,9 @@ package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.*;
-import com.lambdaschool.oktafoundation.services.ActivityService;
-import com.lambdaschool.oktafoundation.services.ClubActivityService;
-import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.MemberReactionService;
 import com.lambdaschool.oktafoundation.views.SearchPost;
-import org.hibernate.annotations.NaturalId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
-import org.springframework.format.datetime.joda.DateTimeParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -134,7 +127,7 @@ public class MemberReactionsController {
         currentreaction = reactionRepository.findReactionByReactionvalue(rx).orElseThrow();
         // we no longer create any reaction, if the reaction is not in our DB, throw.
 
-        MemberReactions temp = new MemberReactions(member, currentreaction, true, ca);
+        MemberReactions temp = new MemberReactions(member, currentreaction, ca);
 
 
 

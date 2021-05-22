@@ -283,7 +283,6 @@ public class SeedData
                 mr = memberReactionRepository.save(new MemberReactions(
                         curmem,
                         allreactions.get(ran.nextInt(allreactions.size())) ,
-                        true,
                         curca
                         ));
             } else {
@@ -291,7 +290,6 @@ public class SeedData
                 mr = memberReactionRepository.save(new MemberReactions(
                         curmem,
                         normalReactionsList.get(ran.nextInt(normalReactionsList.size())),
-                        true,
                         curca
                         ));
             }

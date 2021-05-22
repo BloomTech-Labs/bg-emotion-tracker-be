@@ -66,7 +66,7 @@ public class MemberServiceImpl implements MemberService {
         newMember.getReactions().clear();
         for (MemberReactions mr : member.getReactions()) {
             Reaction addReaction = reactionService.findReactionById(mr.getReaction().getReactionid());
-            newMember.getReactions().add(new MemberReactions(newMember, addReaction, mr.getCheckedin(), mr.getClubactivity()));
+            newMember.getReactions().add(new MemberReactions(newMember, addReaction, mr.getClubactivity()));
         }
 
         return memberrepos.save(newMember);

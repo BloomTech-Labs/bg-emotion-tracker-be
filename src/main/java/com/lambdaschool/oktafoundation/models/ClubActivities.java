@@ -35,7 +35,7 @@ public class ClubActivities extends Auditable implements Serializable
     @ManyToOne
     @NotNull
     @JoinColumn(name = "clubid")
-    @JsonIgnoreProperties(value = {"activities","activity","users"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"activities","activity","users","members"}, allowSetters = true)
     private Club club;
 
     /**

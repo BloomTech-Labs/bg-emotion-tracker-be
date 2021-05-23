@@ -50,7 +50,7 @@ public class User
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    @JsonIgnoreProperties(value = {"user"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"user","members"}, allowSetters = true)
     private Set<ClubUsers> clubs = new HashSet<>();
 
     /**

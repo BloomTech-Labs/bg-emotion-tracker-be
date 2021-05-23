@@ -99,7 +99,6 @@ public class ClubServiceImpl implements ClubService{
                 MemberReactions newMemberReaction = new MemberReactions();
                 newMemberReaction.setMember(newMember);
                 newMemberReaction.setReaction(newReaction);
-                newMemberReaction.setCheckedin(mr.getCheckedin());
                 newMemberReaction.setClubactivity(newclubActivities);
 
                 newclubActivities.getReactions().add(newMemberReaction);

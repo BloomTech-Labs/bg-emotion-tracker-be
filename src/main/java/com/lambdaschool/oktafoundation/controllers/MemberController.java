@@ -46,7 +46,7 @@ public class MemberController {
    /**
      * Returns whether the Member with given id exists in DB
      *
-     * @param memberid The member's ID value (Username).
+     * @param mid The member's ID value (Username).
      * @return a boolean value
      */
     @GetMapping(value="/check")

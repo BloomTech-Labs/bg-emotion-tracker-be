@@ -10,6 +10,13 @@ import java.util.Optional;
  */
 public interface ClubActivityRepository extends CrudRepository<ClubActivities, Long> {
 
+   /**
+    * Finds an Club-Activity pair by their primary keys
+    *
+    * @param cid The primary key of the Club
+    * @param aid The primary key of the Activity
+    * @return The ClubActivity object, if exists.
+    */
    Optional<ClubActivities> getClubActivitiesByActivity_ActivityidAndClub_Clubid(Long aid, Long cid);
 
 }

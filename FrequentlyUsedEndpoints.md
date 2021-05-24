@@ -171,6 +171,25 @@ Or if the frontend knows the activity ID, you can use this too:
     "activityid": 15;
 }
 ```
+<br/>
+
+### Removing a activity from a club
+
+POST /activities/activity/removefrom/{clubid}
+
+with body
+```
+{
+    "activityname": "test"
+}
+```
+or
+```
+{
+    "activityid": 15;
+}
+```
+
 
 
 

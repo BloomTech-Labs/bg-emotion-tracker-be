@@ -1,6 +1,8 @@
 package com.lambdaschool.oktafoundation.controllers;
 
+import com.lambdaschool.oktafoundation.models.ClubMembers;
 import com.lambdaschool.oktafoundation.models.Member;
+import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
 import com.lambdaschool.oktafoundation.repository.MemberRepository;
 import com.lambdaschool.oktafoundation.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class MemberController {
     private MemberService memberService;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberReactionRepository memberReactionRepository;
 
     /**
      * Returns a list of all Members.
@@ -89,4 +93,53 @@ public class MemberController {
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
+
+
+    /**
+     * Given a list of member object with memberids, add the members to the database.
+     *
+     * @param members The list of members object you want to add
+     * @throws URISyntaxException If the member doesn't exist
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PostMapping(value = "/addMembers")
+    public ResponseEntity<?> addMembers(@RequestBody List<Member> members) throws URISyntaxException {
+        for (var i: members) {
+            if( memberRepository.findMemberByMemberid(i.getMemberid()).isPresent()){
+                continue;
+            }
+            memberRepository.save(i);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
+    /**
+     * Given a memberID, remove the member with that ID
+     *
+     * @param mid The memberID of the member you want to delete.
+     * @throws URISyntaxException If the member doesn't exist
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @DeleteMapping(value = "/removeMember/{mid}")
+    public ResponseEntity<?> removeMember(@PathVariable String mid) throws URISyntaxException {
+
+        var member = memberRepository.findMemberByMemberid(mid);
+
+        if (member.isPresent()) {
+            var mem = member.get();
+            var mrlist = memberReactionRepository.getMemberReactionsByMember(mem);
+            mrlist.forEach(i -> memberReactionRepository.delete(i));
+
+            memberRepository.delete(mem);
+        } else {
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
 }

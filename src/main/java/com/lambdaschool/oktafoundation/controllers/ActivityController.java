@@ -6,11 +6,13 @@ import com.lambdaschool.oktafoundation.models.ClubActivities;
 import com.lambdaschool.oktafoundation.models.User;
 import com.lambdaschool.oktafoundation.repository.ClubActivityRepository;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
+import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
 import com.lambdaschool.oktafoundation.services.ActivityService;
 import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.lang.invoke.ConstantBootstraps;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -39,6 +42,9 @@ public class ActivityController {
 
     @Autowired
     private ClubActivityRepository clubActivityRepository;
+
+    @Autowired
+    private MemberReactionRepository memberReactionRepository;
 
     /**
      * Returns a list of all Activities.
@@ -131,9 +137,9 @@ public class ActivityController {
     }
 
     /**
-     * Given a complete Activity object and a clubId, adds the activity to the Club with the given id.
-     *
-     * @param activity A complete new Activity to add to an existing Club
+     * Given a flexible activity object and a clubId, adds the activity to the Club with the given id.
+     * If the activity is given by name and does not exist, it would get created
+     * @param activity An activity to add to an existing Club
      * @param clubid The id of the club to which the Activity should be added
      */
     @PostMapping(value = "/activity/addclub/{clubid}",consumes = "application/json")
@@ -156,4 +162,40 @@ public class ActivityController {
         clubRepository.save(club);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Given a flexible activity object and a clubId, remove the activity to the Club with the given id.
+     *
+     * @param activity A activity that exists in a club
+     * @param clubid The id of the club to which the Activity should removed from
+     */
+    @PostMapping(value = "/activity/removefrom/{clubid}",consumes = "application/json")
+    public ResponseEntity<?> removeActivityFromClub(@RequestBody Activity activity, @PathVariable long clubid){
+        ClubActivities ca;
+
+        if (activity.getActivityid() == 0){
+            // no id provided, try to find by name
+            try {
+                var temp = activityService.findActivityByName(activity.getActivityname());
+                ca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(temp.getActivityid(),clubid).orElseThrow();
+                memberReactionRepository.getMemberReactionsByClubactivity_ClubAndClubactivity_Activity(ca.getClub(),ca.getActivity()).forEach(i -> memberReactionRepository.delete(i));
+                clubActivityRepository.delete(ca);
+
+            } catch (Exception e) {
+                return new ResponseEntity<>("No such club activity", HttpStatus.NOT_MODIFIED);
+            }
+        } else {
+            var temp = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(activity.getActivityid(),clubid);
+            if (temp.isPresent()){
+                ca = temp.get();
+                memberReactionRepository.getMemberReactionsByClubactivity_ClubAndClubactivity_Activity(ca.getClub(),ca.getActivity()).forEach(i -> memberReactionRepository.delete(i));
+                clubActivityRepository.delete(ca);
+            } else {
+                return new ResponseEntity<>("No such club activity", HttpStatus.NOT_MODIFIED);
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

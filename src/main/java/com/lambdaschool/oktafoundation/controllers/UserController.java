@@ -1,6 +1,7 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.User;
+import com.lambdaschool.oktafoundation.repository.UserRepository;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,8 @@ public class UserController
      */
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Returns a list of all users
@@ -174,6 +177,41 @@ public class UserController
         return new ResponseEntity<>(null,
             responseHeaders,
             HttpStatus.CREATED);
+    }
+
+
+    /**
+     * Given a list of users object, add them to the database.
+     * <br> Example: <a href="http://localhost:2019/users/users">http://localhost:2019/users/users</a>
+     *
+     * @param users A list of new users to be added.
+     * @see UserService#save(User) UserService.save(User)
+     */
+    @PostMapping(value = "/users",
+            consumes = "application/json")
+    public ResponseEntity<?> addNewUsers(
+            @Valid
+            @RequestBody
+                    List<User> users) throws
+            URISyntaxException
+    {
+        for (var i : users){
+            if (i.getUserid() != 0) {
+                if(userRepository.findById(i.getUserid()).isPresent()){
+                    continue;
+                }
+            }
+            if (i.getUsername() != null) {
+                if(userRepository.findByUsernameContainingIgnoreCase(i.getUsername()).size()>0){
+                    continue;
+                }
+            }
+            i.setUserid(0);
+            userService.save(i);
+        }
+
+        return new ResponseEntity<>("All Good",
+                HttpStatus.CREATED);
     }
 
     /**

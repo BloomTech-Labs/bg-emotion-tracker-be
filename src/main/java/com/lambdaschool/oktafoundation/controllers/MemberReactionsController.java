@@ -38,11 +38,11 @@ public class MemberReactionsController {
     private ClubActivityRepository clubActivityRepository;
 
     @Autowired
-    private ClubMembersRepository  clubMembersRepository;
+    private ClubMembersRepository clubMembersRepository;
 
 
     @Autowired
-    private ClubRepository  clubRepository;
+    private ClubRepository clubRepository;
 
     @Autowired
     private ReactionRepository reactionRepository;
@@ -50,7 +50,7 @@ public class MemberReactionsController {
     @Autowired
     private EntityManager entityManager;
 
-  
+
     /**
      * Returns a list of all MemberReactions.
      * <br>Example: <a href="http://localhost:2019/memberreactions/memberreactions"></a>
@@ -85,7 +85,7 @@ public class MemberReactionsController {
      * @param mid The id of the Member whose reaction is being added
      * @param aid The id of the Activity for which the Member gave this Reaction
      * @param cid The id of the Club at which the Member gave this Reaction
-     * @param rx A string representing the Reaction, in the form of the selected emoji's Unicode codepoint
+     * @param rx  A string representing the Reaction, in the form of the selected emoji's Unicode codepoint
      * @return Status of OK
      */
     @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
@@ -97,17 +97,19 @@ public class MemberReactionsController {
             @RequestParam(value = "rx") String rx
     ) {
 
-        var normallist = new HashMap<String,Integer>();
-        normallist.put("1F601",0);
-        normallist.put("1F642",0);
-        normallist.put("1F610",0);
-        normallist.put("1F641",0);
-        normallist.put("1F61E",0);
+        var normallist = new HashMap<String, Integer>();
+        normallist.put("1F601", 0);
+        normallist.put("1F642", 0);
+        normallist.put("1F610", 0);
+        normallist.put("1F641", 0);
+        normallist.put("1F61E", 0);
 
 
         Member member;
         var premember = memberRepository.findMemberByMemberid(mid);
-        if(premember.isEmpty()){return new ResponseEntity<>("No such member", HttpStatus.NOT_FOUND);} else {
+        if (premember.isEmpty()) {
+            return new ResponseEntity<>("No such member", HttpStatus.NOT_FOUND);
+        } else {
             member = premember.get();
         }
 
@@ -117,29 +119,34 @@ public class MemberReactionsController {
         );
 
         ClubActivities ca;
-        if(preca.isEmpty()){return new ResponseEntity<>("No such Club Activity",HttpStatus.NOT_FOUND);} else {
+        if (preca.isEmpty()) {
+            return new ResponseEntity<>("No such Club Activity", HttpStatus.NOT_FOUND);
+        } else {
             ca = preca.get();
         }
 
 
-        var checkInOut = Pattern.compile("check.?(in|out)$",Pattern.CASE_INSENSITIVE);
+        var checkInOut = Pattern.compile("check.?(in|out)$", Pattern.CASE_INSENSITIVE);
         var aname = ca.getActivity().getActivityname();
         if (!checkInOut.matcher(aname).find()) {
-            if (!normallist.containsKey(rx)){
+            if (!normallist.containsKey(rx)) {
                 return new ResponseEntity<>("This emoji can't be used in regular activity", HttpStatus.NOT_ACCEPTABLE);
             }
 
         }
 
 
-        clubMembersRepository.save(new ClubMembers(clubRepository.findById(cid).orElseThrow(),member));
+        clubMembersRepository.save(new ClubMembers(clubRepository.findById(cid).orElseThrow(), member));
 
         Reaction currentreaction;
         var precurrentreaction = reactionRepository.findReactionByReactionvalue(rx);
-        if(precurrentreaction.isEmpty()){ return new ResponseEntity<>("No such emoji", HttpStatus.NOT_ACCEPTABLE); } else { currentreaction = precurrentreaction.get();}
+        if (precurrentreaction.isEmpty()) {
+            return new ResponseEntity<>("No such emoji", HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            currentreaction = precurrentreaction.get();
+        }
 
         MemberReactions temp = new MemberReactions(member, currentreaction, ca);
-
 
 
         memberReactionRepository.save(temp);
@@ -150,9 +157,9 @@ public class MemberReactionsController {
     /**
      * Helper method to help build the native SQL search query string
      *
-     * @param from Search starts from which date
-     * @param to Search until which date
-     * @param ca Search range restricted to which club activities
+     * @param from    Search starts from which date
+     * @param to      Search until which date
+     * @param ca      Search range restricted to which club activities
      * @param members Search range restricted to which members
      * @return The built partial query string
      */
@@ -205,8 +212,8 @@ public class MemberReactionsController {
      * Given start and end dates, returns all the relevant reactions from the Members (or to the ClubActivities) specified in the request body.
      *
      * @param from The earliest date by which to filter reactions
-     * @param to The latest date by which to filter reactions
-     * @param sp Other data such as ClubActivities and/or Members by which to filter the reactions
+     * @param to   The latest date by which to filter reactions
+     * @param sp   Other data such as ClubActivities and/or Members by which to filter the reactions
      * @return A list of the relevant MemberReactions
      * @throws Exception
      */

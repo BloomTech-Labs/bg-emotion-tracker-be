@@ -62,6 +62,7 @@ public class SeedData
      * First a set of known data is seeded into our database.
      * Second a random set of data is seeded into our database.
      * This seed removes the previous data, should be avoided in production except for the first startup.
+     *
      * @param args The parameter is required by the parent interface but is not used in this process.
      */
     @Transactional
@@ -258,7 +259,7 @@ public class SeedData
 
         };
 
-        for(var i :rval){
+        for (var i : rval) {
             Reaction rx1 = new Reaction();
             rx1.setReactionvalue(i);
             reactionService.save(rx1);
@@ -274,7 +275,7 @@ public class SeedData
 
 
         // Generating 300 memberReactions
-        Club[] clist = {c1,c2};
+        Club[] clist = {c1, c2};
         var ran = new Random();
         var allmem = memberService.findAll();
         ArrayList<Reaction> allreactions = new ArrayList<>();
@@ -282,25 +283,25 @@ public class SeedData
         var cas = new ArrayList<ClubActivities>();
         Arrays.stream(clist).forEach(i -> cas.addAll(i.getActivities()));
 
-        for (int i = 0; i<300; i++){
+        for (int i = 0; i < 300; i++) {
             var curmem = allmem.get(ran.nextInt(allmem.size()));
             var curca = cas.get(ran.nextInt(cas.size()));
             MemberReactions mr;
             // randomly select from all emojis to add to check in and out
             if (curca.getActivity().getActivityname().equals("Club Checkin") ||
-                    curca.getActivity().getActivityname().equals("Club Checkout")){
+                    curca.getActivity().getActivityname().equals("Club Checkout")) {
                 mr = memberReactionRepository.save(new MemberReactions(
                         curmem,
-                        allreactions.get(ran.nextInt(allreactions.size())) ,
+                        allreactions.get(ran.nextInt(allreactions.size())),
                         curca
-                        ));
+                ));
             } else {
                 // randomly select from 5 positivity indicating emojis for other activities.
                 mr = memberReactionRepository.save(new MemberReactions(
                         curmem,
                         normalReactionsList.get(ran.nextInt(normalReactionsList.size())),
                         curca
-                        ));
+                ));
             }
 
             curmem.getReactions().add(mr);

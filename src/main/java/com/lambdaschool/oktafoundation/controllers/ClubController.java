@@ -1,13 +1,11 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import com.lambdaschool.oktafoundation.models.Club;
-import com.lambdaschool.oktafoundation.models.ClubMembers;
-import com.lambdaschool.oktafoundation.models.ClubUsers;
-import com.lambdaschool.oktafoundation.models.User;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.ClubMembersRepository;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.repository.ClubUsersRepository;
+import com.lambdaschool.oktafoundation.repository.MemberRepository;
 import com.lambdaschool.oktafoundation.services.ClubService;
 import com.lambdaschool.oktafoundation.services.MemberService;
 import com.lambdaschool.oktafoundation.services.UserService;
@@ -180,7 +178,7 @@ public class ClubController {
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PostMapping(value = "/club/{cid}/addUser/{uid}",
             consumes = "application/json")
-    public ResponseEntity<?> addNewUser(
+    public ResponseEntity<?> addUserToClub(
             @PathVariable Long cid, @PathVariable Long uid) throws URISyntaxException
     {
         var currentclub = clubService.findClubById(cid);
@@ -189,6 +187,31 @@ public class ClubController {
 
         // services currently has problem with its save.
         clubRepository.save(currentclub);
+
+        return new ResponseEntity<>(null,
+                HttpStatus.OK);
+    }
+
+    /**
+     * Adds the Users in the list of user body to the Club with the given clubId.
+     *
+     * @param cid The id of the Club to which the User should be added
+     * @param users The list of all user Object to be added
+     * @return Status of OK
+     * @throws URISyntaxException
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PostMapping(value = "/club/{cid}/addUsers",
+            consumes = "application/json")
+    public ResponseEntity<?> addUsersToClub(
+            @PathVariable Long cid, @RequestBody List<User> users) throws URISyntaxException
+    {
+        var club = clubService.findClubById(cid);
+        for (var i: users) {
+            var usr = i.getUserid() == 0 ? userService.findByName(i.getUsername()) : userService.findUserById(i.getUserid());
+            clubUsersRepository.save(new ClubUsers(club, usr));
+        }
+
 
         return new ResponseEntity<>(null,
                 HttpStatus.OK);
@@ -204,11 +227,37 @@ public class ClubController {
      */
     @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @DeleteMapping(value = "/club/{cid}/removeUser/{uid}")
-    public ResponseEntity<?> removeNewUser(
+    public ResponseEntity<?> removeUserfromClub(
             @PathVariable Long cid, @PathVariable Long uid) throws URISyntaxException
     {
         var cu = clubUsersRepository.findClubUsersByClub_ClubidAndUser_Userid(cid,uid).orElseThrow();
         clubUsersRepository.delete(cu);
+
+        return new ResponseEntity<>(null,
+                HttpStatus.OK);
+    }
+
+
+    /**
+     * Remove the users given from the given club with the cid.
+     *
+     * @param cid The id of the Club to which the User should be added
+     * @param users The list of all user Object to be deleted
+     * @return Status of OK
+     * @throws URISyntaxException
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PostMapping(value = "/club/{cid}/removeUsers",
+            consumes = "application/json")
+    public ResponseEntity<?> removeUsersFromClub(
+            @PathVariable Long cid, @RequestBody List<User> users) throws URISyntaxException
+    {
+        var club = clubService.findClubById(cid);
+        for (var i: users) {
+            var usr = i.getUserid() == 0 ? userService.findByName(i.getUsername()) : userService.findUserById(i.getUserid());
+            var cu = clubUsersRepository.findClubUsersByClub_ClubidAndUser_Userid(club.getClubid(), usr.getUserid());
+            cu.ifPresent(clubUsers -> clubUsersRepository.delete(clubUsers));
+        }
 
         return new ResponseEntity<>(null,
                 HttpStatus.OK);
@@ -234,6 +283,27 @@ public class ClubController {
     }
 
     /**
+     * Given a Club key and a body supplying a list of memberids, add the members to the clubs.
+     *
+     * @param cid The primary key of the club
+     * @param members The body supplying a list of memberid
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PostMapping(value = "/club/{cid}/addMembers")
+    public ResponseEntity<?> addNewMembersToClub(@PathVariable Long cid, @RequestBody List<Member> members){
+        var club = clubService.findClubById(cid);
+
+        for (var i: members) {
+            var mem = memberService.findMemberByMemberId(i.getMemberid());
+            clubMembersRepository.save(new ClubMembers(club, mem));
+        }
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    /**
      * Given a Club key and memberID, remove the member from the club if the member is found in.
      * <br> Example: <a href="http://localhost:2019/club/22/removeMember/testmember2">http://localhost:2019/club/22/removeMember/testmember2</a>
      *
@@ -255,4 +325,28 @@ public class ClubController {
                     HttpStatus.NOT_MODIFIED);
         }
     }
+
+    /**
+     * Given a Club key and a body supplying a list of memberids, remove the members
+     *
+     * @param cid The primary key of the club
+     * @param members The body supplying a list of memberid
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
+    @PostMapping(value = "/club/{cid}/removeMembers")
+    public ResponseEntity<?> removeMembersFromClub(@PathVariable Long cid, @RequestBody List<Member> members){
+        var club = clubService.findClubById(cid);
+
+        for (var i: members) {
+            var mem = memberService.findMemberByMemberId(i.getMemberid());
+            var cm  = clubMembersRepository.findClubMembersByClub_ClubidAndMember_Memberid(club.getClubid(), mem.getMemberid());
+            cm.ifPresent(clubMembers -> clubMembersRepository.delete(clubMembers));
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
+
 }

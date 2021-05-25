@@ -62,6 +62,7 @@ public class SeedData
      * First a set of known data is seeded into our database.
      * Second a random set of data is seeded into our database.
      * This seed removes the previous data, should be avoided in production except for the first startup.
+     *
      * @param args The parameter is required by the parent interface but is not used in this process.
      */
     @Transactional
@@ -97,7 +98,7 @@ public class SeedData
         //Activities
         clubService.deleteAll();
         activityService.deleteAll();
-        Activity a1 = new Activity("Club Attendance");
+        Activity a1 = new Activity("Club Checkin");
         Activity a2 = new Activity("Arts & Crafts");
         Activity a3 = new Activity("Archery");
         Activity a4 = new Activity("Basketball");
@@ -116,7 +117,7 @@ public class SeedData
 
 
         // Club
-        // All clubs have Attendance anc Checkout
+        // All clubs have Checkin anc Checkout
         //Anderson has  Arts, Archery, Basketball, Homework
         Club c1 = new Club("Anderson");
         c1.getActivities().add(new ClubActivities(c1, a1));
@@ -226,30 +227,31 @@ public class SeedData
         memberService.save(m3);
         memberService.save(m4);
 
-        // All emoji values
+        // All emoji values (updated 5-25-21)
         String[] rval = {
                 "1F601",
                 "1F642",
                 "1F610",
                 "1F641",
                 "1F61E",
-                "1F605",
-                "1F61B",
-                "1F61C",
+                "1F603",
+                "1F60A",
+                "1F60C",
                 "1F61D",
-                "1F92A",
-                "1F636",
-                "1F611",
-                "1F644",
+                "1F60E",
+                "1F62E",
+                "1F915",
+                "1F974",
                 "1F971",
-                "1F624",
-                "1F620",
-                "1F628",
-                "1F62D",
+                "1F634",
                 "1F622",
-                "1F634",};
+                "1F62D",
+                "1F628",
+                "1F620",
+                "1F624"
+        };
 
-        for(var i :rval){
+        for (var i : rval) {
             Reaction rx1 = new Reaction();
             rx1.setReactionvalue(i);
             reactionService.save(rx1);
@@ -265,7 +267,7 @@ public class SeedData
 
 
         // Generating 300 memberReactions
-        Club[] clist = {c1,c2};
+        Club[] clist = {c1, c2};
         var ran = new Random();
         var allmem = memberService.findAll();
         ArrayList<Reaction> allreactions = new ArrayList<>();
@@ -273,25 +275,25 @@ public class SeedData
         var cas = new ArrayList<ClubActivities>();
         Arrays.stream(clist).forEach(i -> cas.addAll(i.getActivities()));
 
-        for (int i = 0; i<300; i++){
+        for (int i = 0; i < 300; i++) {
             var curmem = allmem.get(ran.nextInt(allmem.size()));
             var curca = cas.get(ran.nextInt(cas.size()));
             MemberReactions mr;
             // randomly select from all emojis to add to check in and out
-            if (curca.getActivity().getActivityname().equals("Club Attendance") ||
-                    curca.getActivity().getActivityname().equals("Club Checkout")){
+            if (curca.getActivity().getActivityname().equals("Club Checkin") ||
+                    curca.getActivity().getActivityname().equals("Club Checkout")) {
                 mr = memberReactionRepository.save(new MemberReactions(
                         curmem,
-                        allreactions.get(ran.nextInt(allreactions.size())) ,
+                        allreactions.get(ran.nextInt(allreactions.size())),
                         curca
-                        ));
+                ));
             } else {
                 // randomly select from 5 positivity indicating emojis for other activities.
                 mr = memberReactionRepository.save(new MemberReactions(
                         curmem,
                         normalReactionsList.get(ran.nextInt(normalReactionsList.size())),
                         curca
-                        ));
+                ));
             }
 
             curmem.getReactions().add(mr);

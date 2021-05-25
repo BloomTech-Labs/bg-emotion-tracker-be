@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * The entry point for clients to access memberreactions data
@@ -104,14 +105,26 @@ public class MemberReactionsController {
         normallist.put("1F61E",0);
 
 
-        var member = memberRepository.findMemberByMemberid(mid).orElseThrow();
-        var ca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(
+        Member member;
+        var premember = memberRepository.findMemberByMemberid(mid);
+        if(premember.isEmpty()){return new ResponseEntity<>("No such member", HttpStatus.NOT_FOUND);} else {
+            member = premember.get();
+        }
+
+
+        var preca = clubActivityRepository.getClubActivitiesByActivity_ActivityidAndClub_Clubid(
                 aid, cid
-        ).orElseThrow();
+        );
+
+        ClubActivities ca;
+        if(preca.isEmpty()){return new ResponseEntity<>("No such Club Activity",HttpStatus.NOT_FOUND);} else {
+            ca = preca.get();
+        }
 
 
-        if (!ca.getActivity().getActivityname().equalsIgnoreCase("Club Attendance") &&
-                !ca.getActivity().getActivityname().equalsIgnoreCase("Club Checkout")){
+        var checkInOut = Pattern.compile("check.?(in|out)$",Pattern.CASE_INSENSITIVE);
+        var aname = ca.getActivity().getActivityname();
+        if (!checkInOut.matcher(aname).find()) {
             if (!normallist.containsKey(rx)){
                 return new ResponseEntity<>("This emoji can't be used in regular activity", HttpStatus.NOT_ACCEPTABLE);
             }
@@ -119,13 +132,11 @@ public class MemberReactionsController {
         }
 
 
-
         clubMembersRepository.save(new ClubMembers(clubRepository.findById(cid).orElseThrow(),member));
 
-
         Reaction currentreaction;
-        currentreaction = reactionRepository.findReactionByReactionvalue(rx).orElseThrow();
-        // we no longer create any reaction, if the reaction is not in our DB, throw.
+        var precurrentreaction = reactionRepository.findReactionByReactionvalue(rx);
+        if(precurrentreaction.isEmpty()){ return new ResponseEntity<>("No such emoji", HttpStatus.NOT_ACCEPTABLE); } else { currentreaction = precurrentreaction.get();}
 
         MemberReactions temp = new MemberReactions(member, currentreaction, ca);
 

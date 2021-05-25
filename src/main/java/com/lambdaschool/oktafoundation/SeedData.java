@@ -97,7 +97,7 @@ public class SeedData
         //Activities
         clubService.deleteAll();
         activityService.deleteAll();
-        Activity a1 = new Activity("Club Attendance");
+        Activity a1 = new Activity("Club Checkin");
         Activity a2 = new Activity("Arts & Crafts");
         Activity a3 = new Activity("Archery");
         Activity a4 = new Activity("Basketball");
@@ -116,7 +116,7 @@ public class SeedData
 
 
         // Club
-        // All clubs have Attendance anc Checkout
+        // All clubs have Checkin anc Checkout
         //Anderson has  Arts, Archery, Basketball, Homework
         Club c1 = new Club("Anderson");
         c1.getActivities().add(new ClubActivities(c1, a1));
@@ -247,7 +247,16 @@ public class SeedData
                 "1F628",
                 "1F62D",
                 "1F622",
-                "1F634",};
+                "1F634",
+                // from latest stakeholder's message. that isn't in the list above
+                "1F60E",
+                "1F915",
+                "1F60C",
+                "1F974",
+                "1F603",
+
+
+        };
 
         for(var i :rval){
             Reaction rx1 = new Reaction();
@@ -278,7 +287,7 @@ public class SeedData
             var curca = cas.get(ran.nextInt(cas.size()));
             MemberReactions mr;
             // randomly select from all emojis to add to check in and out
-            if (curca.getActivity().getActivityname().equals("Club Attendance") ||
+            if (curca.getActivity().getActivityname().equals("Club Checkin") ||
                     curca.getActivity().getActivityname().equals("Club Checkout")){
                 mr = memberReactionRepository.save(new MemberReactions(
                         curmem,

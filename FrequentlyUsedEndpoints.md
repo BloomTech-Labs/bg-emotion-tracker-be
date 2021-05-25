@@ -90,7 +90,7 @@ sample response
         {
             "activity": {
                 "activityid": 13,
-                "activityname": "Club Attendance"
+                "activityname": "Club Checkin"
             }
         },
         {
@@ -285,7 +285,7 @@ GET /report/club/{cid}/activities/avgs?from={fromdate}&to={todate}
 [
     {
         "clubname": "anderson",
-        "activityname": "Club Attendance",
+        "activityname": "Club Checkin",
         "positivity": -0.05
     },
     {
@@ -404,7 +404,7 @@ GET /report/club/{cid}/activities/counts?from={fromdate}&to={todate}
 [
     {
         "clubname": "anderson",
-        "activityname": "Club Attendance",
+        "activityname": "Club Checkin",
         "reactionCounts": {
             "1F601": 4,
             "1F610": 1,

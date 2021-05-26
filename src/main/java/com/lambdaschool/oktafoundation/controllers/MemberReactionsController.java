@@ -194,9 +194,9 @@ public class MemberReactionsController {
 
         // adding filters for club activities
         if (ca != null && ca.size() > 0) {
-            res.append(" and cast((cast(clubid as varchar(255))||(cast(activityid as varchar(255))))as bigint) in (");
+            res.append(" and (clubid,activityid) in (");
             for (var e : ca) {
-                res.append(e.getClub().getClubid()).append(e.getActivity().getActivityid()).append(",");
+                res.append("(").append(e.getClub().getClubid()).append(",").append(e.getActivity().getActivityid()).append(")").append(",");
             }
             res.deleteCharAt(res.length() - 1);
             res.append(")");

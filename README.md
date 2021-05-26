@@ -1,6 +1,126 @@
-# Labs Java Okta Scaffolding
+# Lambda Labs Boys & Girls Club: Experience Tracking Spring Boot Backend
 
-## Some Useful Notes
+## Project Overview
+
+
+### Database layout
+
+![Image of Database Layout](labs34_DBLayout.png)
+
+### Entities
+
+1. Roles
+- For the login accounts, we have three types of roles
+   - Administrator (ADMIN)
+   - Club Director (CD)
+   - Youth Development Professional (YDP)
+2. Users
+- This is the entity that interfaces with the Frontend and Okta
+- The backend stores User entity primarily to serve frontend about the role so that they can use it for protected routing on the frontend.
+- User is authenticated with the Okta token.
+
+3. Clubs
+- A Club would have a list of Users, Activities, and Members
+- It has join tables with the above entities.
+
+4. Activities
+- The Activities table stores a list of different activity names.
+
+5. Members 
+- A Member is a table in the database with a memberID (username). These are passive objects instead of accounts.
+- The frontend can generate the memberID via using the creating QR code function and add the record to the backend.
+- Members have nominal Many-to-Many relationship to Clubs, but this relationship doesn't have any real effect regarding the member submission.
+
+6. Reactions
+- The Reactions table stores a list of truncated unicode points for emojis
+
+7. MemberReaction
+- The table that stores all submission of feedbacks from the frontend scanning loop.
+- Each row stores foreign keys from
+   - a Club, 
+   - an Activity (that is in the Club)
+   - a Member
+   - a Reaction
+   
+
+
+Primary Endpoints Documentation: <a href="https://github.com/Lambda-School-Labs/bg-emotion-tracker-be-b/blob/main/FrequentlyUsedEndpoints.md"> HERE </a>
+
+
+Auto Generated Swagger Endpoints Documentations: <a href="https://bg-emotion-tracker-be-b.herokuapp.com/swagger-ui.html"> HERE </a>
+
+Latest snapshots of Postman Collections, import these to your postman for a headstart:
+- Note that the auth token expires every 3 hours, you need to resupply those by getting the tokens manually, otherwise the requests would not work.
+
+- Local: <a href="https://www.getpostman.com/collections/1bfc89534d979bca9940"> HERE </a>
+- Remote: <a href="https://www.getpostman.com/collections/6c605856f40c73c3b199"> HERE </a>
+
+
+
+## Functionalities
+
+
+### MemberReaction
+
+Submission
+
+- The most critical part of the backend of concern is the endpoint handling the submission of emojis.
+- The submission is a POST via URL params, the format of which is documented in the primary endpoints documentation above
+- Behavior:
+   - If the memberID in the feedback submission is not associated with the club yet, the relationship will be automatically added.
+   - The endpoint would reject on nonexistent club-activity provided as well as nonexistent memberID or reaction unicode point.
+   - Any checkin/out activity would be able to receive the full list of existing emojis. On the contrary, regular activity can only be submitted with a positivity indicating emoji from a set of 5.
+
+Search
+
+- We have a currently unused search functionality that filters against
+   - date range
+   - Club Activities
+   - Member
+- It returns a list of MemberReactions such that any MemberReaction in the list 
+   - has its Club-activity pair in the set of the given Club Activities params
+   - and has its member in the set of the given Members params
+   - and has its creation date within the given date range params
+
+
+### Report
+- See the report charts in the frontend app first for an initial look of these features.
+
+#### Get Counts
+
+1. By Activities
+- This endpoint would count all memberReactions received by a Club-Activity for all Club-Activities, and it would be organized by clubs.
+
+2. By Members
+- This endpoint would count all memberReactions given by a member for all members, and it would be organized by clubs.
+
+#### Get Averages
+- We map the emojis into an integer in [-2,2]
+   - Only the regular activity emojis (5 of them) currently are mapped into values.
+   - Extra emojis that can be submitted in checkin/out default to 0 currently.
+1. By Activities
+- This endpoint would calculate the memberReactions average values received by a Club-Activity for all Club-Activities , and it would be organized by clubs.
+
+2. By Members
+- This endpoint would calculate the memberReactions average values given by a member for all members, and it would be organized by clubs.
+
+### CSV
+
+- We currently support adding clubname,memberid pairs as csv file
+  - This endpoint shall be extended to receive other types of upload if needed by stakeholders.
+  
+- The download endpoint, as of now, returns a csv file containing all clubname,memberid pairs.
+  - This endpoint shall be extended to generate other fields with given frontend parameters, if needed by stakeholders.
+   
+
+
+## Testing
+
+- Currently there is only a few boilerplate unit tests.
+- A full test suite would be a great addition to this project.
+
+
+## Setup Notes
 
 ### For PostgreSQL add the dependency
 
@@ -36,9 +156,9 @@ SPRING.DATASOURCE.URL=jdbc:postgresql://localhost:5432/oktafoundationdb?password
 ```
 
 The Hierarchy of where the values are found
-    OS environment variables.
-    Application properties packaged inside your jar
-    @PropertySource annotation on your Main Class
+OS environment variables.
+Application properties packaged inside your jar
+@PropertySource annotation on your Main Class
 
 Use pgAdmin to create the database only before running your application!
 
@@ -68,9 +188,9 @@ Note: fill in `<private>` with real values
 
 ```
 heroku login
-heroku create jrmmba-oktafoundation
-heroku addons:create heroku-postgresql:hobby-dev -a jrmmba-oktafoundation
-heroku config -a jrmmba-oktafoundation
+heroku create bg-emotion-tracker-be-b
+heroku addons:create heroku-postgresql:hobby-dev -a bg-emotion-tracker-be-b
+heroku config -a bg-emotion-tracker-be-b
 
 heroku config:set spring.security.oauth2.resourceserver.jwt.issuer-uri=<private>
 heroku config:set okta.oauth2.client-id=<private>
@@ -84,7 +204,7 @@ Use the Heroku GUI to access log
 ##### Add the plugin for heroku
 
 ```
-<finalName>jrmmba-oktafoundation</finalName>
+<finalName>bg-emotion-tracker-be-b</finalName>
 
 <!-- Heroku Maven Plugin Configuration -->
 <plugin>
@@ -122,6 +242,10 @@ Note You need to do this each time code is changed!
 
 ### Connect H2 Console to Heroku Postgres
 
+### Note:
+-  The below example serves as an illustration only, actual DB address and username/password assigned to the current project should be used (should be given by TL).
+
+
 jdbc:postgresql://ec2-52-4-177-4.compute-1.amazonaws.com/d3bgb040dnfiod
 
 On Heroku
@@ -158,7 +282,7 @@ In the root folder of your application you will find a Procfile. Change the name
 In the Web Interface of Heroku
 
 Under Deploy -> Connect to GitHub
-    select repository (must have admin rights to repo)
+select repository (must have admin rights to repo)
 
 Now only if not deploying from the root folder!
 
@@ -219,1027 +343,4 @@ command_line_runner_enabled           |  false
 
 So, now when your application is restarted by Heroku, the values will be read from the config vars overriding what is in application.properties and so seed data is not active and you can keep your old data!
 
-******************************
 
-## Introduction
-
-This is a basic database scheme with users, user emails, and user roles. This Java Spring REST API application will provide endpoints for clients to read various data sets contained in the application's data. This application will also form the basis of a user authentication application developed elsewhere in the course
-
-### Database layout
-
-The table layout is similar to the initial version with the following exceptions:
-
-* The join table userroles is explicitly created. This allows us to add additional columns to the join table
-* Since we are creating the join table ourselves, the Many to Many relationship that formed the join table is now two Many to One relationships
-* All tables now have audit fields
-
-Thus the new table layout is as follows
-
-* User is the driving table.
-* Useremails have a Many-To-One relationship with User. Each User has many user email combinations. Each user email combination has only one User.
-* Roles have a Many-To-Many relationship with Users.
-
-![Image of Database Layout](usersfinaldb.png)
-
-Using the provided seed data, expand each endpoint below to see the output it generates.
-
-<details>
-<summary>http://localhost:2019/useremails/useremails</summary>
-
-```JSON
-[
-    {
-        "useremailid": 5,
-        "useremail": "admin@email.local",
-        "user": {
-            "userid": 4,
-            "username": "admin",
-            "primaryemail": "admin@lambdaschool.local",
-            "roles": [
-                {
-                    "role": {
-                        "roleid": 3,
-                        "name": "DATA"
-                    }
-                },
-                {
-                    "role": {
-                        "roleid": 1,
-                        "name": "ADMIN"
-                    }
-                },
-                {
-                    "role": {
-                        "roleid": 2,
-                        "name": "USER"
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "useremailid": 6,
-        "useremail": "admin@mymail.local",
-        "user": {
-            "userid": 4,
-            "username": "admin",
-            "primaryemail": "admin@lambdaschool.local",
-            "roles": [
-                {
-                    "role": {
-                        "roleid": 3,
-                        "name": "DATA"
-                    }
-                },
-                {
-                    "role": {
-                        "roleid": 1,
-                        "name": "ADMIN"
-                    }
-                },
-                {
-                    "role": {
-                        "roleid": 2,
-                        "name": "USER"
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "useremailid": 8,
-        "useremail": "cinnamon@mymail.local",
-        "user": {
-            "userid": 7,
-            "username": "cinnamon",
-            "primaryemail": "cinnamon@lambdaschool.local",
-            "roles": [
-                {
-                    "role": {
-                        "roleid": 2,
-                        "name": "USER"
-                    }
-                },
-                {
-                    "role": {
-                        "roleid": 3,
-                        "name": "DATA"
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "useremailid": 9,
-        "useremail": "hops@mymail.local",
-        "user": {
-            "userid": 7,
-            "username": "cinnamon",
-            "primaryemail": "cinnamon@lambdaschool.local",
-            "roles": [
-                {
-                    "role": {
-                        "roleid": 2,
-                        "name": "USER"
-                    }
-                },
-                {
-                    "role": {
-                        "roleid": 3,
-                        "name": "DATA"
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "useremailid": 10,
-        "useremail": "bunny@email.local",
-        "user": {
-            "userid": 7,
-            "username": "cinnamon",
-            "primaryemail": "cinnamon@lambdaschool.local",
-            "roles": [
-                {
-                    "role": {
-                        "roleid": 2,
-                        "name": "USER"
-                    }
-                },
-                {
-                    "role": {
-                        "roleid": 3,
-                        "name": "DATA"
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "useremailid": 12,
-        "useremail": "barnbarn@email.local",
-        "user": {
-            "userid": 11,
-            "username": "barnbarn",
-            "primaryemail": "barnbarn@lambdaschool.local",
-            "roles": [
-                {
-                    "role": {
-                        "roleid": 2,
-                        "name": "USER"
-                    }
-                }
-            ]
-        }
-    }
-]
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/useremails/useremail/8</summary>
-
-```JSON
-{
-    "useremailid": 8,
-    "useremail": "cinnamon@mymail.local",
-    "user": {
-        "userid": 7,
-        "username": "cinnamon",
-        "primaryemail": "cinnamon@lambdaschool.local",
-        "roles": [
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "USER"
-                }
-            },
-            {
-                "role": {
-                    "roleid": 3,
-                    "name": "DATA"
-                }
-            }
-        ]
-    }
-}
-```
-
-</details>
-
-<details>
-<summary>DELETE http://localhost:2019/useremails/useremail/8</summary>
-
-```TEXT
-No Body Data
-
-Status OK
-```
-
-</details>
-
-
-<details>
-<summary>PUT http://localhost:2019/useremails/useremail/9/email/favbun@hops.local</summary>
-
-OUTPUT
-
-```TEXT
-Status OK
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/useremails/useremail/9</summary>
-
-```JSON
-{
-    "useremailid": 9,
-    "useremail": "favbun@hops.local",
-    "user": {
-        "userid": 7,
-        "username": "cinnamon",
-        "primaryemail": "cinnamon@lambdaschool.local",
-        "roles": [
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "USER"
-                }
-            },
-            {
-                "role": {
-                    "roleid": 3,
-                    "name": "DATA"
-                }
-            }
-        ]
-    }
-}
-```
-
-</details>
-
-<details>
-<summary>POST http://localhost:2019/useremails/user/14/email/favbun@hops.local</summary>
-
-OUTPUT
-
-```TEXT
-Status CREATED
-
-Location Header: http://localhost:2019/useremails/useremail/15
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/useremails/useremail/15</summary>
-
-```JSON
-{
-    "useremailid": 15,
-    "useremail": "favbun@hops.local",
-    "user": {
-        "userid": 14,
-        "username": "misskitty",
-        "primaryemail": "misskitty@school.lambda",
-        "roles": [
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "USER"
-                }
-            }
-        ]
-    }
-}
-```
-
-</details>
-
----
-
-<details>
-<summary>http://localhost:2019/roles/roles</summary>
-
-```JSON
-[
-    {
-        "roleid": 1,
-        "name": "ADMIN",
-        "users": [
-            {
-                "user": {
-                    "userid": 4,
-                    "username": "admin",
-                    "primaryemail": "admin@lambdaschool.local",
-                    "useremails": [
-                        {
-                            "useremailid": 5,
-                            "useremail": "admin@email.local"
-                        },
-                        {
-                            "useremailid": 6,
-                            "useremail": "admin@mymail.local"
-                        }
-                    ]
-                }
-            }
-        ]
-    },
-    {
-        "roleid": 2,
-        "name": "USER",
-        "users": [
-            {
-                "user": {
-                    "userid": 14,
-                    "username": "misskitty",
-                    "primaryemail": "misskitty@school.lambda",
-                    "useremails": [
-                        {
-                            "useremailid": 15,
-                            "useremail": "favbun@hops.local"
-                        }
-                    ]
-                }
-            },
-            {
-                "user": {
-                    "userid": 13,
-                    "username": "puttat",
-                    "primaryemail": "puttat@school.lambda",
-                    "useremails": []
-                }
-            },
-            {
-                "user": {
-                    "userid": 11,
-                    "username": "barnbarn",
-                    "primaryemail": "barnbarn@lambdaschool.local",
-                    "useremails": [
-                        {
-                            "useremailid": 12,
-                            "useremail": "barnbarn@email.local"
-                        }
-                    ]
-                }
-            },
-            {
-                "user": {
-                    "userid": 7,
-                    "username": "cinnamon",
-                    "primaryemail": "cinnamon@lambdaschool.local",
-                    "useremails": [
-                        {
-                            "useremailid": 9,
-                            "useremail": "favbun@hops.local"
-                        },
-                        {
-                            "useremailid": 10,
-                            "useremail": "bunny@email.local"
-                        }
-                    ]
-                }
-            },
-            {
-                "user": {
-                    "userid": 4,
-                    "username": "admin",
-                    "primaryemail": "admin@lambdaschool.local",
-                    "useremails": [
-                        {
-                            "useremailid": 5,
-                            "useremail": "admin@email.local"
-                        },
-                        {
-                            "useremailid": 6,
-                            "useremail": "admin@mymail.local"
-                        }
-                    ]
-                }
-            }
-        ]
-    },
-    {
-        "roleid": 3,
-        "name": "DATA",
-        "users": [
-            {
-                "user": {
-                    "userid": 4,
-                    "username": "admin",
-                    "primaryemail": "admin@lambdaschool.local",
-                    "useremails": [
-                        {
-                            "useremailid": 5,
-                            "useremail": "admin@email.local"
-                        },
-                        {
-                            "useremailid": 6,
-                            "useremail": "admin@mymail.local"
-                        }
-                    ]
-                }
-            },
-            {
-                "user": {
-                    "userid": 7,
-                    "username": "cinnamon",
-                    "primaryemail": "cinnamon@lambdaschool.local",
-                    "useremails": [
-                        {
-                            "useremailid": 9,
-                            "useremail": "favbun@hops.local"
-                        },
-                        {
-                            "useremailid": 10,
-                            "useremail": "bunny@email.local"
-                        }
-                    ]
-                }
-            }
-        ]
-    }
-]
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/roles/role/3</summary>
-
-```JSON
-{
-    "roleid": 3,
-    "name": "DATA",
-    "users": [
-        {
-            "user": {
-                "userid": 4,
-                "username": "admin",
-                "primaryemail": "admin@lambdaschool.local",
-                "useremails": [
-                    {
-                        "useremailid": 5,
-                        "useremail": "admin@email.local"
-                    },
-                    {
-                        "useremailid": 6,
-                        "useremail": "admin@mymail.local"
-                    }
-                ]
-            }
-        },
-        {
-            "user": {
-                "userid": 7,
-                "username": "cinnamon",
-                "primaryemail": "cinnamon@lambdaschool.local",
-                "useremails": [
-                    {
-                        "useremailid": 9,
-                        "useremail": "favbun@hops.local"
-                    },
-                    {
-                        "useremailid": 10,
-                        "useremail": "bunny@email.local"
-                    }
-                ]
-            }
-        }
-    ]
-}
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/roles/role/name/data</summary>
-
-```JSON
-{
-    "roleid": 3,
-    "name": "DATA",
-    "users": [
-        {
-            "user": {
-                "userid": 4,
-                "username": "admin",
-                "primaryemail": "admin@lambdaschool.local",
-                "useremails": [
-                    {
-                        "useremailid": 5,
-                        "useremail": "admin@email.local"
-                    },
-                    {
-                        "useremailid": 6,
-                        "useremail": "admin@mymail.local"
-                    }
-                ]
-            }
-        },
-        {
-            "user": {
-                "userid": 7,
-                "username": "cinnamon",
-                "primaryemail": "cinnamon@lambdaschool.local",
-                "useremails": [
-                    {
-                        "useremailid": 9,
-                        "useremail": "favbun@hops.local"
-                    },
-                    {
-                        "useremailid": 10,
-                        "useremail": "bunny@email.local"
-                    }
-                ]
-            }
-        }
-    ]
-}
-```
-
-</details>
-
-<details>
-<summary>POST http://localhost:2019/roles/role</summary>
-
-DATA
-
-```JSON
-{
-    "name" : "ANewRole"
-}
-```
-
-OUTPUT
-
-```TEXT
-Status CREATED
-
-Location Header: http://localhost:2019/roles/role/16
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/roles/role/name/anewrole</summary>
-
-```JSON
-{
-    "roleid": 16,
-    "name": "ANEWROLE",
-    "users": []
-}
-```
-
-</details>
-
-<details>
-<summary>PUT http://localhost:2019/roles/role/16</summary>
-
-DATA
-
-```JSON
-{
-    "name" : "ANewRole"
-}
-```
-
-OUTPUT
-
-```TEXT
-Status OK
-```
-
-</details>
-
----
-
-<details>
-<summary>http://localhost:2019/users/users</summary>
-
-```JSON
-[
-    {
-        "userid": 4,
-        "username": "admin",
-        "primaryemail": "admin@lambdaschool.local",
-        "useremails": [
-            {
-                "useremailid": 5,
-                "useremail": "admin@email.local"
-            },
-            {
-                "useremailid": 6,
-                "useremail": "admin@mymail.local"
-            }
-        ],
-        "roles": [
-            {
-                "role": {
-                    "roleid": 3,
-                    "name": "DATA"
-                }
-            },
-            {
-                "role": {
-                    "roleid": 1,
-                    "name": "ADMIN"
-                }
-            },
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "USER"
-                }
-            }
-        ]
-    },
-    {
-        "userid": 7,
-        "username": "cinnamon",
-        "primaryemail": "cinnamon@lambdaschool.local",
-        "useremails": [
-            {
-                "useremailid": 9,
-                "useremail": "favbun@hops.local"
-            },
-            {
-                "useremailid": 10,
-                "useremail": "bunny@email.local"
-            }
-        ],
-        "roles": [
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "USER"
-                }
-            },
-            {
-                "role": {
-                    "roleid": 3,
-                    "name": "DATA"
-                }
-            }
-        ]
-    },
-    {
-        "userid": 11,
-        "username": "barnbarn",
-        "primaryemail": "barnbarn@lambdaschool.local",
-        "useremails": [
-            {
-                "useremailid": 12,
-                "useremail": "barnbarn@email.local"
-            }
-        ],
-        "roles": [
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "USER"
-                }
-            }
-        ]
-    },
-    {
-        "userid": 13,
-        "username": "puttat",
-        "primaryemail": "puttat@school.lambda",
-        "useremails": [],
-        "roles": [
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "USER"
-                }
-            }
-        ]
-    },
-    {
-        "userid": 14,
-        "username": "misskitty",
-        "primaryemail": "misskitty@school.lambda",
-        "useremails": [
-            {
-                "useremailid": 15,
-                "useremail": "favbun@hops.local"
-            }
-        ],
-        "roles": [
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "USER"
-                }
-            }
-        ]
-    }
-]
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/users/user/7</summary>
-
-```JSON
-{
-    "userid": 7,
-    "username": "cinnamon",
-    "primaryemail": "cinnamon@lambdaschool.local",
-    "useremails": [
-        {
-            "useremailid": 9,
-            "useremail": "favbun@hops.local"
-        },
-        {
-            "useremailid": 10,
-            "useremail": "bunny@email.local"
-        }
-    ],
-    "roles": [
-        {
-            "role": {
-                "roleid": 2,
-                "name": "USER"
-            }
-        },
-        {
-            "role": {
-                "roleid": 3,
-                "name": "DATA"
-            }
-        }
-    ]
-}
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/users/user/name/cinnamon</summary>
-
-```JSON
-{
-    "userid": 7,
-    "username": "cinnamon",
-    "primaryemail": "cinnamon@lambdaschool.local",
-    "useremails": [
-        {
-            "useremailid": 9,
-            "useremail": "favbun@hops.local"
-        },
-        {
-            "useremailid": 10,
-            "useremail": "bunny@email.local"
-        }
-    ],
-    "roles": [
-        {
-            "role": {
-                "roleid": 2,
-                "name": "USER"
-            }
-        },
-        {
-            "role": {
-                "roleid": 3,
-                "name": "DATA"
-            }
-        }
-    ]
-}
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/users/user/name/like/da</summary>
-
-```JSON
-[]
-```
-
-</details>
-
-<details>
-<summary>POST http://localhost:2019/users/user</summary>
-
-DATA
-
-```JSON
-{
-    "username": "Mojo",
-    "primaryemail": "mojo@lambdaschool.local",
-    "password" : "Coffee123",
-    "useremails": [
-        {
-            "useremail": "mojo@mymail.local"
-        },
-        {
-            "useremail": "mojo@email.local"
-        }
-        ],
-    "roles": [
-        {
-            "role": {
-                "roleid": 1
-            }
-        },
-        {
-            "role": {
-                "roleid": 2
-            }
-        }
-    ]
-}
-```
-
-OUTPUT
-
-```TEXT
-No Body Data
-
-Location Header: http://localhost:2019/users/user/17
-Status 201 Created
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/users/user/name/mojo</summary>
-
-</details>
-
-<details>
-<summary>PUT http://localhost:2019/users/user/14</summary>
-
-DATA
-
-```JSON
-{
-    "username": "stumps",
-    "primaryemail": "stumps@lambdaschool.local",
-    "password" : "EarlGray123",
-    "useremails": [
-        {
-            "useremail": "stumps@mymail.local"
-        },
-        {
-            "useremail": "stumps@email.local"
-        }
-        ],
-    "roles": [
-        {  
-            "role": {
-                "roleid": 3
-            }
-        },
-        {  
-            "role": {
-                "roleid": 1
-            }
-        }
-    ]
-}
-```
-
-OUTPUT
-
-```TEXT
-No Body Data
-
-Status OK
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/users/user/name/stumps</summary>
-
-```JSON
-{
-    "userid": 16,
-    "username": "stumps",
-    "primaryemail": "stumps@lambdaschool.local",
-    "useremails": [
-        {
-            "useremailid": 19,
-            "useremail": "stumps@mymail.local"
-        },
-        {
-            "useremailid": 20,
-            "useremail": "stumps@email.local"
-        }
-    ],
-    "roles": [
-        {
-            "role": {
-                "roleid": 1,
-                "name": "ADMIN"
-            }
-        },
-        {
-            "role": {
-                "roleid": 3,
-                "name": "DATA"
-            }
-        }
-    ]
-}
-```
-
-</details>
-
-<details>
-<summary>PATCH http://localhost:2019/users/user/7</summary>
-
-DATA
-
-```JSON
-{
-    "username": "cinabun",
-    "primaryemail": "cinabun@lambdaschool.home",
-    "useremails": [
-    {
-            "useremail": "cinnamon@mymail.home"
-    },
-    {
-            "useremail": "hops@mymail.home"
-    },
-    {
-            "useremail": "bunny@email.home"
-    }
-    ]
-}
-```
-
-OUTPUT
-
-```TEXT
-No Body Data
-
-Status OK
-```
-
-</details>
-
-<details>
-<summary>http://localhost:2019/users/user/name/cinabun</summary>
-
-```JSON
-{
-    "userid": 7,
-    "username": "cinabun",
-    "primaryemail": "cinabun@lambdaschool.home",
-    "useremails": [
-        {
-            "useremailid": 21,
-            "useremail": "cinnamon@mymail.home"
-        },
-        {
-            "useremailid": 22,
-            "useremail": "hops@mymail.home"
-        },
-        {
-            "useremailid": 23,
-            "useremail": "bunny@email.home"
-        }
-    ],
-    "roles": [
-        {
-            "role": {
-                "roleid": 2,
-                "name": "USER"
-            }
-        },
-        {
-            "role": {
-                "roleid": 3,
-                "name": "DATA"
-            }
-        }
-    ]
-}
-```
-
-</details>
-
-<details>
-
-<summary>DELETE http://localhost:2019/users/user/14</summary>
-
-```TEXT
-No Body Data
-
-Status OK
-```
-
-</details>

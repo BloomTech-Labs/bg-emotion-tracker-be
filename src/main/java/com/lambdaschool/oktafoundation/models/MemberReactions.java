@@ -3,6 +3,7 @@ package com.lambdaschool.oktafoundation.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * The entity allowing interaction with the memberreactions table.
@@ -24,6 +25,12 @@ public class MemberReactions extends Auditable implements Serializable
     @Id
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private long memberreactionid;
+
+    /**
+     * The  reactionresolved(boolean) for memberreactions lets us know if there has been a negative emotion entered as a memeberreaction.
+     */
+    @Column(nullable = false)
+    private boolean reactionresolved;
 
     /**
      * The member with which this member reaction combination is associated.
@@ -68,6 +75,7 @@ public class MemberReactions extends Auditable implements Serializable
         this.member = member;
         this.reaction = reaction;
         this.clubactivity = clubactivity;
+        this.reactionresolved = reaction.getReactionint() != 1;
     }
 
     /**
@@ -122,6 +130,24 @@ public class MemberReactions extends Auditable implements Serializable
      */
     public void setClubactivity(ClubActivities clubactivity) {
         this.clubactivity = clubactivity;
+    }
+
+    /**
+     * The getter for the reactionresolved boolean
+     *
+     * @return The boolean associated with this member reaction combination
+     * that lets us know if a negative emotion has been entered as a memberreaction and if it still needs to be resolved.
+     */
+    public boolean isReactionresolved() {
+        return reactionresolved;
+    }
+    /**
+     * The setter for reactionresolved
+     *
+     * @param reactionresolved Change the club activity combination associated with this member reaction combination
+     */
+    public void setReactionresolved(boolean reactionresolved) {
+        this.reactionresolved = reactionresolved;
     }
 
     @Override

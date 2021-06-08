@@ -50,6 +50,7 @@ public class ReactionServiceImpl implements ReactionService {
         }
 
         newReaction.setReactionvalue(reaction.getReactionvalue());
+        newReaction.setReactionint(reaction.getReactionint());
 
         return reactionrepos.save(newReaction);
     }

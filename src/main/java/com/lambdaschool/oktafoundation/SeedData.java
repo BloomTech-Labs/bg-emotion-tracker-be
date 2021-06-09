@@ -227,34 +227,43 @@ public class SeedData
         memberService.save(m3);
         memberService.save(m4);
 
-        // All emoji values (updated 5-25-21)
-        String[] rval = {
-                "1F601",
-                "1F642",
-                "1F610",
-                "1F641",
-                "1F61E",
-                "1F603",
-                "1F60A",
-                "1F60C",
-                "1F61D",
-                "1F60E",
-                "1F62E",
-                "1F915",
-                "1F974",
-                "1F971",
-                "1F634",
-                "1F622",
-                "1F62D",
-                "1F628",
-                "1F620",
-                "1F624"
+        // All emoji values (updated 6-8-21)
+        String[] reactionValue = {
+                // Activity emojis
+                "1F601",    //  5
+                "1F642",    //  4
+                "1F610",    //  3
+                "1F641",    //  2
+                "1F61E",    //  1
+                // Checkin/checkout emojis
+                "1F60A",    //  5
+                "1F60E",    //  4
+                "1F974",    //  3
+                "1F634",    //  2
+                "1F62D",    //  1
+                //  = Currently unused emojis
+//                "1F603",
+//                "1F60C",
+//                "1F61D",
+//                "1F62E",
+//                "1F915",
+//                "1F971",
+//                "1F622",
+//                "1F628",
+//                "1F620",
+//                "1F624"
         };
-
-        for (var i : rval) {
+        // Initializing Reactions to values between 1-5
+        Integer intValue = 5;
+        for (var emote : reactionValue) {
             Reaction rx1 = new Reaction();
-            rx1.setReactionvalue(i);
+            rx1.setReactionvalue(emote);
+            rx1.setReactionint(intValue);
             reactionService.save(rx1);
+            intValue -= 1;
+            if (intValue == 0) {
+                intValue = 5;
+            }
         }
 
 

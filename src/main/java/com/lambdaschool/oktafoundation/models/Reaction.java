@@ -26,9 +26,23 @@ public class Reaction extends Auditable {
     private String reactionvalue;
 
     /**
+     * The reactionint (Integer). Cannot be null and must be unique
+     * Will hold the value for the reaction to be used for analysis.
+     */
+    @Column(nullable = false, unique = false)
+    private Integer reactionint;
+
+
+    /**
      * Default constructor used primarily by the JPA.
      */
     public Reaction() {
+    }
+
+
+    public Reaction(String reactionvalue, Integer reactionint) {
+        this.reactionvalue = reactionvalue;
+        this.reactionint = reactionint;
     }
 
     /**
@@ -65,5 +79,23 @@ public class Reaction extends Auditable {
      */
     public void setReactionvalue(String reactionvalue) {
         this.reactionvalue = reactionvalue;
+    }
+
+    /**
+     * Getter for reactionvalue
+     *
+     * @return The reactionint (Integer) of the Reaction
+     */
+    public Integer getReactionint() {
+        return reactionint;
+    }
+
+    /**
+     * setter for reactionint
+     *
+     * @param reactionint the new reactionint (Integer) for this Reaction
+     */
+    public void setReactionint(Integer reactionint) {
+        this.reactionint = reactionint;
     }
 }

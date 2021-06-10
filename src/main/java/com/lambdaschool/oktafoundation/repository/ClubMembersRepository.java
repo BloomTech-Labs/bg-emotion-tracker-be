@@ -8,7 +8,8 @@ import java.util.Optional;
 /**
  * The CRUD repository connecting ClubUsers to the rest of the application
  */
-public interface ClubMembersRepository extends CrudRepository<ClubMembers, Long> {
+public interface
+ClubMembersRepository extends CrudRepository<ClubMembers, Long> {
 
     /**
      * Finds an Club-Member pair by their primary keys

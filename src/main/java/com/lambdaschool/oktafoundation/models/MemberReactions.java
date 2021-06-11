@@ -87,6 +87,9 @@ public class MemberReactions extends Auditable implements Serializable
         return member;
     }
 
+    public Date getCreateddate(){
+        return this.createdDate;
+    }
     /**
      * Setter for Member
      *

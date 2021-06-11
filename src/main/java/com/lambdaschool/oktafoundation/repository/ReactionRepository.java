@@ -16,4 +16,6 @@ public interface ReactionRepository extends CrudRepository<Reaction, Long> {
     * @return The first Reaction object with the value you seek
     */
    Optional<Reaction> findReactionByReactionvalue(String value);
+
+   Optional<Reaction> findReactionByReactionid(long reactionId);
 }

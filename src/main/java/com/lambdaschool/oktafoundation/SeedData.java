@@ -204,7 +204,11 @@ public class SeedData
         c6.getActivities().add(new ClubActivities(c6, a5));
         c6.getActivities().add(new ClubActivities(c6, a7));
         c6.getActivities().add(new ClubActivities(c6, a8));
-        clubService.save(c6);
+        c6 = clubService.save(c6);
+
+        c6.getUsers().add(new ClubUsers(c6, userService.findByName("llama001@maildrop.cc")));
+        c6.getUsers().add(new ClubUsers(c6, userService.findByName("llama003@maildrop.cc")));
+
         //Notter has  Arts, Basketball, Homework,
         Club c7 = new Club("Notter");
         c7.getActivities().add(new ClubActivities(c7, a1));
@@ -212,14 +216,23 @@ public class SeedData
         c7.getActivities().add(new ClubActivities(c7, a4));
         c7.getActivities().add(new ClubActivities(c7, a5));
         c7.getActivities().add(new ClubActivities(c7, a8));
-        clubService.save(c7);
+        c7 = clubService.save(c7);
+
+
+        c7.getUsers().add(new ClubUsers(c7, userService.findByName("llama001@maildrop.cc")));
+        c7.getUsers().add(new ClubUsers(c7, userService.findByName("llama003@maildrop.cc")));
 
         //Stelle has  Arts
         Club c8 = new Club("Stelle");
         c8.getActivities().add(new ClubActivities(c8, a1));
         c8.getActivities().add(new ClubActivities(c8, a2));
         c8.getActivities().add(new ClubActivities(c8, a8));
-        clubService.save(c8);
+        c8 = clubService.save(c8);
+
+
+        c8.getUsers().add(new ClubUsers(c8, userService.findByName("llama001@maildrop.cc")));
+        c8.getUsers().add(new ClubUsers(c8, userService.findByName("llama003@maildrop.cc")));
+
 
         //Jefferson has  Arts, Basketball, Homework, Music, Soccer
         Club c9 = new Club("Jefferson");
@@ -230,7 +243,11 @@ public class SeedData
         c9.getActivities().add(new ClubActivities(c9, a6));
         c9.getActivities().add(new ClubActivities(c9, a7));
         c9.getActivities().add(new ClubActivities(c9, a8));
-        clubService.save(c9);
+        c9 = clubService.save(c9);
+
+        c9.getUsers().add(new ClubUsers(c9, userService.findByName("llama001@maildrop.cc")));
+        c9.getUsers().add(new ClubUsers(c9, userService.findByName("llama003@maildrop.cc")));
+
 
         memberService.deleteAll();
         Member m1 = new Member("testmember1");
@@ -315,28 +332,28 @@ public class SeedData
         clubMembersService.save(cm3);
 
         ClubMembers cm4 = new ClubMembers();
-        cm4.setClub(c2);    //  id = 16
+        cm4.setClub(c4);    //  id = 16
         cm4.setMember(m2);
         clubMembersService.save(cm4);
         ClubMembers cm5 = new ClubMembers();
-        cm5.setClub(c3);    //  id = 17
+        cm5.setClub(c5);    //  id = 17
         cm5.setMember(m2);
         clubMembersService.save(cm5);
         ClubMembers cm6 = new ClubMembers();
-        cm6.setClub(c4);    //  id = 18
+        cm6.setClub(c6);    //  id = 18
         cm6.setMember(m2);
         clubMembersService.save(cm6);
 
         ClubMembers cm7 = new ClubMembers();
-        cm7.setClub(c3);
+        cm7.setClub(c7);
         cm7.setMember(m3);
         clubMembersService.save(cm7);
         ClubMembers cm8 = new ClubMembers();
-        cm8.setClub(c4);
+        cm8.setClub(c8);
         cm8.setMember(m3);
         clubMembersService.save(cm8);
         ClubMembers cm9 = new ClubMembers();
-        cm9.setClub(c5);
+        cm9.setClub(c9);
         cm9.setMember(m3);
         clubMembersService.save(cm9);
 
@@ -364,19 +381,11 @@ public class SeedData
         memberService.save(m4);
 
 
-        Club[] clubList = {c1, c2, c3, c4, c5};
         ArrayList<Club> clubArrayList = new ArrayList<>();
         var rand = new Random();
         List<Member> allmembers = memberService.findAll();
-//        List<ClubMembers> allClubMembers = clubMembersService.findAll();
         ArrayList<Reaction> allreactions = new ArrayList<>();
         reactionRepository.findAll().iterator().forEachRemaining(allreactions::add);
-        var clubActivities = new ArrayList<ClubActivities>();
-
-        // Generates a list of all club activities
-        Arrays.stream(clubList).forEach(club -> {
-            clubActivities.addAll(club.getActivities());
-        });
 
         for (int i = 0; i < 300; i++) {
             //  Gets a random member from a list of all members called currentRandMember
@@ -429,12 +438,9 @@ public class SeedData
             currentRandMember.getReactions().add(checkinReaction);
 
             // wait
-//            TimeUnit.SECONDS.sleep(1);
-//            TimeUnit.SECONDS.wait(10);
-//            Thread.sleep(100);
-//            long wait = 10000000;
             for(long wait = 10000000; wait > 0; wait--){
             }
+
             //  gets a random integer between 0 - 4
             //  This is how many activities besides checkin/checkout there will be stored
             Integer randActivityCount = rand.nextInt(3);
@@ -452,8 +458,6 @@ public class SeedData
                 randActivity = actualActivities.get(randActivityIndex);
 
                 // wait here too
-//                TimeUnit.SECONDS.sleep(1);
-//                TimeUnit.SECONDS.wait(10);
 //                Thread.sleep(100);
                 for(long wait = 10000000; wait > 0; wait--) {
                 }

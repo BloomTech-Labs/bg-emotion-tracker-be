@@ -4,7 +4,6 @@ import com.lambdaschool.oktafoundation.models.Activity;
 import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
-import com.lambdaschool.oktafoundation.views.ClubsCheckInOutSummary;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

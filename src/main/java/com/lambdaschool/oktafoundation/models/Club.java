@@ -169,7 +169,7 @@ public class Club
      * @param clubname the new clubname (String) converted to lowercase
      */
     public void setClubname(String clubname) {
-        this.clubname = clubname.toLowerCase();
+        this.clubname = clubname;
     }
 
     /**

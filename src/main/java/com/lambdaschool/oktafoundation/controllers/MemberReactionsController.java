@@ -258,4 +258,18 @@ public class MemberReactionsController {
 
         return new ResponseEntity<>(q.getResultList(), HttpStatus.OK);
     }
+
+    /**
+    Populates the alert list with memberreactions that are not resolved and where activityid=7 (check-in)
+     * <br>Example: <a href="http://localhost:2019/memberreactions/alert"></a>
+     **/
+//    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
+    @GetMapping(value = "/alert", produces = "application/json")
+    public ResponseEntity<?> getAlerts() {
+        List<MemberReactions> rtnList = memberReactionRepository.getMemberReactionsByReactionresolved();
+//        List<AlertsList> alerts = new ArrayList<>();
+
+        return new ResponseEntity<>(rtnList, HttpStatus.OK);
+
+    }
 }

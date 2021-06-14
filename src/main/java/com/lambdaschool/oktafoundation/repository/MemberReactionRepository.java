@@ -4,6 +4,7 @@ import com.lambdaschool.oktafoundation.models.Activity;
 import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -32,4 +33,13 @@ public interface MemberReactionRepository extends CrudRepository<MemberReactions
      */
     List<MemberReactions> getMemberReactionsByMember(Member m);
 
+    // Get initial list of all memberReactions within date range
+    // init count object for all members which is a map from memberID to a list of value that the member gave out.
+
+//    Query to populate the alert lists, all memberreactions where reactionresolved is not true and activityid=7 (checkin)
+    @Query(
+            value = "SELECT * FROM MEMBERREACTIONS where reactionresolved=false AND activityid=7",
+            nativeQuery = true
+    )
+    List<MemberReactions> getMemberReactionsByReactionresolved();
 }

@@ -260,8 +260,8 @@ public class MemberReactionsController {
     }
 
     /**
-    Populates the alert list with memberreactions that are not resolved
-     * <br>Example: <a href="http://localhost:2019/memberreactions/memberreactions"></a>
+    Populates the alert list with memberreactions that are not resolved and where activityid=7 (check-in)
+     * <br>Example: <a href="http://localhost:2019/memberreactions/memberreactions/alert"></a>
      **/
 //    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/memberreactions/alert", produces = "application/json")

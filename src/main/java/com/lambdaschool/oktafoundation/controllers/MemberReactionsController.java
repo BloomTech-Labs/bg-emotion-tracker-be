@@ -260,7 +260,7 @@ public class MemberReactionsController {
     }
 
     /**
-    Populates the alert list with memberreactions that are not resolved and where activityid=7 (check-in)
+    Populates the alert list with memberreactions that are not resolved and where activityid=7 (check-in) or activityid=14 (checkout)
      * <br>Example: <a href="http://localhost:2019/memberreactions/alert"></a>
      **/
 //    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")

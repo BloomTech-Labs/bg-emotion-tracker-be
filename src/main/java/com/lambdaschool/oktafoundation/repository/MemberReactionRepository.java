@@ -42,4 +42,11 @@ public interface MemberReactionRepository extends CrudRepository<MemberReactions
             nativeQuery = true
     )
     List<MemberReactions> getMemberReactionsByReactionresolved();
+    @Query(
+            value = "SELECT * FROM MEMBERREACTIONS where not activityid=7 AND not activityid=14",
+            nativeQuery = true
+    )
+    List<MemberReactions> getMemberReactionsForActivities();
+
+
 }

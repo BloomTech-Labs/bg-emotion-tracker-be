@@ -1,9 +1,11 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.models.Club;
+import com.lambdaschool.oktafoundation.views.ClubsCheckInOutSummary;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Service that works with Club Model.
@@ -55,6 +57,8 @@ public interface ClubService {
     void deleteAll();
 
     Club findClubByName(String name);
+
+    List<ClubsCheckInOutSummary> getClubsCheckInOutSummary();
 
 
 }

@@ -1,6 +1,7 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.models.MemberReactions;
+import com.lambdaschool.oktafoundation.views.AlertData;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface MemberReactionService {
      * @return The given MemberReaction or throws an exception if not found
      */
     MemberReactions findMemberReactionById(Long id);
+
+    List<AlertData> getMemberReactionsByReactionresolved();
 }

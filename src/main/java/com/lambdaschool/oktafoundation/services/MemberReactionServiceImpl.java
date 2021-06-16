@@ -3,6 +3,7 @@ package com.lambdaschool.oktafoundation.services;
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
 import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
+import com.lambdaschool.oktafoundation.views.AlertData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,5 +32,10 @@ public class MemberReactionServiceImpl implements MemberReactionService{
     {
         return memberReactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Member Reaction id" + id + "not found."));
+    }
+
+    @Override
+    public List<AlertData> getMemberReactionsByReactionresolved() {
+        return memberReactionRepository.getMemberReactionsByReactionresolved();
     }
 }

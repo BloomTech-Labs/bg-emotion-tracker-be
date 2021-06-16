@@ -4,6 +4,7 @@ import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.*;
 import com.lambdaschool.oktafoundation.services.MemberReactionService;
 import com.lambdaschool.oktafoundation.views.SearchPost;
+import com.lambdaschool.oktafoundation.views.AlertData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -266,7 +267,7 @@ public class MemberReactionsController {
 //    @PreAuthorize("hasAnyRole('ADMIN','CD','YDP')")
     @GetMapping(value = "/alert", produces = "application/json")
     public ResponseEntity<?> getAlerts() {
-        List<MemberReactions> rtnList = memberReactionRepository.getMemberReactionsByReactionresolved();
+        List<AlertData> rtnList = memberReactionService.getMemberReactionsByReactionresolved();
 //        List<AlertsList> alerts = new ArrayList<>();
 
         return new ResponseEntity<>(rtnList, HttpStatus.OK);

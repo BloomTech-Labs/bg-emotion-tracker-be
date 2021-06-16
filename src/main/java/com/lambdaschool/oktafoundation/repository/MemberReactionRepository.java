@@ -4,6 +4,8 @@ import com.lambdaschool.oktafoundation.models.Activity;
 import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
+import com.lambdaschool.oktafoundation.views.ClubActivityFeedback;
+import com.lambdaschool.oktafoundation.views.ClubActivityFeedbackData;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -42,4 +44,12 @@ public interface MemberReactionRepository extends CrudRepository<MemberReactions
             nativeQuery = true
     )
     List<MemberReactions> getMemberReactionsByReactionresolved();
+
+        @Query(
+            value = "SELECT  created_date as createddate, activityid, clubid, member_table_id as member, reactionid FROM MEMBERREACTIONS where not activityid= :checkinactivityid AND not activityid= :checkoutactivityid",
+            nativeQuery = true
+    )
+    List<ClubActivityFeedbackData> getMemberReactionsNotCheckInOut(long checkinactivityid, long checkoutactivityid);
+
+
 }

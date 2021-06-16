@@ -1,7 +1,13 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.ClubActivities;
+import com.lambdaschool.oktafoundation.models.MemberReactions;
+import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
+import com.lambdaschool.oktafoundation.services.ActivityService;
 import com.lambdaschool.oktafoundation.services.ClubActivityService;
+import com.lambdaschool.oktafoundation.views.ClubActivityFeedback;
+import com.lambdaschool.oktafoundation.views.ClubActivityFeedbackData;
+import com.lambdaschool.oktafoundation.views.ClubActivityFeedbackReactions;
 import io.swagger.annotations.ApiOperation;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * The entry point for clients to access clubactivities data
@@ -25,6 +32,12 @@ public class ClubActivityController {
      */
     @Autowired
     private ClubActivityService clubActivityService;
+
+    @Autowired
+    private MemberReactionRepository memberReactionRepository;
+
+    @Autowired
+    private ActivityService activityService;
   
     /**
      * Returns a list of all clubactivities
@@ -60,4 +73,40 @@ public class ClubActivityController {
         return new ResponseEntity<>(ca,
                 HttpStatus.OK);
     }
+//    @PreAuthorize("hasAnyRole('ADMIN', 'CD')")
+    @GetMapping(value = "/feedback",
+        produces = "application/json")
+    public ResponseEntity<?> getClubActivityFeedback()
+    {
+        long checkinid = activityService.findActivityByName("Club Checkin").getActivityid();
+        long checkoutid = activityService.findActivityByName("Club Checkout").getActivityid();
+        List<ClubActivityFeedbackData> memberReactionsNotCheckInOut =  memberReactionRepository.getMemberReactionsNotCheckInOut(checkinid, checkoutid);
+
+        List<ClubActivityFeedbackReactions> feedbackReactionsList = new ArrayList<>();
+        List<ClubActivityFeedback> rtnList = new ArrayList<>();
+
+        for(ClubActivityFeedbackData clubActivityFeedback: memberReactionsNotCheckInOut) {
+            boolean clubInfeedbackReactionsList = false;
+//            check if clubActivityFeedback.getClubid() is in feedbackReactionsList
+            for(ClubActivityFeedbackReactions feedbackReaction: feedbackReactionsList) {
+                if(feedbackReaction.getClubid() == clubActivityFeedback.getClubid()) {
+                    clubInfeedbackReactionsList = true;
+//                    feedbackReaction
+                }
+            }
+
+//                check if clubActivityFeedback.getActivityid() is in feedbackreactionsList.get(clubActivityFeedback.getClubid())
+//                    if not add it
+//                             as well as the reactionint
+//                if not add it
+//                    as well as the activity id and reacationin
+
+        }
+
+        return new ResponseEntity<>(rtnList,
+                HttpStatus.OK);
+    }
+
+
+
 }

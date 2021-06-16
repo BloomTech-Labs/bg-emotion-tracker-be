@@ -49,7 +49,7 @@ public class ActivityServiceImpl implements ActivityService{
 
     @Override
     public Activity findActivityByName(String name) {
-        return activityRepo.findActivityByActivityname(name).orElseThrow(() -> new ResourceNotFoundException("Activity name" + name + "not found."));
+        return activityRepo.findActivityByActivitynameLike(name).orElseThrow(() -> new ResourceNotFoundException("Activity name " + name + " not found."));
     }
 
 

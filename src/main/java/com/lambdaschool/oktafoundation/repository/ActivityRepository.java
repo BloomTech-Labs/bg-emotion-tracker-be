@@ -15,5 +15,6 @@ public interface ActivityRepository extends CrudRepository<Activity, Long> {
     * @param name The name (String) of the Activity you seek
     * @return The first Activity object with the given name
     */
-   Optional<Activity> findActivityByActivityname(String name);
+
+   Optional<Activity> findActivityByActivitynameLike(String name);
 }

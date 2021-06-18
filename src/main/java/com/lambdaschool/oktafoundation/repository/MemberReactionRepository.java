@@ -50,6 +50,4 @@ public interface MemberReactionRepository extends CrudRepository<MemberReactions
             nativeQuery = true
     )
     List<ClubActivityFeedbackData> getMemberReactionsNotCheckInOut(long checkinactivityid, long checkoutactivityid);
-
-
 }

@@ -153,6 +153,10 @@ public class MemberReactions extends Auditable implements Serializable
         this.reactionresolved = reactionresolved;
     }
 
+    public long getMemberreactionid() {
+        return memberreactionid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

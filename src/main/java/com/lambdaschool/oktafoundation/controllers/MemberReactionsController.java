@@ -1,5 +1,6 @@
 package com.lambdaschool.oktafoundation.controllers;
 
+import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.*;
 import com.lambdaschool.oktafoundation.services.MemberReactionService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -272,5 +274,13 @@ public class MemberReactionsController {
 
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
 
+    }
+
+    @PutMapping(value = "/update/{memberreactionid}")
+    public ResponseEntity<?> updateAlerts(@RequestBody MemberReactions updateMr,
+                                          @PathVariable long memberreactionid)
+    {
+        memberReactionService.update(memberreactionid, updateMr);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

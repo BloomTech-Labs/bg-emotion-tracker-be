@@ -24,5 +24,9 @@ public interface MemberReactionService {
      */
     MemberReactions findMemberReactionById(Long id);
 
+    MemberReactions save(MemberReactions memberreactions);
+
+    MemberReactions update(long id, MemberReactions memberreactions);
+
     List<AlertData> getMemberReactionsByReactionresolved();
 }

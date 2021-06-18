@@ -54,4 +54,10 @@ public class ReactionServiceImpl implements ReactionService {
 
         return reactionrepos.save(newReaction);
     }
+
+    @Override
+    public Reaction findReactionByReactionid(long reactionId) {
+        return reactionrepos.findReactionByReactionid(reactionId).orElseThrow(() -> new ResourceNotFoundException("Reaction " + reactionId +  " Not Found!"));
+    }
+
 }

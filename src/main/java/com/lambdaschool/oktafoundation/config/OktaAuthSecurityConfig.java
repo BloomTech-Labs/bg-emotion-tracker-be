@@ -36,6 +36,7 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
                         "/v2/api-docs",
                         "/webjars/**"
                 ).permitAll()
+
                 .antMatchers(HttpMethod.GET,"/users/**").authenticated()
                 .antMatchers("/users/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/useremails/**").authenticated()

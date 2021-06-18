@@ -3,6 +3,7 @@ package com.lambdaschool.oktafoundation.services;
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.*;
+import com.lambdaschool.oktafoundation.views.ClubsCheckInOutSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +54,7 @@ public class ClubServiceImpl implements ClubService{
     public Club findClubById(Long clubid) throws
             ResourceNotFoundException
     {
-        return clubrepos.findById(clubid)
+        return clubrepos.findClubByClubid(clubid)
             .orElseThrow(() -> new ResourceNotFoundException("Club id" + clubid + "not found!"));
     }
 
@@ -211,5 +212,9 @@ public class ClubServiceImpl implements ClubService{
         return clubrepos.findClubByClubname(name).orElseThrow(() -> new ResourceNotFoundException("Club with name " + name + " not found!"));
     }
 
+    @Override
+    public List<ClubsCheckInOutSummary> getClubsCheckInOutSummary() {
+        return clubrepos.getClubsCheckInOutSummary();
+    }
 
 }

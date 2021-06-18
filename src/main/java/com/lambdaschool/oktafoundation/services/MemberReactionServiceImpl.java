@@ -26,6 +26,7 @@ public class MemberReactionServiceImpl implements MemberReactionService{
         return memberReactionsList;
 
     }
+
     @Transactional
     @Override
     public MemberReactions save(MemberReactions memberreactions) {

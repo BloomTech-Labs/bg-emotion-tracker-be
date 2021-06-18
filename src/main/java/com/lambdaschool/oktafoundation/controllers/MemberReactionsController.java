@@ -275,7 +275,11 @@ public class MemberReactionsController {
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
 
     }
-
+    /**
+     Changes the value in member reactions for {memberreactionid} to the opposite of the pre-existing value.
+     The json object submitted is empty ({ }).
+     * <br>Example: <a href="http://localhost:2019/memberreactions/update/{memberreactionid}"></a>
+     **/
     @PutMapping(value = "/update/{memberreactionid}")
     public ResponseEntity<?> updateAlerts(@RequestBody MemberReactions updateMr,
                                           @PathVariable long memberreactionid)

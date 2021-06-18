@@ -3,8 +3,8 @@ package com.lambdaschool.oktafoundation.views;
 import java.util.List;
 
 public class ActivityReaction {
-    long activityid;
     List<Integer> reactionints;
+    long activityid;
 
     public ActivityReaction() {
     }

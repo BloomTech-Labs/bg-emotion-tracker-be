@@ -3,11 +3,11 @@ package com.lambdaschool.oktafoundation.controllers;
 import com.lambdaschool.oktafoundation.models.ClubActivities;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
 import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
+import com.lambdaschool.oktafoundation.repository.ReactionRepository;
 import com.lambdaschool.oktafoundation.services.ActivityService;
 import com.lambdaschool.oktafoundation.services.ClubActivityService;
-import com.lambdaschool.oktafoundation.views.ClubActivityFeedback;
-import com.lambdaschool.oktafoundation.views.ClubActivityFeedbackData;
-import com.lambdaschool.oktafoundation.views.ClubActivityFeedbackReactions;
+import com.lambdaschool.oktafoundation.services.ReactionService;
+import com.lambdaschool.oktafoundation.views.*;
 import io.swagger.annotations.ApiOperation;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,9 @@ public class ClubActivityController {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private ReactionService reactionService;
   
     /**
      * Returns a list of all clubactivities
@@ -73,38 +76,102 @@ public class ClubActivityController {
         return new ResponseEntity<>(ca,
                 HttpStatus.OK);
     }
-//    @PreAuthorize("hasAnyRole('ADMIN', 'CD')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CD')")
     @GetMapping(value = "/feedback",
         produces = "application/json")
     public ResponseEntity<?> getClubActivityFeedback()
     {
         long checkinid = activityService.findActivityByName("Club Checkin").getActivityid();
         long checkoutid = activityService.findActivityByName("Club Checkout").getActivityid();
+        /**  List to hold all the data from the custom sql query  */
         List<ClubActivityFeedbackData> memberReactionsNotCheckInOut =  memberReactionRepository.getMemberReactionsNotCheckInOut(checkinid, checkoutid);
-
+        /**  List to hold the intermediate data for calculating ratings
+        *   This will hold all of the reaction values
+        *   */
         List<ClubActivityFeedbackReactions> feedbackReactionsList = new ArrayList<>();
+        /**  List to hold the final return data including activity ratings  */
         List<ClubActivityFeedback> rtnList = new ArrayList<>();
 
         for(ClubActivityFeedbackData clubActivityFeedback: memberReactionsNotCheckInOut) {
+            /** boolean used to determine whether or not the club is alread in feedbackReactionsList*/
             boolean clubInfeedbackReactionsList = false;
 //            check if clubActivityFeedback.getClubid() is in feedbackReactionsList
             for(ClubActivityFeedbackReactions feedbackReaction: feedbackReactionsList) {
+                /** If the club is in feedbackReactionsList then check to see if the current looked activity is associated with that club */
                 if(feedbackReaction.getClubid() == clubActivityFeedback.getClubid()) {
                     clubInfeedbackReactionsList = true;
-//                    feedbackReaction
+
+                    List<ActivityReaction> feedbackReactionActivityReactions = feedbackReaction.getActivityreactions();
+                    boolean activityIdFound = false;
+                    for(ActivityReaction ar: feedbackReactionActivityReactions) {
+                        /** This is the case where the club is found and activity is found.
+                         *  Here we just add the reactionint for the reaction given */
+                        if(ar.getActivityid() == clubActivityFeedback.getActivityid()) {
+                            activityIdFound = true;
+                            Integer reactionIntval = reactionService.findReactionById(clubActivityFeedback.getReactionid()).getReactionint();
+                            ar.getReactionints().add(reactionIntval);
+                        }
+                    }
+                    /** The case were the club is found but not the activity.
+                     *  Here we need to add the activity and first reactionint */
+                    if(!activityIdFound){
+                        ActivityReaction newAR = new ActivityReaction();
+                        newAR.setActivityid(clubActivityFeedback.getActivityid());
+                        Integer reactionIntval = reactionService.findReactionById(clubActivityFeedback.getReactionid()).getReactionint();
+                        List<Integer> newIntegerList = new ArrayList<>();
+                        newIntegerList.add(reactionIntval);
+                        newAR.setReactionints(newIntegerList);
+                        // add newAR to the club
+                        feedbackReaction.getActivityreactions().add(newAR);
+                    }
                 }
             }
+            /** The case where the club is not found
+             *  Here we need to add the club, and the first activity and first reactionint*/
+            if(!clubInfeedbackReactionsList) {
+                ClubActivityFeedbackReactions newClubAct = new ClubActivityFeedbackReactions();
+                ActivityReaction newActivityReaction = new ActivityReaction();
 
-//                check if clubActivityFeedback.getActivityid() is in feedbackreactionsList.get(clubActivityFeedback.getClubid())
-//                    if not add it
-//                             as well as the reactionint
-//                if not add it
-//                    as well as the activity id and reacationin
+                List<Integer> newIntList = new ArrayList<>();
+                newIntList.add(reactionService.findReactionById(clubActivityFeedback.getReactionid()).getReactionint());
+                List<ActivityReaction> newActivityReactionList = new ArrayList<>();
+                newActivityReactionList.add(newActivityReaction);
 
+                newActivityReaction.setActivityid(clubActivityFeedback.getActivityid());
+                newActivityReaction.setReactionints(newIntList);
+
+                newClubAct.setClubid(clubActivityFeedback.getClubid());
+                newClubAct.setActivityreactions(newActivityReactionList);
+                feedbackReactionsList.add(newClubAct);
+            }
         }
 
-        return new ResponseEntity<>(rtnList,
-                HttpStatus.OK);
+            /** We now have a list of all the clubs and their activities. Under all the activities we have a list of all the reactions to that activity.
+             * Here we need to average the reactions and store it in the rtnList */
+
+            for(ClubActivityFeedbackReactions feedbackReactions: feedbackReactionsList){
+                ClubActivityFeedback newClubActivityFeedback = new ClubActivityFeedback();
+
+                newClubActivityFeedback.setClubid(feedbackReactions.getClubid());
+                List<ActivityReactionRating> newRatingList = new ArrayList<>();
+
+                for(ActivityReaction activityReaction: feedbackReactions.getActivityreactions()) {
+                    ActivityReactionRating newActivityReactionRating = new ActivityReactionRating();
+                    newActivityReactionRating.setActivityid(activityReaction.getActivityid());
+                    double reactionSum = 0.0;
+                    for (Integer val: activityReaction.getReactionints()) {
+                        reactionSum += (double) val;
+                    }
+                    double reactionAvg =  reactionSum / (double) activityReaction.getReactionints().size();
+                    newActivityReactionRating.setActivityrating(reactionAvg);
+                    newRatingList.add(newActivityReactionRating);
+
+                }
+                newClubActivityFeedback.setActivityReactionRatings(newRatingList);
+                rtnList.add(newClubActivityFeedback);
+            }
+
+        return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
 
 

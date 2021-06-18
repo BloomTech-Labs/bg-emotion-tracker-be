@@ -1,19 +1,12 @@
 package com.lambdaschool.oktafoundation.views;
 
+import java.util.List;
+
 public class ClubActivityFeedback {
-    long activityid;
     long clubid;
-    double activityrating;
+    List<ActivityReactionRating> activityReactionRatings;
 
     public ClubActivityFeedback() {
-    }
-
-    public long getActivityid() {
-        return activityid;
-    }
-
-    public void setActivityid(long activityid) {
-        this.activityid = activityid;
     }
 
     public long getClubid() {
@@ -24,12 +17,12 @@ public class ClubActivityFeedback {
         this.clubid = clubid;
     }
 
-    public double getActivityrating() {
-        return activityrating;
+    public List<ActivityReactionRating> getActivityReactionRatings() {
+        return activityReactionRatings;
     }
 
-    public void setActivityrating(double activityrating) {
-        this.activityrating = activityrating;
+    public void setActivityReactionRatings(List<ActivityReactionRating> activityReactionRatings) {
+        this.activityReactionRatings = activityReactionRatings;
     }
 }
 

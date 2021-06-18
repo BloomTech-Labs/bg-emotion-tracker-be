@@ -1,7 +1,5 @@
 package com.lambdaschool.oktafoundation.views;
 
-import com.lambdaschool.oktafoundation.models.MemberReactions;
-
 import java.util.List;
 
 public class ClubActivityFeedbackReactions {

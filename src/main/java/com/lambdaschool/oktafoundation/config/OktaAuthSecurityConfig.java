@@ -34,9 +34,9 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
                         "/swagger-resource/**",
                         "/swagger-ui.html",
                         "/v2/api-docs",
-                        "/webjars/**",
-                        "/clubactivities/**"
-                        ).permitAll()
+                        "/webjars/**"
+                ).permitAll()
+
                 .antMatchers(HttpMethod.GET,"/users/**").authenticated()
                 .antMatchers("/users/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/useremails/**").authenticated()
@@ -55,6 +55,8 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/leaderboard/leaderboard").hasAnyRole("ADMIN","CD")
                 .antMatchers(HttpMethod.GET,"/memberreactions/alert").authenticated()
                 .antMatchers("/memberreactions/alert").hasAnyRole("ADMIN","CD","YDP")
+                .antMatchers(HttpMethod.GET,"/clubactivities/feedback").authenticated()
+                .antMatchers("/clubactivities/feedback").hasAnyRole("ADMIN","CD")
                 .antMatchers(HttpMethod.GET,"/members/**").authenticated()
                 .antMatchers("/members/**").hasAnyRole("CD","ADMIN")
                 .antMatchers("/csv/**").hasAnyRole("CD","ADMIN")

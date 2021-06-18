@@ -32,4 +32,6 @@ public interface ReactionService {
      * @return The saved Reaction object including any automatically generated fields
      */
     Reaction save(Reaction reaction);
+
+    Reaction findReactionByReactionid(long reactionId);
 }

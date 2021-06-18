@@ -39,5 +39,5 @@ public interface ClubRepository extends CrudRepository<Club, Long> {
     */
    Optional<Club> findClubByClubname(String name);
 
-   Club findClubByClubid(long clubid);
+   Optional<Club> findClubByClubid(long clubid);
 }

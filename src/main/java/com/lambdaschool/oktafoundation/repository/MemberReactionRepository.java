@@ -4,8 +4,9 @@ import com.lambdaschool.oktafoundation.models.Activity;
 import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
-import com.lambdaschool.oktafoundation.views.ClubActivityFeedback;
 import com.lambdaschool.oktafoundation.views.ClubActivityFeedbackData;
+import com.lambdaschool.oktafoundation.views.AlertData;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -40,14 +41,22 @@ public interface MemberReactionRepository extends CrudRepository<MemberReactions
 
 //    Query to populate the alert lists, all memberreactions where reactionresolved is not true and activityid=7 (checkin) or activityid=14(checkout)
     @Query(
-            value = "SELECT * FROM MEMBERREACTIONS where reactionresolved=false AND (activityid=7 or activityid=14)",
+            value = "SELECT memberreactions.clubid,reactionid,activityid,member_table_id as member, memberreactions.created_date as createdDate, clubs.clubname FROM MEMBERREACTIONS LEFT JOIN CLUBS ON memberreactions.clubid=clubs.clubid where reactionresolved=false AND (activityid=7 or activityid=14)",
             nativeQuery = true
     )
-    List<MemberReactions> getMemberReactionsByReactionresolved();
+
+    List<AlertData> getMemberReactionsByReactionresolved();
 
         @Query(
             value = "SELECT  created_date as createddate, activityid, clubid, member_table_id as member, reactionid FROM MEMBERREACTIONS where not activityid= :checkinactivityid AND not activityid= :checkoutactivityid",
             nativeQuery = true
     )
     List<ClubActivityFeedbackData> getMemberReactionsNotCheckInOut(long checkinactivityid, long checkoutactivityid);
+
+    @Query(
+            value = "SELECT * FROM MEMBERREACTIONS where not activityid=7 AND not activityid=14",
+            nativeQuery = true
+    )
+    List<MemberReactions> getMemberReactionsForActivities();
+
 }

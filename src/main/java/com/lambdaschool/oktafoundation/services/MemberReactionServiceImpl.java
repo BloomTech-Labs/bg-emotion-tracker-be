@@ -27,6 +27,35 @@ public class MemberReactionServiceImpl implements MemberReactionService{
 
     }
 
+    @Transactional
+    @Override
+    public MemberReactions save(MemberReactions memberreactions) {
+        MemberReactions newMr = new MemberReactions();
+
+        if (memberreactions.getMemberreactionid() != 0)
+        {
+            newMr = memberReactionRepository.findById(memberreactions.getMemberreactionid())
+                    .orElseThrow(() -> new ResourceNotFoundException("Member Reaction id " + memberreactions.getMemberreactionid() + "not found!"));
+        }
+
+        newMr.setMember((memberreactions.getMember()));
+        newMr.setReaction((memberreactions.getReaction()));
+        newMr.setClubactivity((memberreactions.getClubactivity()));
+        newMr.setReactionresolved((memberreactions.isReactionresolved()));
+        return memberReactionRepository.save(newMr);
+    }
+
+    @Transactional
+    @Override
+    public MemberReactions update(long id, MemberReactions memberreactions) {
+
+        MemberReactions currentMr = memberReactionRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("MemberReaction id " + id + " not found!"));
+
+        currentMr.setReactionresolved(!currentMr.isReactionresolved());
+        return memberReactionRepository.save(currentMr);
+    }
+
     @Override
     public MemberReactions findMemberReactionById(Long id) throws ResourceNotFoundException
     {

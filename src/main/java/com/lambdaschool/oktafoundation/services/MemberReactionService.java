@@ -24,5 +24,14 @@ public interface MemberReactionService {
      */
     MemberReactions findMemberReactionById(Long id);
 
+    MemberReactions save(MemberReactions memberreactions);
+    /**
+     * Returns the current MemberReaction identified by the given primary key with it's reactionresolved value flipped.
+     *
+     * @param id The primary key (long) of the MemberReaction you seek
+     * @return HttpStatus.OK
+     */
+    MemberReactions update(long id, MemberReactions memberreactions);
+
     List<AlertData> getMemberReactionsByReactionresolved();
 }

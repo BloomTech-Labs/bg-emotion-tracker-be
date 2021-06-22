@@ -41,10 +41,9 @@ public interface MemberReactionRepository extends CrudRepository<MemberReactions
 
 //    Query to populate the alert lists, all memberreactions where reactionresolved is not true and activityid=7 (checkin) or activityid=14(checkout)
     @Query(
-            value = "SELECT memberreactions.clubid,reactionid,activityid,member_table_id as member, memberreactions.created_date as createdDate, clubs.clubname FROM MEMBERREACTIONS LEFT JOIN CLUBS ON memberreactions.clubid=clubs.clubid where reactionresolved=false AND (activityid=7 or activityid=14)",
+            value = "SELECT memberreactions.memberreactionid as Id, memberreactions.member_table_id as member, memberreactions.activityid, activities.activityname as activities, reactions.reactionint, reactions.reactionvalue, reactions.reactionid, clubs.clubname, memberreactions.clubid, memberreactions.created_date as createdDate FROM MEMBERREACTIONS JOIN REACTIONS ON memberreactions.reactionid = reactions.reactionid LEFT JOIN ACTIVITIES ON memberreactions.activityid = activities.activityid LEFT JOIN CLUBS ON memberreactions.clubid=clubs.clubid where reactionresolved=false",
             nativeQuery = true
     )
-
     List<AlertData> getMemberReactionsByReactionresolved();
 
         @Query(

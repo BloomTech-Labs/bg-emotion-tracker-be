@@ -161,6 +161,7 @@ public class MemberReactions extends Auditable implements Serializable
         return memberreactionid;
     }
 
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

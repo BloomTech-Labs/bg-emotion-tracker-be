@@ -285,6 +285,6 @@ public class MemberReactionsController {
                                           @PathVariable long memberreactionid)
     {
         memberReactionService.update(memberreactionid, updateMr);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(updateMr, HttpStatus.OK);
     }
 }

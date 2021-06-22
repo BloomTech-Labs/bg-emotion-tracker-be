@@ -4,10 +4,13 @@ import java.util.Date;
 
 public interface AlertData {
     long getId();
-    String getClubname();
-    long getClubid();
-    long getReactionid();
-    long getActivityid();
     long getMember();
+    long getActivityId();
+    String getActivities();
+    String getClubname();
+    long getReactionid();
+    String getReactionvalue();
+    long getReactionint();
+    long getClubid();
     Date getCreateddate();
 }

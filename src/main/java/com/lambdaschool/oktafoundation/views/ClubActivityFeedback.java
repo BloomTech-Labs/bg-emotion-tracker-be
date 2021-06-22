@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ClubActivityFeedback {
     long clubid;
+    String clubname;
     List<ActivityReactionRating> activityReactionRatings;
 
     public ClubActivityFeedback() {
@@ -23,6 +24,14 @@ public class ClubActivityFeedback {
 
     public void setActivityReactionRatings(List<ActivityReactionRating> activityReactionRatings) {
         this.activityReactionRatings = activityReactionRatings;
+    }
+
+    public String getClubname() {
+        return clubname;
+    }
+
+    public void setClubname(String clubname) {
+        this.clubname = clubname;
     }
 }
 

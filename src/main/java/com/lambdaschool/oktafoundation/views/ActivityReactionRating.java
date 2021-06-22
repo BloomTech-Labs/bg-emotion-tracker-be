@@ -3,6 +3,7 @@ package com.lambdaschool.oktafoundation.views;
 public class ActivityReactionRating {
 
     long activityid;
+    String activityname;
     double activityrating;
 
     public ActivityReactionRating() {
@@ -14,6 +15,14 @@ public class ActivityReactionRating {
 
     public void setActivityid(long activityid) {
         this.activityid = activityid;
+    }
+
+    public String getActivityname() {
+        return activityname;
+    }
+
+    public void setActivityname(String activityname) {
+        this.activityname = activityname;
     }
 
     public double getActivityrating() {

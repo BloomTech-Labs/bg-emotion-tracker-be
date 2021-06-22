@@ -4,12 +4,9 @@ import com.lambdaschool.oktafoundation.models.ClubActivities;
 import com.lambdaschool.oktafoundation.models.MemberReactions;
 import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
 import com.lambdaschool.oktafoundation.repository.ReactionRepository;
-import com.lambdaschool.oktafoundation.services.ActivityService;
-import com.lambdaschool.oktafoundation.services.ClubActivityService;
-import com.lambdaschool.oktafoundation.services.ReactionService;
+import com.lambdaschool.oktafoundation.services.*;
 import com.lambdaschool.oktafoundation.views.*;
 import io.swagger.annotations.ApiOperation;
-import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +29,9 @@ public class ClubActivityController {
      */
     @Autowired
     private ClubActivityService clubActivityService;
+
+    @Autowired
+    private ClubService clubService;
 
     @Autowired
     private MemberReactionRepository memberReactionRepository;
@@ -95,7 +95,6 @@ public class ClubActivityController {
         for(ClubActivityFeedbackData clubActivityFeedback: memberReactionsNotCheckInOut) {
             /** boolean used to determine whether or not the club is alread in feedbackReactionsList*/
             boolean clubInfeedbackReactionsList = false;
-//            check if clubActivityFeedback.getClubid() is in feedbackReactionsList
             for(ClubActivityFeedbackReactions feedbackReaction: feedbackReactionsList) {
                 /** If the club is in feedbackReactionsList then check to see if the current looked activity is associated with that club */
                 if(feedbackReaction.getClubid() == clubActivityFeedback.getClubid()) {
@@ -153,11 +152,13 @@ public class ClubActivityController {
                 ClubActivityFeedback newClubActivityFeedback = new ClubActivityFeedback();
 
                 newClubActivityFeedback.setClubid(feedbackReactions.getClubid());
+                newClubActivityFeedback.setClubname(clubService.findClubById(feedbackReactions.getClubid()).getClubname());
                 List<ActivityReactionRating> newRatingList = new ArrayList<>();
 
                 for(ActivityReaction activityReaction: feedbackReactions.getActivityreactions()) {
                     ActivityReactionRating newActivityReactionRating = new ActivityReactionRating();
                     newActivityReactionRating.setActivityid(activityReaction.getActivityid());
+                    newActivityReactionRating.setActivityname(activityService.findActivityById(activityReaction.getActivityid()).getActivityname());
                     double reactionSum = 0.0;
                     for (Integer val: activityReaction.getReactionints()) {
                         reactionSum += (double) val;

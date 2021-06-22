@@ -44,7 +44,7 @@ public class MemberReactionServiceImpl implements MemberReactionService{
         newMr.setReactionresolved((memberreactions.isReactionresolved()));
         return memberReactionRepository.save(newMr);
     }
-
+//hey
     @Transactional
     @Override
     public MemberReactions update(long id, MemberReactions memberreactions) {

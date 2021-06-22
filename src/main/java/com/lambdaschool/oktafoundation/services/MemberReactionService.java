@@ -33,5 +33,6 @@ public interface MemberReactionService {
      */
     MemberReactions update(long id, MemberReactions memberreactions);
 
+
     List<AlertData> getMemberReactionsByReactionresolved();
 }

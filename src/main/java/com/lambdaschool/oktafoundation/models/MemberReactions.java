@@ -152,7 +152,14 @@ public class MemberReactions extends Auditable implements Serializable
     public void setReactionresolved(boolean reactionresolved) {
         this.reactionresolved = reactionresolved;
     }
-
+     /**
+     * The getter for the memberreactionid
+     *
+     * @return The memberreactionid associated with all other data
+     */
+    public long getMemberreactionid() {
+        return memberreactionid;
+    }
     
     @Override
     public boolean equals(Object o) {

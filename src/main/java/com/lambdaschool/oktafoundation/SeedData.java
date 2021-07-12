@@ -293,7 +293,7 @@ public class SeedData
 //                "1F624"
         };
         // Initializing Reactions to values between 1-5
-        Integer intValue = 11;
+        Integer intValue = 10;
         for (var emote : reactionValue) {
             Reaction rx1 = new Reaction();
             rx1.setReactionvalue(emote);

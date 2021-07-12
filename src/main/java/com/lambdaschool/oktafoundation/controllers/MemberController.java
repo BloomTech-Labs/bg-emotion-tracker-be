@@ -140,6 +140,11 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PatchMapping(value = "/updatemember/{memberid}")
+    public ResponseEntity <?> updateMember(@PathVariable long memberid)
+    {
+        memberService.update(memberid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

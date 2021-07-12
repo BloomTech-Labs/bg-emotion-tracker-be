@@ -26,6 +26,8 @@ public class Member extends Auditable
     @Column(unique = true, nullable = false)
     private String memberid;
 
+    @Column(nullable = false)
+    private boolean active = true;
     /**
      * Part of the join relationship between Member and Reactions
      * connects member to the member reaction combination
@@ -93,6 +95,16 @@ public class Member extends Auditable
      */
     public void setMemberid(String memberid) {
         this.memberid = memberid;
+    }
+
+    public boolean isActive()
+    {
+        return active;
+    }
+
+    public void setActive(boolean active)
+    {
+        this.active = active;
     }
 
     /**

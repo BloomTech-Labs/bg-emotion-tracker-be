@@ -35,4 +35,5 @@ public interface MemberService {
      * @return The saved Member object including any automatically generated fields
      */
     Member save(Member member);
+    Member update(long memberid);
 }

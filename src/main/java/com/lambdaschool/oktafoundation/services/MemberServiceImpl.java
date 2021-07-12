@@ -86,4 +86,16 @@ public class MemberServiceImpl implements MemberService {
 //        return memberrepos.save(newMember);
         return memberrepos.save(member);
     }
+
+    //Toggles active and deactivated states of members
+    @Transactional
+    @Override
+    public Member update(long memberid)
+    {
+        Member member = memberrepos.findById(memberid)
+            .orElseThrow(()-> new ResourceNotFoundException("Member " + memberid + " not found!"));
+
+        member.setActive(!member.isActive());
+        return memberrepos.save(member);
+    }
 }

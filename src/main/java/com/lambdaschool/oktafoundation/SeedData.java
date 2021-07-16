@@ -144,7 +144,7 @@ public class SeedData
         c1.getUsers().add(new ClubUsers(c1, userService.findByName("llama003@maildrop.cc")));
 
         //Caitlin has Arts, Basketball, Homework,
-        Club c2 = new Club("Caitlin");
+        Club c2 = new Club("Catlin");
         c2.getActivities().add(new ClubActivities(c2, a1));
         c2.getActivities().add(new ClubActivities(c2, a2));
         c2.getActivities().add(new ClubActivities(c2, a4));
@@ -274,11 +274,6 @@ public class SeedData
                 "1F641",    //  2 //3
                 "1F61E",    //  1 //2
                 "1F62D",    //  1 //1
-
-
-
-
-
 
                 //  = Currently unused emojis
 //                "1F603",

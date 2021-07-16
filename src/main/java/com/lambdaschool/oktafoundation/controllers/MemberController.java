@@ -140,6 +140,7 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','CD')")
     @PatchMapping(value = "/updatemember/{memberid}")
     public ResponseEntity <?> updateMember(@PathVariable long memberid)
     {

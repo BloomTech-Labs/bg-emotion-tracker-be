@@ -262,40 +262,28 @@ public class SeedData
 
         // All emoji values (updated 6-8-21)
         String[] reactionValue = {
-                // Activity emojis
-            // Checkin/checkout emojis
-                "1F601",    //  5 //10
-                "1F60A",    //  5 //9
-                "1F642",    //  4 //8
-                "1F60E",    //  4 //7
-                "1F610",    //  3 //6
-                "1F974",    //  3 //5
-                "1F634",    //  2 //4
-                "1F641",    //  2 //3
-                "1F61E",    //  1 //2
-                "1F62D",    //  1 //1
-
-                //  = Currently unused emojis
-//                "1F603",
-//                "1F60C",
-//                "1F61D",
-//                "1F62E",
-//                "1F915",
-//                "1F971",
-//                "1F622",
-//                "1F628",
-//                "1F620",
-//                "1F624"
+                // Activity emojis ints
+            // Checkin/checkout emojis all
+                "1F603", //5 😃
+                "1F60E", //4.5 😎
+                "1F642", //4 🙂
+                "1F610", // 3.5 😐
+                "1F974", //3 🥴
+                "1F634", //2.5 😴
+                "1F915", //2 🤕
+                "1F971", //1.5 🥱
+                "1F622", //1 😢
+                "1F624" //0.5 😤
         };
         // Initializing Reactions to values between 1-5
-        Integer intValue = 10;
+        Double intValue = 5.0;
         for (var emote : reactionValue) {
             Reaction rx1 = new Reaction();
             rx1.setReactionvalue(emote);
             rx1.setReactionint(intValue);
             reactionService.save(rx1);
-            intValue -= 1;
-//
+            System.out.println(intValue);
+            intValue -= 0.5;
         }
 
 

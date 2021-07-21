@@ -1,9 +1,7 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.ClubActivities;
-import com.lambdaschool.oktafoundation.models.MemberReactions;
 import com.lambdaschool.oktafoundation.repository.MemberReactionRepository;
-import com.lambdaschool.oktafoundation.repository.ReactionRepository;
 import com.lambdaschool.oktafoundation.services.*;
 import com.lambdaschool.oktafoundation.views.*;
 import io.swagger.annotations.ApiOperation;
@@ -107,7 +105,7 @@ public class ClubActivityController {
                          *  Here we just add the reactionint for the reaction given */
                         if(ar.getActivityid() == clubActivityFeedback.getActivityid()) {
                             activityIdFound = true;
-                            Integer reactionIntval = reactionService.findReactionById(clubActivityFeedback.getReactionid()).getReactionint();
+                            Double reactionIntval = reactionService.findReactionById(clubActivityFeedback.getReactionid()).getReactionint();
                             ar.getReactionints().add(reactionIntval);
                         }
                     }
@@ -116,8 +114,8 @@ public class ClubActivityController {
                     if(!activityIdFound){
                         ActivityReaction newAR = new ActivityReaction();
                         newAR.setActivityid(clubActivityFeedback.getActivityid());
-                        Integer reactionIntval = reactionService.findReactionById(clubActivityFeedback.getReactionid()).getReactionint();
-                        List<Integer> newIntegerList = new ArrayList<>();
+                        Double reactionIntval = reactionService.findReactionById(clubActivityFeedback.getReactionid()).getReactionint();
+                        List<Double> newIntegerList = new ArrayList<>();
                         newIntegerList.add(reactionIntval);
                         newAR.setReactionints(newIntegerList);
                         // add newAR to the club
@@ -131,7 +129,7 @@ public class ClubActivityController {
                 ClubActivityFeedbackReactions newClubAct = new ClubActivityFeedbackReactions();
                 ActivityReaction newActivityReaction = new ActivityReaction();
 
-                List<Integer> newIntList = new ArrayList<>();
+                List<Double> newIntList = new ArrayList<>();
                 newIntList.add(reactionService.findReactionById(clubActivityFeedback.getReactionid()).getReactionint());
                 List<ActivityReaction> newActivityReactionList = new ArrayList<>();
                 newActivityReactionList.add(newActivityReaction);
@@ -160,7 +158,7 @@ public class ClubActivityController {
                     newActivityReactionRating.setActivityid(activityReaction.getActivityid());
                     newActivityReactionRating.setActivityname(activityService.findActivityById(activityReaction.getActivityid()).getActivityname());
                     double reactionSum = 0.0;
-                    for (Integer val: activityReaction.getReactionints()) {
+                    for (Double val: activityReaction.getReactionints()) {
                         reactionSum += (double) val;
                     }
                     double reactionAvg =  reactionSum / (double) activityReaction.getReactionints().size();

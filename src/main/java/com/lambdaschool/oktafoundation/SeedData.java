@@ -282,18 +282,23 @@ public class SeedData
             rx1.setReactionvalue(emote);
             rx1.setReactionint(intValue);
             reactionService.save(rx1);
-            System.out.println(intValue);
             intValue -= 0.5;
         }
 
 
-        var normalReactionsList = new ArrayList<Reaction>();
-        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F601").orElseThrow());
-        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F642").orElseThrow());
-        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F610").orElseThrow());
-        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F641").orElseThrow());
-        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F61E").orElseThrow());
+//        var normalReactionsList = new ArrayList<Reaction>();
+//        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F601").orElseThrow());
+//        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F642").orElseThrow());
+//        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F610").orElseThrow());
+//        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F641").orElseThrow());
+//        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F61E").orElseThrow());
 
+        var normalReactionsList = new ArrayList<Reaction>();
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F603").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F642").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F974").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F915").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F622").orElseThrow());
 
         /**
          * We need to set up these reaction so that they are generating a random reaction

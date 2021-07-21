@@ -3,7 +3,7 @@ package com.lambdaschool.oktafoundation.views;
 import java.util.List;
 
 public class ActivityReaction {
-    List<Integer> reactionints;
+    List<Double> reactionints;
     long activityid;
     String activityname;
 
@@ -26,11 +26,11 @@ public class ActivityReaction {
         this.activityname = activityname;
     }
 
-    public List<Integer> getReactionints() {
+    public List<Double> getReactionints() {
         return reactionints;
     }
 
-    public void setReactionints(List<Integer> reactionints) {
+    public void setReactionints(List<Double> reactionints) {
         this.reactionints = reactionints;
     }
 }

@@ -1,10 +1,6 @@
 package com.lambdaschool.oktafoundation.models;
 
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * The entity allowing interaction with the reactions table
@@ -30,7 +26,7 @@ public class Reaction extends Auditable {
      * Will hold the value for the reaction to be used for analysis.
      */
     @Column(nullable = false, unique = false)
-    private Integer reactionint;
+    private Double reactionint;
 
 
     /**
@@ -40,7 +36,7 @@ public class Reaction extends Auditable {
     }
 
 
-    public Reaction(String reactionvalue, Integer reactionint) {
+    public Reaction(String reactionvalue, Double reactionint) {
         this.reactionvalue = reactionvalue;
         this.reactionint = reactionint;
     }
@@ -86,7 +82,7 @@ public class Reaction extends Auditable {
      *
      * @return The reactionint (Integer) of the Reaction
      */
-    public Integer getReactionint() {
+    public Double getReactionint() {
         return reactionint;
     }
 
@@ -95,7 +91,7 @@ public class Reaction extends Auditable {
      *
      * @param reactionint the new reactionint (Integer) for this Reaction
      */
-    public void setReactionint(Integer reactionint) {
+    public void setReactionint(Double reactionint) {
         this.reactionint = reactionint;
     }
 }

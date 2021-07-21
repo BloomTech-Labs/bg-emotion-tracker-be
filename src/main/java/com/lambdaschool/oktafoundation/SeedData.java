@@ -402,8 +402,7 @@ public class SeedData
             MemberReactions memberReaction;
             MemberReactions checkoutReaction;
 
-            //  This was a suggestion from IntelliJ
-            //  Im using this to store the activities for checkin and checkout
+            //  This was a suggestion from IntelliJz
             final ClubActivities[] checkinActivity = new ClubActivities[1];
             final ClubActivities[] checkoutActivity = new ClubActivities[1];
             ArrayList<ClubActivities> actualActivities = new ArrayList<>();
@@ -471,7 +470,6 @@ public class SeedData
             currentRandMember.getReactions().add(checkoutReaction);
 
 
-//            currentRandMember.getClubs().add(new ClubMembers(c1, currentRandMember));
             memberService.save(currentRandMember);
         }
     }

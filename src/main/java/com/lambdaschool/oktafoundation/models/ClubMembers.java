@@ -125,7 +125,7 @@ public class ClubMembers
     @Override
     public int hashCode()
     {
-        // return Objects.hash(club.getClubid(), member.getMemberid());
+
         return 37;
     }
 }

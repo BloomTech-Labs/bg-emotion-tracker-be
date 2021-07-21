@@ -22,10 +22,6 @@ public class ClubUsersId implements Serializable {
     public ClubUsersId() {
     }
 
-//    public ClubUsersId(long user, long club) {
-//        this.user = user;
-//        this.club = club;
-//    }
     /**
      * Getter for the club id
      *

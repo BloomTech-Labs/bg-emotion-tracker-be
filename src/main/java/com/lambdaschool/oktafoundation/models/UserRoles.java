@@ -127,7 +127,6 @@ public class UserRoles
     @Override
     public int hashCode()
     {
-        // return Objects.hash(user.getUserid(), role.getRoleid());
         return 37;
     }
 }

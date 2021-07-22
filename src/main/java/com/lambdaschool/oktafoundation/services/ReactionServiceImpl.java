@@ -1,8 +1,6 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
-import com.lambdaschool.oktafoundation.models.Member;
-import com.lambdaschool.oktafoundation.models.MemberReactions;
 import com.lambdaschool.oktafoundation.models.Reaction;
 import com.lambdaschool.oktafoundation.repository.ReactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

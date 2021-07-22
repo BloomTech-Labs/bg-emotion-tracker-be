@@ -34,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
         memberrepos.findAll()
                 .iterator()
                 .forEachRemaining(list::add);
+        list.sort((m1,m2)-> (int)(m1.getMember_table_id()- m2.getMember_table_id()));
         return list;
     }
 

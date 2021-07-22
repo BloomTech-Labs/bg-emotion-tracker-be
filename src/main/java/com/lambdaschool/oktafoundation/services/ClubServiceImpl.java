@@ -47,6 +47,7 @@ public class ClubServiceImpl implements ClubService{
         clubrepos.findAll()
                 .iterator()
                 .forEachRemaining(clubList::add);
+        clubList.sort((c1,c2)-> c1.getClubname().compareToIgnoreCase(c2.getClubname()));
         return clubList;
     }
 

@@ -56,35 +56,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member save(Member member) {
-//        Member newMember = new Member();
-//
-//        if (member.getMember_table_id() != 0) {
-//           memberrepos.findById(member.getMember_table_id())
-//                    .orElseThrow(() -> new ResourceNotFoundException("Member id " + member.getMember_table_id() + " not found!!"));
-//            newMember.setMember_table_id(member.getMember_table_id());
-//        }
-//
-////         if the memberid is already in the database, return it, no new member is created.
-//            Optional<Member> temp = memberrepos.findByMemberid(member.getMemberid());
-//            if (temp.isPresent()) {
-//                return temp.get();
-//            }
-//        System.out.println(member.getMemberid());
-//
-//        newMember.setMemberid(member.getMemberid());
-//
-//        newMember.getReactions().clear();
-//        for (MemberReactions mr : member.getReactions()) {
-//            Reaction addReaction = reactionService.findReactionById(mr.getReaction().getReactionid());
-//            newMember.getReactions().add(new MemberReactions(newMember, addReaction, mr.getClubactivity()));
-//        }
-//        newMember.getClubs().clear();
-//        for (ClubMembers clubMembers : member.getClubs()) {
-//            Club addClub = clubService.findClubById(clubMembers.getClub().getClubid());
-//            newMember.getClubs().add(new ClubMembers(addClub, newMember));
-//        }
-//
-//        return memberrepos.save(newMember);
+
         return memberrepos.save(member);
     }
 

@@ -74,7 +74,6 @@ public class ClubMembersId
         {
             return true;
         }
-        // boolean temp = (o.getClass() instanceof Class);
         if (o == null || getClass() != o.getClass())
         {
             return false;

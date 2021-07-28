@@ -75,7 +75,7 @@ public class MemberReactions extends Auditable implements Serializable
         this.member = member;
         this.reaction = reaction;
         this.clubactivity = clubactivity;
-        this.reactionresolved = reaction.getReactionint() != 1;
+        this.reactionresolved = reaction.getReactionint() > 3;
     }
 
     /**

@@ -266,14 +266,16 @@ public class SeedData
             // Checkin/checkout emojis all
                 "1F603", //5 😃
                 "1F60E", //4.5 😎
-                "1F642", //4 🙂
-                "1F610", // 3.5 😐
-                "1F974", //3 🥴
+                "1F642",//4 🙂
+                "1F974",//3.5 🥴
+                "1F610", // 3😐
                 "1F634", //2.5 😴
-                "1F915", //2 🤕
-                "1F971", //1.5 🥱
+                "1F624", //2 😤
+                "1F915", //1.5 🤕
                 "1F622", //1 😢
-                "1F624" //0.5 😤
+                "1F971", //0.5 🥱
+
+
         };
         // Initializing Reactions to values between 1-5
         Double intValue = 5.0;
@@ -296,8 +298,8 @@ public class SeedData
         var normalReactionsList = new ArrayList<Reaction>();
         normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F603").orElseThrow());
         normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F642").orElseThrow());
-        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F974").orElseThrow());
-        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F915").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F610").orElseThrow());
+        normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F624").orElseThrow());
         normalReactionsList.add(reactionRepository.findReactionByReactionvalue("1F622").orElseThrow());
 
         /**

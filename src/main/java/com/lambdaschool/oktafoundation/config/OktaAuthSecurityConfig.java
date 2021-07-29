@@ -49,6 +49,7 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers(HttpMethod.GET,"/clubs/**").authenticated()
                 .antMatchers("/clubs/**").hasAnyRole("ADMIN", "CD")
                 .antMatchers("/clubusers/**").hasAnyRole("ADMIN", "CD")
+                .antMatchers(HttpMethod.GET,"/reactions/**").authenticated()
                 .antMatchers(HttpMethod.POST,"/memberreactions/**").authenticated() //YDP can post reactions
                 .antMatchers("/memberreactions/**").hasAnyRole("ADMIN","CD") //YDP cannot GET reactions
                 .antMatchers(HttpMethod.GET,"/leaderboard/leaderboard").authenticated()
